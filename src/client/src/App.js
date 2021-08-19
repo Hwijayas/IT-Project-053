@@ -1,4 +1,4 @@
-//this entire chunk of code is from https://github.com/zeroabsolute/MonorepoHerokuDeployment/blob/master/src/web-client/src/App.js
+//this entire chunk of code is slightly modified from https://github.com/zeroabsolute/MonorepoHerokuDeployment/blob/master/src/web-client/src/App.js
 
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     Axios({
       method: 'GET',
-      url: `${API_URL}/health`
+      url: `${API_URL}/status`
     }).then((response) => {
       setApiStatus({ status: response.status, payload: response.data, error: null });
     }).catch((error) => {
@@ -48,7 +48,7 @@ function renderStatus(response) {
   return (
     <div>
       Code: {response.status} <br />
-      Version: {response.payload?.version} <br />
+      Time: {response.payload?.time} <br />
       Message: {response.payload?.status}
     </div>
   );
