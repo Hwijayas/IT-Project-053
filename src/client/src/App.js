@@ -7,6 +7,7 @@ import logo from './logo.svg';
 import './App.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+console.log("the api url is: " + API_URL);
 
 function App() {
   const [apiStatus, setApiStatus] = useState("");
