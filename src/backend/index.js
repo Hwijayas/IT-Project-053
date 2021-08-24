@@ -3,7 +3,10 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const PORT = process.env.PORT || 5000;
 const app = express();
+const path = require('path');
+const passport = require('passport');
 require('dotenv').config();
+
 
 const userRoutes = require('../backend/routes/userRouter');
 
@@ -35,6 +38,27 @@ app.use('/status', (req,res)=>{
 		status: 'OK',
 		});
 	});
+
+
+// Must first load the models
+require('./models/user');
+
+
+// Pass the global passport object into the configuration function
+require('./config/passport')(passport);
+
+// This will initialize the passport object on every request
+app.use(passport.initialize());
+
+
+// Instead of using body-parser middleware, use the new Express implementation of the same thing
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+
+/**
+ * -------------- SERVER ----------------
+ */
 server.listen(PORT, err => {
 	if(err){
 		console.log(`${err}`);
@@ -43,6 +67,11 @@ server.listen(PORT, err => {
 	}
 });
 
+
+
+/**
+ * -------------- ROUTES ----------------
+ */
 app.use('/user', userRoutes);
 
 module.exports = app;
