@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const utils = require('../lib/utils');
 const User = require('../models/user');
+const Account = require("../controllers/accountsController")
 
 
 // Function to add a new User into the DB
@@ -45,37 +46,7 @@ const userRegisterHandler = function(req, res) {
     })
 }
 
-// Function to log in the user
-const userLoginHandler =  function(req, res, next){
-
-    User.findOne({ userEmail: req.body.userEmail })
-        .then((user) => {
-
-            if (!user) {
-                return res.status(401).json({ success: false, msg: "could not find user" });
-            }
-
-            // Function defined at bottom of app.js
-            const isValid = utils.validPassword(req.body.password, user.hash, user.salt);
-
-            if (isValid) {
-
-                const tokenObject = utils.issueJWT(user);
-
-                res.status(200).json({ success: true, user: user, token: tokenObject.token, expiresIn: tokenObject.expires });
-
-            } else {
-
-                res.status(401).json({ success: false, msg: "you entered the wrong password" });
-
-            }
-
-        })
-        .catch((err) => {
-            next(err);
-        });
-}
-
+let userLoginHandler = Account.loginHandler
 
 module.exports.userRegisterHandler = userRegisterHandler;
-module.exports.userLoginHandler = userLoginHandler;
+module.exports.userLoginHandler = userLoginHandler
