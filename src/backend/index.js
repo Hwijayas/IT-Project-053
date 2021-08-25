@@ -6,8 +6,6 @@ const app = express();
 const path = require('path');
 const passport = require('passport');
 require('dotenv').config();
-
-
 const userRoutes = require('../backend/routes/userRouter');
 
 // mongoDB connection string
