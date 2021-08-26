@@ -1,11 +1,9 @@
 const mongoose = require("mongoose")
 const utils = require('../lib/utils');
 const User = require('../models/user');
-const Account = require("../controllers/accountsController")
-
 
 // Function to add a new User into the DB
-const userRegisterHandler = function(req, res) {
+const userRegisterHandler = (req, res) => {
     User.find({userEmail: req.body.userEmail})
     .exec()
     .then(user => {
@@ -34,7 +32,7 @@ const userRegisterHandler = function(req, res) {
                     .then((user) => {
 
                         const jwt = utils.issueJWT(user)
-                        res.json({ success: true, user: user, token: jwt.token, expiresIn:jwt.expires });
+                        res.json({ success: true, userEmail: user.userEmail, firstName:user.userFirstName , lastName: user.userLastName, token: jwt.token, expiresIn:jwt.expires });
                     });
 
             } catch (err) {
@@ -46,7 +44,36 @@ const userRegisterHandler = function(req, res) {
     })
 }
 
-let userLoginHandler = Account.loginHandler
+// Function to log in the user
+const userLoginHandler =  (req, res, next) => {
+
+    User.findOne({ userEmail: req.body.userEmail })
+        .then((user) => {
+
+            if (!user) {
+                return res.status(401).json({ success: false, msg: "could not find user" });
+            }
+
+            // Function defined at bottom of app.js
+            const isValid = utils.validPassword(req.body.password, user.hash, user.salt);
+
+            if (isValid) {
+
+                const tokenObject = utils.issueJWT(user);
+
+                res.status(200).json({ success: true, userEmail: user.userEmail, token: tokenObject.token, expiresIn: tokenObject.expires });
+
+            } else {
+
+                res.status(401).json({ success: false, msg: "you entered the wrong password" });
+
+            }
+
+        })
+        .catch((err) => {
+            next(err);
+        });
+}
 
 module.exports.userRegisterHandler = userRegisterHandler;
 module.exports.userLoginHandler = userLoginHandler
