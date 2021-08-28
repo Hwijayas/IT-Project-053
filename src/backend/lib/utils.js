@@ -20,9 +20,9 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
  * the decrypted hash/salt with the password that the user provided at login
  */
 const validPassword = (password, hash, salt) => {
-    let hashVerify = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
-    return hash === hashVerify;
-}
+  const hashVerify = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+  return hash === hashVerify;
+};
 
 /**
  *
@@ -35,36 +35,35 @@ const validPassword = (password, hash, salt) => {
  * You would then store the hashed password in the database and then re-hash it to verify later (similar to what we do here)
  */
 const genPassword = (password) => {
-    let salt = crypto.randomBytes(32).toString('hex');
-    let genHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+  const salt = crypto.randomBytes(32).toString('hex');
+  const genHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
 
-    return {
-        salt: salt,
-        hash: genHash
-    };
-}
-
+  return {
+    salt,
+    hash: genHash,
+  };
+};
 
 /**
  * @param {*} user - The user object.  We need this to set the JWT `sub` payload property to the MongoDB user ID
  */
 const issueJWT = (user) => {
-    const _id = user._id;
+  const { _id } = user;
 
-    const expiresIn = '1d';
+  const expiresIn = '1d';
 
-    const payload = {
-        sub: _id,
-        iat: Date.now()
-    };
+  const payload = {
+    sub: _id,
+    iat: Date.now(),
+  };
 
-    const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {expiresIn: expiresIn, algorithm: 'RS256'});
+  const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn, algorithm: 'RS256' });
 
-    return {
-        token: "Bearer " + signedToken,
-        expires: expiresIn
-    }
-}
+  return {
+    token: `Bearer ${signedToken}`,
+    expires: expiresIn,
+  };
+};
 
 module.exports.validPassword = validPassword;
 module.exports.genPassword = genPassword;
