@@ -6,22 +6,22 @@ import Axios from 'axios';
 
 const Form = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
-    const [userEmail, setUserEmail] = useState("");
-    const [password, setPassword] = useState("");
 
     function submitForm(){
         setIsSubmitted = (true);
     }
 
-    /*
-    const login = () => {
-        Axios.post("http://localhost5000/user/login",{ 
-            userEmail: userEmail,
-            password: password
+    
+    const login = (username, pass) => {
+        //console.log(process.env.REACT_APP_API_ENDPOINT);
+        Axios.post("http://localhost:5000/user/login",{ 
+            
+            userEmail: username,
+            password: pass
         }).then((response) => {
             console.log(response);
         });
-    }*/
+    }
     
 
     return (
@@ -32,7 +32,7 @@ const Form = () => {
                 <img className='form-img' src='BitsRMl_logo.svg' alt='logo' />
             </div>
             {/* {!isSubmitted ? <FormSignup submitForm={submitForm} /> : (<FormSuccess/>)} */}
-            <FormLogin submitForm={submitForm}/>
+            <FormLogin submitForm={submitForm} login={login}/>
         </div>
         </>
     )

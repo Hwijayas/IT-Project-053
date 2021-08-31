@@ -3,9 +3,8 @@ import useForm from './useForm'
 import validate from './validateInfo';
 import "../css/Form.css"
 
-const FormSignup = (submitForm) => {
-    const{handleChange, values, handleSubmit, errors} = useForm(submitForm, validate);
-
+const FormSignup = (props) => {
+    const{handleChange, values, handleSubmit, errors} = useForm(props.submitForm, validate, props.login);
     /* Basic signup form with 2 input fields */
 
     return (

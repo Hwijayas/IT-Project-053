@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const useForm = (callback, validate) => {
+const useForm = (callback, validate, login) => {
     const [values, setValues] = useState({
         username: "",
         password: ""
@@ -16,6 +16,8 @@ const useForm = (callback, validate) => {
             ...values,
             [name]: value
         });
+
+        console.log(values);
     };
 
     const handleSubmit = e => {
@@ -23,6 +25,8 @@ const useForm = (callback, validate) => {
 
         setErrors(validate(values))
         setIsSubmitting(true);
+        //console.log(login);
+        login(values.username, values.password);
     };
 
     useEffect(
