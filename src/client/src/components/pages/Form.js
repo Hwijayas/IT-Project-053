@@ -5,7 +5,8 @@ import Axios from 'axios';
 //import { response } from 'express';
 
 const Form = () => {
-    const [isSubmitted, setIsSubmitted] = useState(false)
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [error, setError] = useState("");
 
     function submitForm(){
         setIsSubmitted = (true);
@@ -18,8 +19,16 @@ const Form = () => {
             
             userEmail: username,
             password: pass
-        }).then((response) => {
-            console.log(response);
+        }).then(async response => {
+            // console.log(response);
+            if(!response.ok){
+                if(response.status === 401){
+                    setError(response.data.msg);
+                }
+            }
+        }).catch(error => {
+            console.log(error);
+            alert(error);
         });
     }
     
