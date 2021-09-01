@@ -18,4 +18,7 @@ router.post('/createDeal', userController.userCreateDeal);
 // Update an existing deal
 router.post('/updateDeal', userController.userUpdateDeal);
 
+// Delete an existing deal
+router.post('/deleteDeal', userController.userDeleteDeal);
+
 module.exports = router;
