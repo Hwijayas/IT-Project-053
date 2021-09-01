@@ -25,8 +25,8 @@ const useForm = (callback, validate, login) => {
 
         setErrors(validate(values))
         setIsSubmitting(true);
-        //console.log(login);
-        login(values.username, values.password);
+        // console.log(values);
+        login(values);
     };
 
     useEffect(

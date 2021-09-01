@@ -13,14 +13,14 @@ const Form = () => {
     }
 
     
-    const login = (username, pass) => {
+    const login = (values) => {
         //console.log(process.env.REACT_APP_API_ENDPOINT);
         Axios.post("http://localhost:5000/user/login",{ 
-            
-            userEmail: username,
-            password: pass
+            // console.log()
+            userEmail: values.username,
+            password: values.password
         }).then(async response => {
-            // console.log(response);
+            console.log(response);
             if(!response.ok){
                 if(response.status === 401){
                     console.log(response.status);
