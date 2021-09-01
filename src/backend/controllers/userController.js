@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const utils = require('../lib/utils');
+const deal = require('../models/deal');
 const User = require('../models/user');
 
 // Function to add a new User into the DB
@@ -76,5 +77,36 @@ const userLoginHandler = (req, res, next) => {
     });
 };
 
+// Function to create deals
+const userCreateDeal = (req, res) => {
+  const newDeal = new deal({
+    _id: new mongoose.Types.ObjectId(),
+    name: req.body.name,
+    value: req.body.value,
+    prefContact: req.body.prefContact,
+    contact: req.body.contact,
+  });
+
+  console.log("deal saved");
+  newDeal.save()
+    .then(result => {
+      res.status(201).json({ success: true, msg: 'deal created!' });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+  res.status(201);
+}
+
+// Function to update deals WIP
+/*const userUpdateDeal = (req, res) => {
+  try {
+    const dealId = req.body.dealId;
+
+  }
+}*/
+
 module.exports.userRegisterHandler = userRegisterHandler;
 module.exports.userLoginHandler = userLoginHandler;
+module.exports.userCreateDeal = userCreateDeal;
