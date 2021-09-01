@@ -12,6 +12,10 @@ router.post('/login', userController.userLoginHandler);
 // Register a new user
 router.post('/register', userController.userRegisterHandler);
 
+// Create a new deal
 router.post('/createDeal', userController.userCreateDeal);
+
+// Update an existing deal
+router.post('/updateDeal', userController.userUpdateDeal);
 
 module.exports = router;

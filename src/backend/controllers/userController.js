@@ -90,23 +90,33 @@ const userCreateDeal = (req, res) => {
   console.log("deal saved");
   newDeal.save()
     .then(result => {
-      res.status(201).json({ success: true, msg: 'deal created!' });
+      res.status(201).json({ success: true, msg: 'Deal created!' });
     })
     .catch(err => {
       console.log(err);
     });
-
   res.status(201);
-}
+};
 
 // Function to update deals WIP
-/*const userUpdateDeal = (req, res) => {
-  try {
-    const dealId = req.body.dealId;
-
-  }
-}*/
+const userUpdateDeal = (req, res) => {
+  const dealId = req.body.dealId;
+  const newName = req.body.name;
+  const newValue = req.body.value;
+  const newPrefContact = req.body.prefContact;
+  const newContact = req.body.contact;
+  
+  deal.findOneAndUpdate({_id: dealId}, {name: newName, value: newValue, prefContact: newPrefContact, contact: newContact}, {new: true}, (err) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ success: false, msg: 'Bad request' });
+    } else {
+      res.status(200).json({ success: true, msg: 'Deal updated!' });
+    }
+  });
+};
 
 module.exports.userRegisterHandler = userRegisterHandler;
 module.exports.userLoginHandler = userLoginHandler;
 module.exports.userCreateDeal = userCreateDeal;
+module.exports.userUpdateDeal = userUpdateDeal;
