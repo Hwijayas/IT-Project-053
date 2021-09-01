@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import FormLogin from '../FormLogin';
-import "./Form.css"
+import "../../css/Form.css"
 import Axios from 'axios';
 //import { response } from 'express';
 
@@ -23,12 +23,17 @@ const Form = () => {
             // console.log(response);
             if(!response.ok){
                 if(response.status === 401){
-                    setError(response.data.msg);
+                    console.log(response.status);
                 }
             }
-        }).catch(error => {
-            console.log(error);
-            alert(error);
+            else{
+                const data = await response.json()
+                localStorage.setItem('token', data.token);
+            }
+        }).catch(err => {
+            console.log(err);
+            alert(err);
+            
         });
     }
     
