@@ -33,7 +33,7 @@ const Form = () => {
 
             if(responseOK){
                 console.log(response);
-                localStorage.setItem('token', response.data,token);
+                localStorage.setItem('token', response.data.token);
             }
         }).catch(err => {
             console.log(err);
