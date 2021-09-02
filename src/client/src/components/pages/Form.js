@@ -19,16 +19,21 @@ const Form = () => {
             // console.log()
             userEmail: values.username,
             password: values.password
-        }).then(async response => {
-            console.log(response);
-            if(!response.ok){
+        }).then(response => {
+            
+            const responseOK = response && response.status === 200 
+            && response.statusText === 'OK';
+
+
+            if(!responseOK){
                 if(response.status === 401){
                     console.log(response.status);
                 }
             }
-            else{
-                const data = await response.json()
-                localStorage.setItem('token', data.token);
+
+            if(responseOK){
+                console.log(response);
+                localStorage.setItem('token', response.data,token);
             }
         }).catch(err => {
             console.log(err);
