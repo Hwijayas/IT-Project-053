@@ -13,12 +13,12 @@ router.post('/login', userController.userLoginHandler);
 router.post('/register', userController.userRegisterHandler);
 
 // Create a new deal
-router.post('/createDeal', userController.userCreateDeal);
+router.post('/deal/:id', userController.userCreateDeal);
 
 // Update an existing deal
-router.post('/updateDeal', userController.userUpdateDeal);
+router.put('/deal/:id', userController.userUpdateDeal);
 
 // Delete an existing deal
-router.post('/deleteDeal', userController.userDeleteDeal);
+router.delete('/deal/:id', userController.userDeleteDeal);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const utils = require('../lib/utils');
+const { findById } = require('../models/deal');
 const deal = require('../models/deal');
 const User = require('../models/user');
 
@@ -78,29 +79,41 @@ const userLoginHandler = (req, res, next) => {
 };
 
 // Function to create deals
-const userCreateDeal = (req, res) => {
-  const newDeal = new deal({
-    _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
-    value: req.body.value,
-    prefContact: req.body.prefContact,
-    contact: req.body.contact,
-  });
-
-  console.log("deal saved");
-  newDeal.save()
-    .then(result => {
-      res.status(201).json({ success: true, msg: 'Deal created!' });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  res.status(201);
+const userCreateDeal = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    User.findById(userId, (err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const newDeal = new deal({
+          _id: new mongoose.Types.ObjectId(),
+          user: data._id,
+          name: req.body.name,
+          value: req.body.value,
+          prefContact: req.body.prefContact,
+          contact: req.body.contact,
+        });
+        
+        newDeal.save()
+        .then(result => {
+          res.status(201).json({ success: true, msg: 'Deal created!' });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      }
+    }).lean();
+    
+    res.status(201);
+  } catch(error) {
+    console.log(error);
+  }
 };
 
 // Function to update deals
 const userUpdateDeal = (req, res) => {
-  const dealId = req.body.dealId;
+  const dealId = req.params.id;
   const newName = req.body.name;
   const newValue = req.body.value;
   const newPrefContact = req.body.prefContact;
@@ -122,7 +135,7 @@ const userUpdateDeal = (req, res) => {
 
 // Function to delete deals
 const userDeleteDeal = (req, res) => {
-  const dealId = req.body.dealId;
+  const dealId = req.params.id;
   deal.findOneAndDelete({_id: dealId}, (err, deal) => {
     if (err) {
       console.log(err)
