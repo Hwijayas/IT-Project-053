@@ -13,9 +13,9 @@ const Form = () => {
     }
 
     
-    const login = (values) => {
+    const login = async (values) => {
         //console.log(process.env.REACT_APP_API_ENDPOINT);
-        Axios.post("http://localhost:5000/user/login",{ 
+        await Axios.post("http://localhost:5000/user/login",{ 
             // console.log()
             userEmail: values.username,
             password: values.password
