@@ -21,4 +21,7 @@ router.put('/deal/:id', userController.userUpdateDeal);
 // Delete an existing deal
 router.delete('/deal/:id', userController.userDeleteDeal);
 
+// Update status of deal
+router.put('/deal/status/:id', userController.updateDealStatus);
+
 module.exports = router;

@@ -138,11 +138,28 @@ const userDeleteDeal = (req, res) => {
   const dealId = req.params.id;
   deal.findOneAndDelete({_id: dealId}, (err, deal) => {
     if (err) {
-      console.log(err)
+      console.log(err);
       res.status(400).json({ success: false, msg: 'Bad request' });
     } else {
       if (deal != null) {
         res.status(200).json({ success: true, msg: 'Deal deleted!' });
+      } else {
+        res.status(404).json({ success: false, msg: 'Deal not found!' });
+      }
+    }
+  });
+};
+
+const updateDealStatus = (req, res) => {
+  const dealId = req.params.id;
+  const newStatus = req.body.status;
+  deal.findOneAndUpdate({_id: dealId}, {status: newStatus}, (err, deal) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ success: false, msg: 'Bad request' });
+    } else {
+      if (deal != null) {
+        res.status(200).json({ success: true, msg: 'Deal status updated!' });
       } else {
         res.status(404).json({ success: false, msg: 'Deal not found!' });
       }
@@ -155,3 +172,4 @@ module.exports.userLoginHandler = userLoginHandler;
 module.exports.userCreateDeal = userCreateDeal;
 module.exports.userUpdateDeal = userUpdateDeal;
 module.exports.userDeleteDeal = userDeleteDeal;
+module.exports.updateDealStatus = updateDealStatus;
