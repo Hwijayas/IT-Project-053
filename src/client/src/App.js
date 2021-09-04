@@ -5,6 +5,7 @@ import './css/App.css';
 import Navbar from './components/Navbar';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
+import Form from './components/pages/Form'
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route exact path='/about' component={About}/>
+          <Route path="/login" component={Form} />
           <Route path='/contact'>
             <Contact/>
             </Route>
