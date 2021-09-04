@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const utils = require('../lib/utils');
-const { findById } = require('../models/deal');
-const deal = require('../models/deal');
 const User = require('../models/user');
 
 // Function to add a new User into the DB
@@ -78,98 +76,5 @@ const userLoginHandler = (req, res, next) => {
     });
 };
 
-// Function to create deals
-const userCreateDeal = async (req, res) => {
-  const userId = req.params.id;
-  try {
-    User.findById(userId, (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        const newDeal = new deal({
-          _id: new mongoose.Types.ObjectId(),
-          user: data._id,
-          name: req.body.name,
-          value: req.body.value,
-          prefContact: req.body.prefContact,
-          contact: req.body.contact,
-        });
-        
-        newDeal.save()
-        .then(result => {
-          res.status(201).json({ success: true, msg: 'Deal created!' });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      }
-    }).lean();
-    
-    res.status(201);
-  } catch(error) {
-    console.log(error);
-  }
-};
-
-// Function to update deals
-const userUpdateDeal = (req, res) => {
-  const dealId = req.params.id;
-  const newName = req.body.name;
-  const newValue = req.body.value;
-  const newPrefContact = req.body.prefContact;
-  const newContact = req.body.contact;
-  
-  deal.findOneAndUpdate({_id: dealId}, {name: newName, value: newValue, prefContact: newPrefContact, contact: newContact}, {new: true}, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else {
-      if (deal != null) {
-        res.status(200).json({ success: true, msg: 'Deal updated!' });
-      } else {
-        res.status(404).json({ success: false, msg: 'Deal not found!' });
-      }
-    }
-  });
-};
-
-// Function to delete deals
-const userDeleteDeal = (req, res) => {
-  const dealId = req.params.id;
-  deal.findOneAndDelete({_id: dealId}, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else {
-      if (deal != null) {
-        res.status(200).json({ success: true, msg: 'Deal deleted!' });
-      } else {
-        res.status(404).json({ success: false, msg: 'Deal not found!' });
-      }
-    }
-  });
-};
-
-const updateDealStatus = (req, res) => {
-  const dealId = req.params.id;
-  const newStatus = req.body.status;
-  deal.findOneAndUpdate({_id: dealId}, {status: newStatus}, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else {
-      if (deal != null) {
-        res.status(200).json({ success: true, msg: 'Deal status updated!' });
-      } else {
-        res.status(404).json({ success: false, msg: 'Deal not found!' });
-      }
-    }
-  });
-};
-
 module.exports.userRegisterHandler = userRegisterHandler;
 module.exports.userLoginHandler = userLoginHandler;
-module.exports.userCreateDeal = userCreateDeal;
-module.exports.userUpdateDeal = userUpdateDeal;
-module.exports.userDeleteDeal = userDeleteDeal;
-module.exports.updateDealStatus = updateDealStatus;
