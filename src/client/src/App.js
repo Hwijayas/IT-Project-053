@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Form from './components/pages/Form'
+import ProtectedRoute from './components/ProtectedRoute';
 
 class App extends Component {
   render() {
@@ -14,7 +15,7 @@ class App extends Component {
         <Router>
         <Navbar/>
         <Switch>
-          <Route exact path='/' component={Home}/>
+          <ProtectedRoute exact path='/' component={Home}/>
           <Route exact path='/about' component={About}/>
           <Route path="/login" component={Form} />
           <Route path='/contact'>
