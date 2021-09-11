@@ -6,15 +6,16 @@ import Axios from 'axios';
 
 const Form = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [error, setError] = useState("");
+    //const [error, setError] = useState("");
 
     function submitForm(){
         setIsSubmitted = (true);
     }
 
-    
+    //makes request to backend to get token 
     const login = async (values) => {
         //console.log(process.env.REACT_APP_API_ENDPOINT);
+        //https://bits-please-web-client.herokuapp.com/user/login
         await Axios.post("http://localhost:5000/user/login",{ 
             // console.log()
             userEmail: values.username,

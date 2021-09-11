@@ -10,6 +10,7 @@ const useForm = (callback, validate, login) => {
     const [errors, setErrors] = useState({})
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    //handle changes on input field
     const handleChange = e => {
         const {name, value} = e.target;
         setValues({
@@ -20,6 +21,7 @@ const useForm = (callback, validate, login) => {
         console.log(values);
     };
 
+    //check for errors if any then submit and call login
     const handleSubmit = e => {
         e.preventDefault();
 
@@ -28,7 +30,7 @@ const useForm = (callback, validate, login) => {
         // console.log(values);
         login(values);
     };
-
+    
     useEffect(
         () => {
         if(Object.keys(errors).length === 0 && isSubmitting){
