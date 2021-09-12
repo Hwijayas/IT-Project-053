@@ -1,19 +1,18 @@
 const mongoose = require('mongoose');
-const Customer = require('../models/Customer');
+const Customer = require('../models/customer');
 
-// Add customer function
-const addCustomer = (customer, user, res) => {
+// handler to create deals
+const userAddsCustomer = async (req, res) => {
   try {
     Customer.find({
-      name: customer.name,
-      company: customer.company,
-      email: customer.email,
-      phone: customer.phone,
+      name: req.body.name,
+      company: req.body.company,
+      email: req.body.email,
+      phone: req.body.phone,
     }).exec()
-      // eslint-disable-next-line consistent-return
       .then((data) => {
         if (data.length >= 1) {
-          if (!data[0].user.includes(user._id)) data[0].user.push(user._id);
+          if (!data[0].user.includes(req.user._id)) data[0].user.push(req.user._id);
           return res.status(422).json({
             message: 'Customer already exists',
             deal: data,
@@ -21,12 +20,12 @@ const addCustomer = (customer, user, res) => {
         }
         const newCustomer = new Customer({
           _id: new mongoose.Types.ObjectId(),
-          name: customer.name,
-          company: customer.company,
-          email: customer.email,
-          phone: customer.phone,
+          name: req.body.name,
+          company: req.body.company,
+          email: req.body.email,
+          phone: req.body.phone,
         });
-        newCustomer.user.push(user._id);
+        newCustomer.user.push(req.user._id);
 
         newCustomer.save()
           .then(() => {
@@ -42,11 +41,4 @@ const addCustomer = (customer, user, res) => {
   }
 };
 
-// handler to create deals
-const userAddsCustomer = async (req, res) => {
-  addCustomer(req.body, req.user, res);
-
-};
-
-module.exports.addCustomer = addCustomer;
 module.exports.userAddsCustomer = userAddsCustomer;

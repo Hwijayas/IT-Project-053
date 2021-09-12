@@ -1,46 +1,78 @@
 const mongoose = require('mongoose');
 const Deal = require('../models/deal');
+const Customer = require('../models/customer');
 
 // Function to create deals
 const userCreateDeal = async (req, res) => {
   try {
     Deal.find({
-      name: req.body.name,
-      // eslint-disable-next-line no-underscore-dangle
-      user: req.user._id,
+      dealName: req.body.dealName,
       value: req.body.value,
-      prefContact: req.body.prefContact,
-      contact: req.body.contact,
-      // eslint-disable-next-line consistent-return
-    }).exec()
-      // eslint-disable-next-line consistent-return
+      user: req.user._id,
+    }).populate('customer')
+      .exec()
       .then((data) => {
         if (data.length >= 1) {
-          return res.status(422).json({
-            message: 'Deal already exists',
-            deal: data,
-          });
+          if ((data[0].customer.name === req.body.customer.name)
+            && (data[0].customer.company === req.body.customer.company)) {
+            return res.status(422).json({
+              message: 'Deal already exists',
+              deal: data,
+            });
+          }
         }
-        const newDeal = new Deal({
-          _id: new mongoose.Types.ObjectId(),
-          // eslint-disable-next-line no-underscore-dangle
-          user: req.user._id,
-          name: req.body.name,
-          value: req.body.value,
-          prefContact: req.body.prefContact,
-          contact: req.body.contact,
-        });
+        Customer.find({
+          name: req.body.customer.name,
+          company: req.body.customer.company,
+          email: req.body.customer.email,
+          phone: req.body.customer.phone,
+        }).exec()
+          .then((customer) => {
+            if (customer.length >= 1) {
+              if (!customer[0].user.includes(user._id)) customer[0].user.push(user._id);
 
-        newDeal.save()
-          .then(() => {
-            res.status(201).json({ success: true, msg: 'Deal created!', deal: newDeal });
-          })
-          .catch((error) => {
-            console.log(error);
+              const newDeal = new Deal({
+                _id: new mongoose.Types.ObjectId(),
+                dealName: req.body.dealName,
+                value: req.body.value,
+                customer: customer[0]._id,
+              });
+              newDeal.user.push(req.user._id);
+              newDeal.save()
+                .then(() => {
+                  res.status(201).json({ success: true, msg: 'Deal created!', deal: newDeal });
+                });
+            }
+
+            const newCustomer = new Customer({
+              _id: new mongoose.Types.ObjectId(),
+              name: req.body.customer.name,
+              company: req.body.customer.company,
+              email: req.body.customer.email,
+              phone: req.body.customer.phone,
+            });
+            newCustomer.user.push(req.user._id);
+
+            newCustomer.save();
+
+            const newDeal = new Deal({
+              _id: new mongoose.Types.ObjectId(),
+              dealName: req.body.dealName,
+              value: req.body.value,
+              customer: newCustomer._id,
+            });
+            newDeal.user.push(req.user._id);
+
+            newDeal.save()
+              .then(() => {
+                res.status(201).json({ success: true, msg: 'Deal created!', deal: newDeal });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           });
+        res.status(201);
       });
-
-    res.status(201);
   } catch (error) {
     console.log(error);
   }
