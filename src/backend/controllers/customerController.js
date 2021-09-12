@@ -60,5 +60,22 @@ const userUpdateCustomer = (req, res) => {
   });
 };
 
+// Function to delete customer
+const userDeleteCustomer = (req, res) => {
+  const dealId = req.params.id;
+  Customer.findOneAndDelete({ _id: dealId, user: req.user._id }, (err, deal) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ success: false, msg: 'Bad request' });
+    } else if (deal != null) {
+      res.status(200).json({ success: true, msg: 'Customer deleted!' });
+    } else {
+      res.status(404).json({ success: false, msg: 'Customer not found!' });
+    }
+  });
+};
+
+
 module.exports.userAddsCustomer = userAddsCustomer;
 module.exports.userUpdateCustomer = userUpdateCustomer;
+module.exports.userDeleteCustomer = userDeleteCustomer;

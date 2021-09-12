@@ -30,4 +30,10 @@ router.put('/deal/:id/status', passport.authenticate('jwt', { session: false }),
 // Register the customer
 router.post('/customer', passport.authenticate('jwt', { session: false }), customerController.userAddsCustomer);
 
+// Update an existing customer
+router.put('/customer/:id', passport.authenticate('jwt', { session: false }), customerController.userUpdateCustomer);
+
+// Delete an existing deal
+router.delete('/customer/:id', passport.authenticate('jwt', { session: false }), customerController.userDeleteCustomer);
+
 module.exports = router;
