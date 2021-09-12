@@ -5,6 +5,7 @@ const Customer = require('../models/customer');
 // Function to create deals
 const userCreateDeal = async (req, res) => {
   try {
+    // Check if the deal is already in DB
     Deal.find({
       dealName: req.body.dealName,
       value: req.body.value,
@@ -13,6 +14,7 @@ const userCreateDeal = async (req, res) => {
       .exec()
       .then((data) => {
         if (data.length >= 1) {
+          // Check if customer is also the same
           if ((data[0].customer.name === req.body.customer.name)
             && (data[0].customer.company === req.body.customer.company)) {
             return res.status(422).json({
@@ -21,6 +23,9 @@ const userCreateDeal = async (req, res) => {
             });
           }
         }
+
+        // Now deal is not in DB
+        // Check if the customer present in DB
         Customer.find({
           name: req.body.customer.name,
           company: req.body.customer.company,
@@ -29,6 +34,7 @@ const userCreateDeal = async (req, res) => {
         }).exec()
           .then((customer) => {
             if (customer.length >= 1) {
+              // Customer present add a create a new customer and add found customer as ref
               if (!customer[0].user.includes(user._id)) customer[0].user.push(user._id);
 
               const newDeal = new Deal({
@@ -44,6 +50,7 @@ const userCreateDeal = async (req, res) => {
                 });
             }
 
+            // Customer and deal not represnt in DB
             const newCustomer = new Customer({
               _id: new mongoose.Types.ObjectId(),
               name: req.body.customer.name,
