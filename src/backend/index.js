@@ -8,6 +8,7 @@ const passport = require('passport');
 require('dotenv').config();
 const server = require('http').Server(app);
 const userRoutes = require('./routes/userRouter');
+const adminRoutes = require('./routes/adminRouter');
 
 // mongoDB connection string
 const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@cluster0.g7t1y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -65,5 +66,6 @@ server.listen(PORT, (err) => {
  * -------------- ROUTES ----------------
  */
 app.use('/user', userRoutes);
+app.use('/admin', adminRoutes);
 
 module.exports = app;
