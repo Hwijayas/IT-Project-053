@@ -41,4 +41,24 @@ const userAddsCustomer = async (req, res) => {
   }
 };
 
+// user updates customer
+const userUpdateCustomer = (req, res) => {
+  Customer.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, {
+    name: req.body.name,
+    company: req.body.company,
+    email: req.body.email,
+    phone: req.body.phone,
+  }, { new: true }, (err, customer) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ success: false, msg: 'Bad request' });
+    } else if (customer != null) {
+      res.status(200).json({ success: true, msg: 'Customer updated!' });
+    } else {
+      res.status(404).json({ success: false, msg: 'Customer not found!' });
+    }
+  });
+};
+
 module.exports.userAddsCustomer = userAddsCustomer;
+module.exports.userUpdateCustomer = userUpdateCustomer;
