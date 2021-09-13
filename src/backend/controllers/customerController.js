@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const Customer = require('../models/customer');
 
 // Add customer to DB
@@ -22,7 +21,7 @@ const addCustomer = async (customerDetails, userID) => {
   const customer = await Customer.findOneAndUpdate(query, update, options);
 
   // Add the user if not present
-  customer.user.indexOf(userID) === -1 ? customer.user.push(userID) : console.log('user already exists');
+  if (customer.user.indexOf(userID) === -1) customer.user.push(userID);
   customer.save();
 
   return customer;

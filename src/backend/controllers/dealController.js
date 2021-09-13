@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
 const Deal = require('../models/deal');
-const Customer = require('../models/customer');
 const customerController = require('./customerController');
 
 // Function to create deals
@@ -24,7 +22,7 @@ const userCreateDeal = async (req, res) => {
   const deal = await Deal.findOneAndUpdate(query, update, options);
 
   // Add the user if not present
-  deal.user.indexOf(req.user._id) === -1 ? deal.user.push(req.user._id) : console.log('user already exists');
+  if (deal.user.indexOf(req.user._id) === -1) deal.user.push(req.user._id);
   deal.save();
 
   return res.status(201).json({

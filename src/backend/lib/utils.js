@@ -26,13 +26,19 @@ const validPassword = (password, hash, salt) => {
 
 /**
  *
- * @param {*} password - The password string that the user inputs to the password field in the register form
+ * @param {*} password-
+ * The password string that the user inputs to the password field in the register form
  *
- * This function takes a plain text password and creates a salt and hash out of it.  Instead of storing the plaintext
+ * This function takes a plain text password and creates a salt and hash out of it.
+ * Instead of storing the plaintext
  * password in the database, the salt and hash are stored for security
  *
- * ALTERNATIVE: It would also be acceptable to just use a hashing algorithm to make a hash of the plain text password.
- * You would then store the hashed password in the database and then re-hash it to verify later (similar to what we do here)
+ * ALTERNATIVE:
+ * It would also be acceptable to just use a hashing algorithm to make
+ * a hash of the plain text password.
+ *
+ * You would then store the hashed password in the database and then re-hash it to verify later
+ * (similar to what we do here)
  */
 const genPassword = (password) => {
   const salt = crypto.randomBytes(32).toString('hex');
@@ -45,7 +51,8 @@ const genPassword = (password) => {
 };
 
 /**
- * @param {*} user - The user object.  We need this to set the JWT `sub` payload property to the MongoDB user ID
+ * @param {*} user - The user object.
+ * We need this to set the JWT `sub` payload property to the MongoDB user ID
  */
 const issueJWT = (user) => {
   const { _id } = user;
