@@ -27,7 +27,9 @@ const userCreateDeal = async (req, res) => {
   deal.user.indexOf(req.user._id) === -1 ? deal.user.push(req.user._id) : console.log('user already exists');
   deal.save();
 
-  return res.status(201).json({ success: true, msg: 'Deal created!', deal });
+  return res.status(201).json({
+    success: true, msg: 'Deal created!', deal, customer,
+  });
 };
 
 // Function to update deals
