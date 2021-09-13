@@ -1,62 +1,61 @@
 const mongoose = require('mongoose');
 const Customer = require('../models/customer');
 
-// handler to create deals
-const userAddsCustomer = async (req, res) => {
-  try {
-    Customer.find({
-      name: req.body.name,
-      company: req.body.company,
-      email: req.body.email,
-      phone: req.body.phone,
-    }).exec()
-      .then((data) => {
-        if (data.length >= 1) {
-          if (!data[0].user.includes(req.user._id)) data[0].user.push(req.user._id);
-          return res.status(422).json({
-            message: 'Customer already exists',
-            deal: data,
-          });
-        }
-        const newCustomer = new Customer({
-          _id: new mongoose.Types.ObjectId(),
-          name: req.body.name,
-          company: req.body.company,
-          email: req.body.email,
-          phone: req.body.phone,
-        });
-        newCustomer.user.push(req.user._id);
+// Add customer to DB
+const addCustomer = async (customerDetails, userID) => {
+  // https://stackoverflow.com/questions/33305623/mongoose-create-document-if-not-exists-otherwise-update-return-document-in
+  const query = {
+    name: customerDetails.name,
+    company: customerDetails.company,
+    email: customerDetails.email,
+    phone: customerDetails.phone,
+  };
+  const update = {
+    name: customerDetails.name,
+    company: customerDetails.company,
+    email: customerDetails.email,
+    phone: customerDetails.phone,
+  };
+  const options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-        newCustomer.save()
-          .then(() => {
-            res.status(201).json({ success: true, msg: 'Customer Created!', deal: newCustomer });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      });
-    res.status(201);
-  } catch (error) {
-    console.log(error);
-  }
+  // Find the document
+  const customer = await Customer.findOneAndUpdate(query, update, options);
+
+  // Add the user if not present
+  customer.user.indexOf(userID) === -1 ? customer.user.push(userID) : console.log('user already exists');
+  customer.save();
+
+  return customer;
 };
 
-// user updates customer
-const userUpdateCustomer = (req, res) => {
-  Customer.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, {
-    name: req.body.name,
-    company: req.body.company,
-    email: req.body.email,
-    phone: req.body.phone,
-  }, { new: true }, (err, customer) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else if (customer != null) {
-      res.status(200).json({ success: true, msg: 'Customer updated!' });
-    } else {
-      res.status(404).json({ success: false, msg: 'Customer not found!' });
-    }
+// handler to create deals
+const userAddsCustomer = async (req, res) => {
+  const customer = await addCustomer(req.body, req.user._id);
+  res.status(422).json({
+    message: 'Customer added',
+    customer,
+  });
+};
+
+const updateCustomer = async (customerID, userID, newDetails) => Customer.findOneAndUpdate(
+  { _id: customerID, user: userID }, {
+    name: newDetails.name,
+    company: newDetails.company,
+    email: newDetails.email,
+    phone: newDetails.phone,
+  }, { new: true },
+);
+
+// handles updates customer request
+const userUpdateCustomer = async (req, res) => {
+  const customer = await updateCustomer(req.params.id, req.user._id, req.body);
+
+  if (customer == null) {
+    return res.status(401).json({ success: false, msg: 'could not find customer' });
+  }
+  return res.status(200).json({
+    success: true,
+    customer,
   });
 };
 
@@ -75,7 +74,8 @@ const userDeleteCustomer = (req, res) => {
   });
 };
 
-
 module.exports.userAddsCustomer = userAddsCustomer;
 module.exports.userUpdateCustomer = userUpdateCustomer;
 module.exports.userDeleteCustomer = userDeleteCustomer;
+module.exports.addCustomer = addCustomer;
+module.exports.updateCustomer = updateCustomer;
