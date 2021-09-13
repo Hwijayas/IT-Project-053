@@ -1,10 +1,10 @@
 import React from 'react'
 import useForm from './useForm'
 import validate from './validateInfo';
-import "../../css/Form.css"
+import "../css/Form.css"
 
-const FormSignup = ({submitForm, login}) => {
-    const{handleChange, values, handleSubmit, errors} = useForm(submitForm, validate, login);
+const FormLogin = ({submitForm, login, FormState, changeForm}) => {
+    const{handleChange, values, handleSubmit, errors} = useForm(submitForm, validate, login, FormState);
     /* Basic sigin form with 2 input fields */
 
     return (
@@ -35,10 +35,13 @@ const FormSignup = ({submitForm, login}) => {
                     {errors.password && <p>{errors.password}</p>}
             </div>
             <button className="form-input-btn" type="submit">Sign In</button>
-            {/* <span className="form-input-login"></span> */}
+            
+            <span className="form-input-login">Don't have an account? 
+                <button onClick={changeForm}>Sign Up</button> here
+            </span>
             </form>
         </div>
     )
 }
 
-export default FormSignup
+export default FormLogin

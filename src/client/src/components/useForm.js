@@ -2,11 +2,20 @@
 
 import { useState, useEffect } from "react";
 
-const useForm = (callback, validate, login) => {
+const useForm = (callback, validate, login, LoginFormState, register) => {
     const [values, setValues] = useState({
         username: "",
         password: ""
     });
+    // if(!LoginFormState){ setValues({
+    //     username: "",
+    //     firstName: "",
+    //     lastName: "",
+    //     password: "",
+    //     password2: ""
+    // });
+    // }
+    
     const [errors, setErrors] = useState({})
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -28,7 +37,8 @@ const useForm = (callback, validate, login) => {
         setErrors(validate(values))
         setIsSubmitting(true);
         // console.log(values);
-        login(values);
+        {LoginFormState ? login(values) : register(values)}
+        //login(values);
     };
     
     useEffect(
