@@ -22,7 +22,7 @@ const addCustomer = async (customerDetails, userID) => {
 
   // Add the user if not present
   if (customer.user.indexOf(userID) === -1) customer.user.push(userID);
-  customer.save();
+  await customer.save();
 
   return customer;
 };

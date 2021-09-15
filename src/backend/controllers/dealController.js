@@ -23,7 +23,7 @@ const userCreateDeal = async (req, res) => {
 
   // Add the user if not present
   if (deal.user.indexOf(req.user._id) === -1) deal.user.push(req.user._id);
-  deal.save();
+  await deal.save();
 
   return res.status(201).json({
     success: true, msg: 'Deal created!', deal, customer,
