@@ -78,6 +78,7 @@ const adminLoginHandler = (req, res, next) => {
 };
 
 // Function to get all users
+// from https://stackoverflow.com/questions/14103615/mongoose-get-full-list-of-users by user soulcheck
 const adminGetAllUsers = async (req, res) => {
   const users = await User.find({});
   const userMap = {};
