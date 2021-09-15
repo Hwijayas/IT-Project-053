@@ -41,8 +41,9 @@ const userUpdateDeal = async (req, res) => {
   if (deal === null) {
     res.status(400).json({ success: false, msg: 'Deal not found!' });
   } else {
-    const customer = await customerController.updateCustomer(deal.customer,
-      req.user._id, req.body.customer);
+    const customer = await customerController.addCustomer(req.body.customer, req.user._id);
+    deal.customer = customer._id;
+    await deal.save();
     res.status(200).json({
       success: true, msg: 'Deal updated!', deal, customer,
     });
