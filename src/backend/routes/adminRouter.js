@@ -9,7 +9,7 @@ router.get('/protected', passport.authenticate('jwt', { session: false }), (req,
 
 router.post('/login', adminController.adminLoginHandler);
 
-router.post('/register', adminController.adminRegisterHandler);
+router.post('/register', passport.authenticate('jwt', { session: false }), adminController.adminRegisterHandler);
 
 router.get('/users', passport.authenticate('jwt', { session: false }), adminController.adminGetAllUsers);
 
