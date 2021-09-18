@@ -80,7 +80,14 @@ const updateDealStatus = (req, res) => {
   });
 };
 
+// view all Deals
+const viewDeals = async (req, res) => {
+  const deals = await Deal.find({ user: req.user._id }).populate('customer');
+  res.send(deals);
+};
+
 module.exports.userCreateDeal = userCreateDeal;
 module.exports.userUpdateDeal = userUpdateDeal;
 module.exports.userDeleteDeal = userDeleteDeal;
 module.exports.updateDealStatus = updateDealStatus;
+module.exports.viewDeals = viewDeals;
