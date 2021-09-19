@@ -13,16 +13,20 @@ const Form = () => {
         setIsSubmitted (true);
     }
 
+    //change state of form
     function changeForm(){
         setLogin(!isLogin);
     }
 
-    
+    //register new user
     const register = async(values) => {
+        //console.log(values);
         await Axios.post("http://localhost:5000/user/register",{
+            
             userEmail: values.username,
-            firstname: values.firstName,
-            lastname: values.lastname
+            firstName: values.firstName,
+            lastName: values.lastName,
+            password: values.password
 
         }).then(response => {
 
@@ -72,6 +76,7 @@ const Form = () => {
 
             if(responseOK){
                 console.log(response);
+                alert("Succesfully Logged In")
                 localStorage.setItem('token', response.data.token);
             }
         }).catch(err => {
@@ -91,8 +96,8 @@ const Form = () => {
             </div>
             {/* {!isSubmitted ? <FormSignup submitForm={submitForm} /> : (<FormSuccess/>)} */}
             {/* <FormLogin submitForm={submitForm} login={login}/> */}
-            {isLogin ? <FormLogin submitForm={submitForm} login={login} FormState={isLogin} changeForm={changeForm}/> : 
-                <FormRegister submitForm={submitForm} changeForm = {changeForm} FormState={isLogin}/>}
+            {isLogin ? <FormLogin submitForm={submitForm} login={login} changeForm={changeForm}/> : 
+                <FormRegister submitForm={submitForm} changeForm = {changeForm} register={register}/>}
         </div>
         </>
     )

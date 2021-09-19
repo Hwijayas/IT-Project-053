@@ -3,8 +3,9 @@ import useForm from './useForm'
 import validate from './validateInfo';
 import "../css/Form.css"
 
-const FormLogin = ({submitForm, login, FormState, changeForm}) => {
-    const{handleChange, values, handleSubmit, errors} = useForm(submitForm, validate, login, FormState);
+const FormLogin = ({submitForm, login, changeForm}) => {
+    const{handleChange, values, handleSubmit, errors} = useForm(submitForm, validate, login);
+
     /* Basic sigin form with 2 input fields */
 
     return (
@@ -37,7 +38,7 @@ const FormLogin = ({submitForm, login, FormState, changeForm}) => {
             <button className="form-input-btn" type="submit">Sign In</button>
             
             <span className="form-input-login">Don't have an account? 
-                <button onClick={changeForm}>Sign Up</button> here
+                <button className="form-change-btn" onClick={changeForm}>Sign Up</button> here
             </span>
             </form>
         </div>
