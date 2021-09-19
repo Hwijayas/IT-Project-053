@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import FormLogin from '../FormLogin';
+import { Switch, useRouteMatch, Route, Link } from 'react-router-dom';
 import "../../css/Form.css"
 import Axios from 'axios';
 import FormRegister from '../FormRegister';
@@ -9,6 +10,8 @@ const Form = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLogin, setLogin] = useState(true);
 
+    const {path, url} = useRouteMatch();
+    
     function submitForm(){
         setIsSubmitted (true);
     }
@@ -21,7 +24,7 @@ const Form = () => {
     //register new user
     const register = async(values) => {
         //console.log(values);
-        await Axios.post("http://localhost:5000/user/register",{
+        await Axios.post("https://bits-please-api.herokuapp.com/user/register",{
             
             userEmail: values.username,
             firstName: values.firstName,
@@ -56,7 +59,7 @@ const Form = () => {
     const login = async (values) => {
         //console.log(process.env.REACT_APP_API_ENDPOINT);
         //https://bits-please-web-client.herokuapp.com/user/login
-        await Axios.post("http://localhost:5000/user/login",{ 
+        await Axios.post("https://bits-please-api.herokuapp.com/user/login",{ 
             // console.log()
             userEmail: values.username,
             password: values.password
@@ -92,12 +95,21 @@ const Form = () => {
         <div className='form-container'>
             {/* <span className='close-btn'>×</span> */}
             <div className='form-content-left'>
-                <img className='form-img' src='BitsRMl_logo.svg' alt='logo' />
+                <img className='form-img' src='/BitsRMl_logo.svg' alt='logo' />
             </div>
             {/* {!isSubmitted ? <FormSignup submitForm={submitForm} /> : (<FormSuccess/>)} */}
             {/* <FormLogin submitForm={submitForm} login={login}/> */}
-            {isLogin ? <FormLogin submitForm={submitForm} login={login} changeForm={changeForm}/> : 
-                <FormRegister submitForm={submitForm} changeForm = {changeForm} register={register}/>}
+            {/* {isLogin ? <FormLogin submitForm={submitForm} login={login} changeForm={changeForm}/> : 
+                <FormRegister submitForm={submitForm} changeForm = {changeForm} register={register}/>} */}
+            
+            <Switch>
+                <Route path={`${path}/login`}>
+                    <FormLogin submitForm={submitForm} login={login} changeForm={changeForm} url={url}/>
+                </Route>
+                <Route path={`${path}/sign-up`}>
+                    <FormRegister submitForm={submitForm} changeForm = {changeForm} register={register} url={url}/>
+                </Route>
+            </Switch>
         </div>
         </>
     )

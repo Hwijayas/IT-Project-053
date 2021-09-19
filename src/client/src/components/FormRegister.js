@@ -1,10 +1,11 @@
 import React from 'react'
 import useForm from './useForm'
 import validate from './validateInfo';
+import {Link } from 'react-router-dom';
 import "../css/Form.css"
 
 //user registr component
-const FormRegister = ({submitForm, changeForm, register}) => {
+const FormRegister = ({submitForm, changeForm, register, url}) => {
     const{handleChange, values, handleSubmit, errors} = useForm(submitForm, validate, register);
     //const {url} = useRouteMatch();
     
@@ -76,7 +77,8 @@ const FormRegister = ({submitForm, changeForm, register}) => {
 
             <button className="form-input-btn" type="submit">Sign Up</button>
             <span className="form-input-login">Already have an account? 
-                <button className="form-change-btn" onClick={changeForm}>Log in</button> here
+                <Link to={`${url}/login`}> Log in here </Link>
+                {/* <button className="form-change-btn" onClick={changeForm}>Log in</button> here */}
             </span>
             
             </form>
