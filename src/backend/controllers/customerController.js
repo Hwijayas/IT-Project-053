@@ -1,5 +1,5 @@
 const Customer = require('../models/customer');
-
+const Deal = require('../models/deal');
 // Add customer to DB
 const addCustomer = async (customerDetails, userID) => {
   // https://stackoverflow.com/questions/33305623/mongoose-create-document-if-not-exists-otherwise-update-return-document-in
@@ -59,18 +59,26 @@ const userUpdateCustomer = async (req, res) => {
 };
 
 // Function to delete customer
-const userDeleteCustomer = (req, res) => {
-  const dealId = req.params.id;
-  Customer.findOneAndDelete({ _id: dealId, user: req.user._id }, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else if (deal != null) {
-      res.status(200).json({ success: true, msg: 'Customer deleted!' });
-    } else {
-      res.status(404).json({ success: false, msg: 'Customer not found!' });
-    }
-  });
+const userDeleteCustomer = async (req, res) => {
+  const customerID = req.params.id;
+
+  const count = await Deal.countDocuments({ customer: customerID });
+
+  // Safe delete option: Delete customer if not referenced in deal
+  if (count === 0) {
+    Customer.findOneAndDelete({ _id: customerID, user: req.user._id }, (err, deal) => {
+      if (err) {
+        console.log(err);
+        res.status(400).json({ success: false, msg: 'Bad request' });
+      } else if (deal != null) {
+        res.status(200).json({ success: true, msg: 'Customer deleted!' });
+      } else {
+        res.status(404).json({ success: false, msg: 'Customer not found!' });
+      }
+    });
+  } else {
+    res.status(405).json({ success: false, msg: 'Customer reference present in a deal; cannot delete' });
+  }
 };
 
 module.exports.userAddsCustomer = userAddsCustomer;
