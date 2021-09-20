@@ -1,11 +1,13 @@
 import React from 'react'
 import useForm from './useForm'
 import validate from './validateInfo';
+import {Link } from 'react-router-dom';
 import "../css/Form.css"
 
-const FormSignup = ({submitForm, login}) => {
+const FormLogin = ({submitForm, login, changeForm, url}) => {
     const{handleChange, values, handleSubmit, errors} = useForm(submitForm, validate, login);
-    /* Basic signup form with 2 input fields */
+
+    /* Basic sigin form with 2 input fields */
 
     return (
         <div className="form-content">
@@ -35,10 +37,14 @@ const FormSignup = ({submitForm, login}) => {
                     {errors.password && <p>{errors.password}</p>}
             </div>
             <button className="form-input-btn" type="submit">Sign In</button>
-            {/* <span className="form-input-login"></span> */}
+            
+            <span className="form-input-login">Don't have an account? 
+                <Link to={`${url}/sign-up`}> Sign up here </Link>
+                {/* <button className="form-change-btn" onClick={changeForm}>Sign Up</button> here */}
+            </span>
             </form>
         </div>
     )
 }
 
-export default FormSignup
+export default FormLogin
