@@ -4,6 +4,7 @@ import React from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
 import { NavLink } from 'react-router-dom'
 
+//Sidebar links
 const Navbar = () => {
     return (
         <>
@@ -15,7 +16,7 @@ const Navbar = () => {
                         <NavLink className="nav-link text-light pb-4" to="/"><i className="zmdi zmdi-home fs-1"></i></NavLink>
                         <NavLink className="nav-link text-light pb-4" to="/graph"><i className="zmdi zmdi-chart fs-1"></i></NavLink>
                         <NavLink className="nav-link text-light pb-4" to="/contact"><i className="zmdi zmdi-phone fs-1"></i></NavLink>
-                        <NavLink className="nav-link text-light pb-4" to="/register"><i className="zmdi zmdi-settings fs-1"></i></NavLink>
+                        <NavLink className="nav-link text-light pb-4" to="/settings"><i className="zmdi zmdi-settings fs-1"></i></NavLink>
                     </ul>
                 </nav>
             </div>

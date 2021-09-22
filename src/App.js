@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import './App.css'
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
-import Register from './components/Register';
+import Settings from './components/Settings';
 import About from './components/About';
 import Contact from './components/Contact'
 import Graph from './components/Graph';
@@ -16,13 +16,13 @@ const App = () => {
       <Navbar/>
 
       <Logo/>
-        
+
       <Route exact path='/'>
         <Dashboard/>
       </Route>
 
-      <Route path='/register'>
-        <Register/>
+      <Route path='/settings'>
+        <Settings/>
       </Route>
 
       <Route path='/login'>
