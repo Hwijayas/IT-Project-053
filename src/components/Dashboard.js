@@ -2,6 +2,48 @@
 import React, { Component } from 'react';
 import '../App.css';
 
+const addDeal = async () => {
+    const response = await Axios.post("https://bits-please-api.herokuapp.com/user/deal", {
+
+        dealName: "",
+        value: "",
+        customer: "",
+        withCredentials: true
+
+    }).catch(err => {
+        console.log(err);
+        alert(err);
+        
+    });
+
+    const responseOK = response && response.status === 201 
+
+    if(responseOK){
+        alert(response.msg);
+    }
+
+
+}
+
+const deleteDeal = (dealId) => {
+    Axios.delete(`https://bits-please-api.herokuapp.com/user/deal/${dealId}`, {
+        params: {id: dealId}
+
+    }).catch(err => {
+        console.log(err);
+        alert(err);
+        
+    });
+
+    const responseOK = response && response.status === 200
+
+    if(responseOK){
+        alert(response.msg);
+    }
+
+
+}
+
 export default class Dashboard extends Component {
 //State for holding component's dynamic data
     state = {
