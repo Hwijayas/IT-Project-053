@@ -24,69 +24,70 @@ const Form = () => {
     //register new user
     const register = async(values) => {
         //console.log(values);
-        await Axios.post("https://bits-please-api.herokuapp.com/user/register",{
+        //http://localhost:5000/user/register
+        const response = await Axios.post("https://bits-please-api.herokuapp.com/user/register",{
             
             userEmail: values.username,
             firstName: values.firstName,
             lastName: values.lastName,
             password: values.password
 
-        }).then(response => {
-
-            const responseOK = response && response.status === 200 
-            && response.statusText === 'OK';
-
-            if(!responseOK){
-                if(response.status === 422){
-                    console.log(response.status);
-                }
-            }
-
-            if(responseOK){
-
-                console.log(response);
-                alert("Successfully registered");
-            }
-
-        }).catch(err => {
-            console.log(err);
-            alert(err);
-        })
-    }
-    
-
-    //makes request to backend to get token 
-    const login = async (values) => {
-        //console.log(process.env.REACT_APP_API_ENDPOINT);
-        //https://bits-please-web-client.herokuapp.com/user/login
-        await Axios.post("https://bits-please-api.herokuapp.com/user/login",{ 
-            // console.log()
-            userEmail: values.username,
-            password: values.password
-        }).then(response => {
-            
-            const responseOK = response && response.status === 200 
-            && response.statusText === 'OK';
-
-
-            if(!responseOK){
-                if(response.status === 401){
-                    //put specific handling in here, 
-                    //rn only console log even though we alr have catch
-                    console.log(response.status);
-                }
-            }
-
-            if(responseOK){
-                console.log(response);
-                alert("Succesfully Logged In")
-                localStorage.setItem('token', response.data.token);
-            }
         }).catch(err => {
             console.log(err);
             alert(err);
             
         });
+
+        const responseOK = response && response.status === 200 
+        && response.statusText === 'OK';
+
+        if(!responseOK){
+            if(response.status === 422){
+                console.log(response.status);
+            }
+        }
+
+        if(responseOK){
+
+            console.log(response);
+            alert("Successfully registered");
+        }
+    }
+    
+
+    //makes request to backend to get token 
+    const login = async (values) => {
+        
+        //https://bits-please-web-client.herokuapp.com/user/login
+        const response = await Axios.post("https://bits-please-api.herokuapp.com/user/login",{ 
+            
+            userEmail: values.username,
+            password: values.password
+
+        }).catch(err => {
+            console.log(err);
+            alert(err);
+            
+        });
+            
+        const responseOK = response && response.status === 200 
+        && response.statusText === 'OK';
+
+
+        if(!responseOK){
+            if(response.status === 401){
+                //put specific handling in here, 
+                //rn only console log even though we alr have catch
+                console.log(response.status);
+            }
+        }
+
+        if(responseOK){
+            console.log(response);
+            alert("Succesfully Logged In")
+            localStorage.setItem('token', response.data.token);
+        }
+        
     }
     
 
