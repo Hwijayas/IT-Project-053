@@ -1,7 +1,11 @@
 //Dashboard Component
 import React, { Component } from 'react';
 import '../App.css';
+import Modal from "./Modal.js"
+import "./Modal.css"
 
+
+/*
 const addDeal = async () => {
     const response = await Axios.post("https://bits-please-api.herokuapp.com/user/deal", {
 
@@ -43,10 +47,22 @@ const deleteDeal = (dealId) => {
 
 
 }
+*/
+
+
 
 export default class Dashboard extends Component {
+
+    showModal = () => {
+        this.setState({ show: true });
+      };
+    
+      hideModal = () => {
+        this.setState({ show: false });
+      };
 //State for holding component's dynamic data
     state = {
+        show: false,
         tasks: [
             {
                 id: 'cla',
@@ -146,8 +162,9 @@ export default class Dashboard extends Component {
                     <div className="col-sm-3 newLead p-0"
                         onDragOver={(e)=>this.onDragOver(e)}
                         onDrop={(e)=>{this.onDrop(e, "newLead")}}>         
-                   <button type="button" className="btn btn-lg new-lead">New Leads<span className="btn fs-4 m-0 p-0" data-bs-toggle="modal" data-bs-target="#exampleModal">+</span> </button>
+                   <button type="button" className="btn btn-lg new-lead" onClick={this.showModal}>New Leads<span className="btn fs-4 m-0 p-0" data-bs-toggle="modal" data-bs-target="#exampleModal">+</span> </button>
                         <h5 className="card-title">{tasks.newLead}</h5>
+                        <Modal show={this.state.show} handleClose={this.hideModal}></Modal>
                     </div>
 
                     <div className="col-sm-3 droppable p-0"
