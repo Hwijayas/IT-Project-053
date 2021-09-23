@@ -24,6 +24,9 @@ router.put('/deal/:id', passport.authenticate('jwt', { session: false }), dealCo
 // Delete an existing deal
 router.delete('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.userDeleteDeal);
 
+// View All deals
+router.get('/deal', passport.authenticate('jwt', { session: false }), dealController.viewDeals);
+
 // Update status of deal
 router.put('/deal/:id/status', passport.authenticate('jwt', { session: false }), dealController.updateDealStatus);
 

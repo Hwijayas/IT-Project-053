@@ -1,5 +1,5 @@
 const Customer = require('../models/customer');
-
+const Deal = require('../models/deal');
 // Add customer to DB
 const addCustomer = async (customerDetails, userID) => {
   // https://stackoverflow.com/questions/33305623/mongoose-create-document-if-not-exists-otherwise-update-return-document-in
@@ -36,45 +36,59 @@ const userAddsCustomer = async (req, res) => {
   });
 };
 
-const updateCustomer = async (customerID, userID, newDetails) => Customer.findOneAndUpdate(
-  { _id: customerID, user: userID }, {
-    name: newDetails.name,
-    company: newDetails.company,
-    email: newDetails.email,
-    phone: newDetails.phone,
-  }, { new: true },
-);
-
 // handles updates customer request
 const userUpdateCustomer = async (req, res) => {
-  const customer = await updateCustomer(req.params.id, req.user._id, req.body);
+  const oldCustomer = await Customer.findById(req.params.id);
 
-  if (customer == null) {
+  if (!oldCustomer) {
     return res.status(401).json({ success: false, msg: 'could not find customer' });
   }
+
+  // Create new customer
+  const updatedCustomer = await addCustomer(req.body, req.user._id);
+
+  if (updatedCustomer._id !== oldCustomer._id) {
+    oldCustomer.user.forEach((present) => {
+      if (updatedCustomer.user.indexOf(present) === -1) updatedCustomer.user.push(present);
+    });
+    await updatedCustomer.save();
+
+    // Update all the references in Deal
+    await Deal.updateMany({ customer: oldCustomer._id }, { customer: updatedCustomer._id });
+
+    await Customer.findByIdAndDelete(oldCustomer._id);
+  }
+
   return res.status(200).json({
     success: true,
-    customer,
+    customer: updatedCustomer,
   });
 };
 
 // Function to delete customer
-const userDeleteCustomer = (req, res) => {
-  const dealId = req.params.id;
-  Customer.findOneAndDelete({ _id: dealId, user: req.user._id }, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else if (deal != null) {
-      res.status(200).json({ success: true, msg: 'Customer deleted!' });
-    } else {
-      res.status(404).json({ success: false, msg: 'Customer not found!' });
-    }
-  });
+const userDeleteCustomer = async (req, res) => {
+  const customerID = req.params.id;
+
+  const count = await Deal.countDocuments({ customer: customerID });
+
+  // Safe delete option: Delete customer if not referenced in deal
+  if (count === 0) {
+    Customer.findOneAndDelete({ _id: customerID, user: req.user._id }, (err, deal) => {
+      if (err) {
+        console.log(err);
+        res.status(400).json({ success: false, msg: 'Bad request' });
+      } else if (deal != null) {
+        res.status(200).json({ success: true, msg: 'Customer deleted!' });
+      } else {
+        res.status(404).json({ success: false, msg: 'Customer not found!' });
+      }
+    });
+  } else {
+    res.status(405).json({ success: false, msg: 'Customer reference present in a deal; cannot delete' });
+  }
 };
 
 module.exports.userAddsCustomer = userAddsCustomer;
 module.exports.userUpdateCustomer = userUpdateCustomer;
 module.exports.userDeleteCustomer = userDeleteCustomer;
 module.exports.addCustomer = addCustomer;
-module.exports.updateCustomer = updateCustomer;
