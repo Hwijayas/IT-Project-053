@@ -33,9 +33,7 @@ const userRegisterHandler = (req, res) => {
             const jwt = utils.issueJWT(user);
             res.json({
               success: true,
-              userEmail: user.userEmail,
-              firstName: user.userFirstName,
-              lastName: user.userLastName,
+              user:user,
               token: jwt.token,
               expiresIn: jwt.expires,
             });
@@ -63,7 +61,7 @@ const userLoginHandler = (req, res, next) => {
 
         res.status(200).json({
           success: true,
-          userEmail: user.userEmail,
+          user: user,
           token: tokenObject.token,
           expiresIn: tokenObject.expires,
         });

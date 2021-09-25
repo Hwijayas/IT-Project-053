@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import FormLogin from '../FormLogin';
 import { Switch, useRouteMatch, Route, Link } from 'react-router-dom';
 import "../../css/Form.css"
-import Axios from 'axios';
 import FormRegister from '../FormRegister';
-//import { response } from 'express';
+import { fetchUser } from '../../actions/userActions';
+
 
 const Form = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -16,79 +16,11 @@ const Form = () => {
         setIsSubmitted (true);
     }
 
-    //change state of form
-    function changeForm(){
-        setLogin(!isLogin);
-    }
+    const userInfo = {
+        userEmail: '',
+        password: ''};
 
-    //register new user
-    const register = async(values) => {
-        //console.log(values);
-        //http://localhost:5000/user/register
-        const response = await Axios.post("https://bits-please-api.herokuapp.com/user/register",{
-            
-            userEmail: values.username,
-            firstName: values.firstName,
-            lastName: values.lastName,
-            password: values.password
-
-        }).catch(err => {
-            console.log(err);
-            alert(err);
-            
-        });
-
-        const responseOK = response && response.status === 200 
-        && response.statusText === 'OK';
-
-        if(!responseOK){
-            if(response.status === 422){
-                console.log(response.status);
-            }
-        }
-
-        if(responseOK){
-
-            console.log(response);
-            alert("Successfully registered");
-        }
-    }
-    
-
-    //makes request to backend to get token 
-    const login = async (values) => {
-        
-        //https://bits-please-web-client.herokuapp.com/user/login
-        const response = await Axios.post("https://bits-please-api.herokuapp.com/user/login",{ 
-            
-            userEmail: values.username,
-            password: values.password
-
-        }).catch(err => {
-            console.log(err);
-            alert(err);
-            
-        });
-            
-        const responseOK = response && response.status === 200 
-        && response.statusText === 'OK';
-
-
-        if(!responseOK){
-            if(response.status === 401){
-                //put specific handling in here, 
-                //rn only console log even though we alr have catch
-                console.log(response.status);
-            }
-        }
-
-        if(responseOK){
-            console.log(response);
-            alert("Succesfully Logged In")
-            localStorage.setItem('token', response.data.token);
-        }
-        
-    }
+    fetchUser(userInfo);
     
 
     return (
@@ -99,18 +31,42 @@ const Form = () => {
                 <img className='form-img' src='/BitsRMl_logo.svg' alt='logo' />
             </div>
             {/* {!isSubmitted ? <FormSignup submitForm={submitForm} /> : (<FormSuccess/>)} */}
-            {/* <FormLogin submitForm={submitForm} login={login}/> */}
-            {/* {isLogin ? <FormLogin submitForm={submitForm} login={login} changeForm={changeForm}/> : 
-                <FormRegister submitForm={submitForm} changeForm = {changeForm} register={register}/>} */}
+            <FormLogin submitForm={submitForm} login={fetchUser}/>
             
-            <Switch>
-                <Route path={`${path}/login`}>
-                    <FormLogin submitForm={submitForm} login={login} changeForm={changeForm} url={url}/>
-                </Route>
-                <Route path={`${path}/sign-up`}>
-                    <FormRegister submitForm={submitForm} changeForm = {changeForm} register={register} url={url}/>
-                </Route>
-            </Switch>
+            <div className="form-content">
+            <form className="form" onSubmit={handleSubmit} noValidate>
+                <h1>Log In</h1>
+            
+            <div className="form-inputs">
+                <label htmlFor="username" className="form-label">Username</label>
+                <input type="text" 
+                    name="username" 
+                    className="form-input" 
+                    placeholder="Enter Username"
+                    id="username"
+                    value={values.username}
+                    onChange={handleChange}/>
+                    {errors.username && <p>{errors.username}</p>}
+            </div>
+            <div className="form-inputs">
+                <label htmlFor="password" className="form-label">Password</label>
+                <input type="password" 
+                    name="password" 
+                    className="form-input" 
+                    placeholder="Enter Password"
+                    id="password"
+                    value={values.password}
+                    onChange={handleChange}/>
+                    {errors.password && <p>{errors.password}</p>}
+            </div>
+            <button className="form-input-btn" type="submit">Sign In</button>
+            
+            <span className="form-input-login">Don't have an account? 
+                <Link to={`${url}/sign-up`}> Sign up here </Link>
+                {/* <button className="form-change-btn" onClick={changeForm}>Sign Up</button> here */}
+            </span>
+            </form>
+        </div>
         </div>
         </>
     )

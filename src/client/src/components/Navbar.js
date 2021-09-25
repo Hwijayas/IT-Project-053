@@ -8,8 +8,9 @@ import {
     NavBtn,
     NavBtnLink,
 } from "./NavElements";
-
-const Navbar = () => {
+import { Redirect } from "react-router";
+const Navbar = (props) => {
+    
     return (
         <>
            <Nav>
@@ -28,12 +29,20 @@ const Navbar = () => {
                 <NavLink to="/contact" activeStyle>
                     Contact
                 </NavLink>
-                <NavLink to="/Form/login" activeStyle>
-                    Sign In
-                </NavLink>
-                <NavBtn>
-                    <NavBtnLink to="/Form/sign-up">Sign Up</NavBtnLink>                
-                </NavBtn>
+                {props.loggedin ?
+                    (<>
+                    <NavBtn>
+                        <NavBtnLink to="/" onClick={props.handleLogout}>Sign Out</NavBtnLink>                
+                    </NavBtn>
+                    </>)
+                    :
+                    (<>
+                        <NavBtn>
+                            <NavBtnLink to="/login" onClick={props.handleOpen}>Sign In</NavBtnLink>                
+                            <NavBtnLink to="/sign-up" onClick={props.handleOpen}>Sign Up</NavBtnLink>                
+                        </NavBtn>
+                        </>)
+                }
             </NavMenu> 
            </Nav> 
         </>
