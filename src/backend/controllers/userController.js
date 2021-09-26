@@ -10,7 +10,8 @@ const userRegisterHandler = (req, res) => {
     .then((user) => {
       if (user.length >= 1) {
         return res.status(422).json({
-          message: 'User already exists',
+          success: false,
+          msg: 'User already exists',
         });
       }
       const saltHash = utils.genPassword(req.body.password);
@@ -33,9 +34,7 @@ const userRegisterHandler = (req, res) => {
             const jwt = utils.issueJWT(user);
             res.json({
               success: true,
-              userEmail: user.userEmail,
-              firstName: user.userFirstName,
-              lastName: user.userLastName,
+              user:user.userEmail,
               token: jwt.token,
               expiresIn: jwt.expires,
             });
@@ -63,7 +62,7 @@ const userLoginHandler = (req, res, next) => {
 
         res.status(200).json({
           success: true,
-          userEmail: user.userEmail,
+          user: user.userEmail,
           token: tokenObject.token,
           expiresIn: tokenObject.expires,
         });

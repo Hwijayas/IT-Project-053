@@ -8,8 +8,10 @@ import {
     NavBtn,
     NavBtnLink,
 } from "./NavElements";
+import {Button} from '@mui/material';
 
-const Navbar = () => {
+const Navbar = (props) => {
+
     return (
         <>
            <Nav>
@@ -28,12 +30,18 @@ const Navbar = () => {
                 <NavLink to="/contact" activeStyle>
                     Contact
                 </NavLink>
-                <NavLink to="/Form/login" activeStyle>
-                    Sign In
-                </NavLink>
-                <NavBtn>
-                    <NavBtnLink to="/Form/sign-up">Sign Up</NavBtnLink>                
-                </NavBtn>
+                {props.loggedIn ?
+                    (<>
+                    <Button variant='contained' color='info' onClick={props.handleLogout}>Log Out</Button>
+                    </>)
+                    :
+                    (<>
+                        <NavBtn>
+                            <NavBtnLink to="/login" onClick={props.handleOpen}>Sign In</NavBtnLink>                
+                            <NavBtnLink to="/sign-up" onClick={props.handleOpen}>Sign Up</NavBtnLink>                
+                        </NavBtn>
+                        </>)
+                }
             </NavMenu> 
            </Nav> 
         </>
