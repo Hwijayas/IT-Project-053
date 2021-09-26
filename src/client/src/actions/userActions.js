@@ -2,6 +2,10 @@ import { Redirect } from "react-router";
 
 //const url = 'http://bits-please-api.herokuapp.com/user';
 const url = 'http://localhost:5000/user';
+const headers = {
+	"Content-Type": "application/json",
+	"Accept": "application/json"
+} 
 export const setUser = (payload) => ({ type: "SET_USER", payload})
 
 export const logout = () => ({type: "LOGOUT"});
@@ -22,10 +26,7 @@ export const setLoading = (loading)=>({
 export const fetchUser =  (userInfo) => async dispatch => {
 	const res = await fetch(`${url}/login`, {
 		method: "POST",
-		headers: {
-				"Content-Type": "application/json",
-				"Accept": "application/json"
-		},
+		headers: headers,
 		body: JSON.stringify(userInfo)
 	})
 	const data = await res.json();
@@ -40,14 +41,10 @@ export const fetchUser =  (userInfo) => async dispatch => {
 export const signUp = (userInfo) => async dispatch => {
 	const res = await fetch(`${url}/register`, {
 		method: "POST",
-		headers: {
-				"Content-Type": "application/json",
-				"Accept": "application/json"
-		},
+		headers: headers,
 		body: JSON.stringify(userInfo)
 	})
 	const data = await res.json();
-	if(data)console.log('sign-up data: '+ data);
 	if(data.success === false){
 		return dispatch(setErrors(data.msg))
 	}
@@ -64,11 +61,7 @@ export const verifyUser = () => async dispatch => {
 	}
 	const res = await fetch(`${url}/protected`, {
 			method: 'GET',
-			headers: {
-					"Content-Type": "application/json",
-					"Accept": "application/json",
-					"Authorization": `${token}`
-			}
+			headers: {...headers, "Authorization": `${token}`}
 	})
 	const data = await res.json();
 	if (data.success === true){

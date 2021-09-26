@@ -50,7 +50,7 @@ const Form = ({ handleClose, route}) => {
 		if (!data.firstName) {
 			res = (fetchUser({"userEmail":data.userEmail, "password":data.password}))
 		}else{
-			res = (signUp({'userEmail:':data.userEmail, 'password':data.password, 'firstName':data.firstName, 'lastName': data.lastName}))
+			res = (signUp(data))
 		}
 		if(res){
 			await dispatch(res);

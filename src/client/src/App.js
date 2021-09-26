@@ -13,7 +13,6 @@ import LoginComponent from './components/LoginComponent';
 const App = () => {
   /*authenticate user if jwt exists */
   const userReducer = useSelector(state => state.userReducer)
-  console.log("reducer: "+userReducer);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
