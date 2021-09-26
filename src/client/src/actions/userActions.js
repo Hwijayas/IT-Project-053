@@ -16,6 +16,7 @@ export const emptyErrors = () => ({
 })
 
 export const fetchUser = (userInfo) => dispatch => {
+    console.log('fetchUser: '+ JSON.stringify(userInfo));
     fetch(`${url}/login`, {
         method: "POST",
         headers: {

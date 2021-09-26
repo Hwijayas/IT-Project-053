@@ -52,7 +52,7 @@ const Form = ({ handleClose, route}) => {
 		console.log('submit')
 		setLoading(true);
     const res = await dispatch((data.firstName==="") ? 
-        fetchUser({userEmail:data.userEmail, password:data.password}) :
+        fetchUser({"userEmail":data.userEmail, "password":data.password}) :
         signUp({data})
     )
     if(res){
@@ -121,7 +121,7 @@ const Form = ({ handleClose, route}) => {
 
 			<Box sx={{height:20}}/>	
 			<Controller
-				name="username"
+				name="userEmail"
 				control={control}
 				defaultValue=""
 				render={({ field: { onChange, userEmail }, fieldState: { error } }) => (
