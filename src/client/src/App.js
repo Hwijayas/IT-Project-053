@@ -5,17 +5,19 @@ import './css/App.css';
 import Navbar from './components/Navbar';
 import Dashboard from './components/dashboard/Dashboard';
 import About from './components/pages/About';
-import ProtectedRoute from './components/ProtectedRoute';
+import {ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
 import { logout, verifyUser } from './actions/userActions';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
+
 const App = () => {
   /*authenticate user if jwt exists */
   const userReducer = useSelector(state => state.userReducer)
+  console.log("reducer: "+userReducer);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
-  },[dispatch]);
+  },[userReducer.loggedIn, dispatch]);
   
   /*sign-in modal handles*/
   const [open, setOpen] = useState(true);
@@ -24,21 +26,23 @@ const App = () => {
 	};
 	const handleClose = () => {
 		setOpen(false);
-    <Redirect to='/about'/>
+    <Redirect to='/'/>
 	};
+  const handleLogout = () => {
+    dispatch(logout());
+    return (
+      <Redirect to="/login"/>
+    )
+  }
   return (
     <div className='App'>
       <Router>
-      <Navbar loggedIn={userReducer.loggedIn} handleOpen={handleOpen} handleLogout={logout}/>
+      <Navbar loggedIn={userReducer.loggedIn} handleOpen={handleOpen} handleLogout={handleLogout}/>
       <Switch>
-        <ProtectedRoute exact path='/' loggedin={userReducer.loggedIn} component={Dashboard}/>
+        <ProtectedRoute exact path='/' loggedIn={userReducer.loggedIn} component={Dashboard}/>
         <Route exact path='/about' component={About}/>
-        <Route exact path="/login" >
-          <LoginComponent open={open} handleClose={handleClose}/>
-        </Route>
-        <Route exact path="/sign-up">
-          <LoginComponent open={open} handleClose={handleClose}/>
-        </Route>
+        <PublicRoute path="/login" loggedIn={userReducer.loggedIn} open={open} handleClose={handleClose} component={LoginComponent}/>
+        <PublicRoute path="/sign-up" loggedIn={userReducer.loggedIn} open={open} handleClose={handleClose} component={LoginComponent} />
       </Switch>
       </Router>
     </div>

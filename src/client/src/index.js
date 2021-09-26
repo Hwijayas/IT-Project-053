@@ -1,18 +1,29 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import {createStore, applyMiddleware} from 'redux';
+import {createStore,compose, applyMiddleware} from 'redux';
 import rootReducer from './reducers/index';
-import thunk from 'redux-thunk'
+import thunkMiddleware from 'redux-thunk'
 
 import './css/index.css';
 import App from '../src/App';
-const store = createStore(rootReducer, applyMiddleware(thunk));
+
+const configureStore = (preloadedState)=> {
+    const middlewares = [thunkMiddleware]
+    const middlewareEnhancer = applyMiddleware(...middlewares)
+  
+    const enhancers = [middlewareEnhancer]
+    const composedEnhancers = compose(...enhancers)
+  
+    const store = createStore(rootReducer, preloadedState, composedEnhancers)
+  
+    return store
+}
+
+const store = configureStore();
 render((
     <Provider store={store}>
-    <BrowserRouter>
         <App/>
-    </BrowserRouter>
     </Provider>
 ), document.getElementById('root'));
+

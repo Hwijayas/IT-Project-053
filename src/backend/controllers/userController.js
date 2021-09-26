@@ -10,7 +10,8 @@ const userRegisterHandler = (req, res) => {
     .then((user) => {
       if (user.length >= 1) {
         return res.status(422).json({
-          message: 'User already exists',
+          success: false,
+          msg: 'User already exists',
         });
       }
       const saltHash = utils.genPassword(req.body.password);

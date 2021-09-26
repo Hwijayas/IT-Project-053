@@ -1,17 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Box,Button,ButtonGroup,Card,TextField} from '@mui/material'
 import { makeStyles } from '@mui/styles';
-import { fetchUser, signUp ,emptyErrors} from '../actions/userActions';
+import { fetchUser, signUp ,emptyErrors, setLoading} from '../actions/userActions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form'
 import { Redirect } from 'react-router';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import Chip from '@mui/material/Chip';
 
-
-const errorLiStyle = {
-  color: 'red'
-}
 const useStyles = makeStyles (theme => ({
 	root: {
 		display: 'flex',
@@ -43,36 +40,38 @@ const RedirectForm = (props) => {
 }
 const Form = ({ handleClose, route}) => {
   const user = useSelector(state => state.userReducer)
-  const [loading,setLoading] = useState(false);
   const classes = useStyles();
   const { handleSubmit, control } = useForm();
   const dispatch = useDispatch();
-
   const onSubmit = async (data) => {
-		console.log('submit')
-		setLoading(true);
-    const res = await dispatch((data.firstName==="") ? 
-        fetchUser({"userEmail":data.userEmail, "password":data.password}) :
-        signUp({data})
-    )
-    if(res){
-      console.log(`loginForm.log: ${res}`);
-			emptyErrors();
-	  	setLoading(false);
-      <Redirect to="/"/>
-    };
+		dispatch(emptyErrors());
+		dispatch(setLoading(true));
+		let res;
+		if (!data.firstName) {
+			res = (fetchUser({"userEmail":data.userEmail, "password":data.password}))
+		}else{
+			res = (signUp({'userEmail:':data.userEmail, 'password':data.password, 'firstName':data.firstName, 'lastName': data.lastName}))
+		}
+		if(res){
+			await dispatch(res);
+			dispatch(setLoading(false));
+			<Redirect to="/"/>
+		}else{
+			dispatch(setLoading(false));
+		}
   };
+
 
   return (
 	  <>
 	<Backdrop
 	sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-	open={loading}
+	open={(user.loading)}
   	><CircularProgress color="inherit" />
     </Backdrop>
 	
 	<form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
-	<Card variant='default' disableElevation>
+	<Card variant='default' disableElevation={true}>
 	<img className='form-img' src='/BitsRMl_logo.svg' alt='logo' />
 	</Card>
 	{
@@ -156,14 +155,16 @@ const Form = ({ handleClose, route}) => {
 						type="password"
 					/>
 				)}
-				rules={{ required: 'Password required' }}
+				rules={{ required: 'Password required', minLength: 6 }}
 			/>
       <Box sx={{height:20}}/>
-      <ul>
-        {
-          user.loginErrors.map((error,idx) => <li style={errorLiStyle} key={idx}>{error}</li>)
-        }
-      </ul>
+			{
+				!!user.loginErrors ? 
+					<>
+					<Chip label={user.loginErrors} variant="filled" size='small' color='error' onDelete={null} />
+					<Box sx={{height:10}}/>
+					</>:null
+			}
 			<ButtonGroup variant="text" aria-label="text button group">
 				<Button variant="contained" onClick={handleClose}>
 					Cancel

@@ -1,7 +1,9 @@
 const defaultState = {
     loggedIn: false,
     user: {},
-    loginErrors: [],
+    loginErrors: '',
+    updateErrors:[],
+    loading: false,
 }
 
 const userReducer = (state = defaultState, action) => {
@@ -13,22 +15,30 @@ const userReducer = (state = defaultState, action) => {
           user: {...action.payload}
       }
     case "LOGOUT":
-      localStorage.clear()
+      localStorage.clear();
       return {
           ...state,
           loggedIn: false,
-          user: {}
+          user: {},
+          updateErrors: [],
+          loginErrors:'',
+          loading:false,
       }
     case "SET_ERRORS":
       return {
           ...state,
-          loginErrors: {...action.payload}
+          loginErrors: action.payload
         }
     case "EMPTY_ERRORS":
       return {
           ...state,
-          loginErrors: [],
+          loginErrors: '',
           updateErrors: []
+      }
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.payload
       }
     
     default: return state

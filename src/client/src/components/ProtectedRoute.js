@@ -1,14 +1,21 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-function ProtectedRoute({ component: Component, ...restOfProps }) {
+function ProtectedRoute({ component: Component, loggedIn, ...restOfProps }) {
     return (
         <Route
-        {...restOfProps}
-        render={(props) =>
-            props.loggedin ? <Component {...props} /> : <Redirect to="/login" />
+        render={() =>
+            loggedIn ? <Component {...restOfProps} /> : <Redirect to="/login" />
         }
         />
     );
 }
-
-export default ProtectedRoute;
+function PublicRoute({ component: Component, loggedIn, ...restOfProps }) {
+    return (
+        <Route
+        render={() =>
+            !loggedIn ? <Component {...restOfProps} /> : <Redirect to="/" />
+        }
+        />
+    );
+}
+export  {ProtectedRoute, PublicRoute};

@@ -8,9 +8,10 @@ import {
     NavBtn,
     NavBtnLink,
 } from "./NavElements";
-import { Redirect } from "react-router";
+import {Button} from '@mui/material';
+
 const Navbar = (props) => {
-    
+
     return (
         <>
            <Nav>
@@ -29,11 +30,9 @@ const Navbar = (props) => {
                 <NavLink to="/contact" activeStyle>
                     Contact
                 </NavLink>
-                {props.loggedin ?
+                {props.loggedIn ?
                     (<>
-                    <NavBtn>
-                        <NavBtnLink to="/" onClick={props.handleLogout}>Sign Out</NavBtnLink>                
-                    </NavBtn>
+                    <Button variant='contained' color='info' onClick={props.handleLogout}>Log Out</Button>
                     </>)
                     :
                     (<>
