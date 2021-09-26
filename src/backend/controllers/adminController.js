@@ -118,7 +118,7 @@ const adminGetAllFlaggedDeals = async (req, res) => {
 
 const adminDeleteDeal = (req, res) => {
   const dealId = req.params.id;
-  deal.findOneAndDelete({_id: dealId}, (err, deal) => {
+  deal.findOneAndDelete({_id: dealId, delStatus: true}, (err, deal) => {
     if (err) {
       console.log(err);
       res.status(400).json({ success: false, msg: 'Bad request' });
