@@ -1,7 +1,7 @@
 import { Redirect } from "react-router";
 
-//const url = 'http://bits-please-api.herokuapp.com/user';
-const url = 'http://localhost:5000/user';
+const url = 'https://bits-please-api.herokuapp.com/user';
+//const url = 'http://localhost:5000/user';
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json"
