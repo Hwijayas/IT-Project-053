@@ -98,7 +98,35 @@ const updateDealStatus = (req, res) => {
   });
 };
 
+// Function to toggle deal deletion status
+const flagDealDeletion = (req, res) => {
+  const dealId = req.params.dealId;
+
+  Deal.findOne({_id: dealId}, (err, deal) => {
+    if (err) {
+      console.log(err);
+      res.status(404);
+    } else {
+      newDelStatus = !deal.delStatus;
+      Deal.findOneAndUpdate({_id: dealId}, {Open: false}, {new: true}, (err, deal) => {
+        if (err) {
+          console.log(err);
+          res.status(404);
+        } else {
+          if (deal == null) {
+            console.log(err);
+            res.status(404);
+          } else {
+            res.status(200).json({ success: true, msg: 'Deal deletion flag updated!'})
+          }
+        }
+      });
+    }
+  });
+};
+
 module.exports.userCreateDeal = userCreateDeal;
 module.exports.userUpdateDeal = userUpdateDeal;
 module.exports.userDeleteDeal = userDeleteDeal;
 module.exports.updateDealStatus = updateDealStatus;
+module.exports.flagDealDeletion = flagDealDeletion;

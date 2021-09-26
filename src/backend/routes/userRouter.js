@@ -26,4 +26,7 @@ router.delete('/deal/:id', passport.authenticate('jwt', { session: false }), dea
 // Update status of deal
 router.put('/deal/:id/status', passport.authenticate('jwt', { session: false }), dealController.updateDealStatus);
 
+// Update status of deal deletion
+router.put('/deal/:id/flag', passport.authenticate('jwt', { session: false }), dealController.flagDealDeletion);
+
 module.exports = router;

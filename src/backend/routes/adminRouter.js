@@ -15,4 +15,8 @@ router.get('/users', passport.authenticate('jwt', { session: false }), adminCont
 
 router.delete('/users/:id', passport.authenticate('jwt', { session: false }), adminController.adminDeleteUser);
 
+router.get('/deals/flagged', passport.authenticate('jwt', { session: false }), adminController.adminGetAllFlaggedDeals);
+
+router.delete('/deals/:id', passport.authenticate('jwt', { session: false }), adminController.adminDeleteDeal);
+
 module.exports = router;

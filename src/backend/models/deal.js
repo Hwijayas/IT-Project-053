@@ -8,6 +8,7 @@ const dealSchema = mongoose.Schema({
   prefContact: String, // Email, contact number
   contact: String,
   status: { type: String, default: 'Pending' }, // Pending, Accepted, Declined, Done
+  delStatus: { type: Boolean, default: false } 
 });
 
 module.exports = mongoose.model('Deal', dealSchema);
