@@ -100,7 +100,7 @@ const updateDealStatus = (req, res) => {
 
 // Function to toggle deal deletion status
 const flagDealDeletion = (req, res) => {
-  const dealId = req.params.dealId;
+  const dealId = req.params.id;
 
   Deal.findOne({_id: dealId}, (err, deal) => {
     if (err) {
@@ -108,7 +108,7 @@ const flagDealDeletion = (req, res) => {
       res.status(404);
     } else {
       newDelStatus = !deal.delStatus;
-      Deal.findOneAndUpdate({_id: dealId}, {Open: false}, {new: true}, (err, deal) => {
+      Deal.findOneAndUpdate({_id: dealId}, {delStatus: newDelStatus}, {new: true}, (err, deal) => {
         if (err) {
           console.log(err);
           res.status(404);
