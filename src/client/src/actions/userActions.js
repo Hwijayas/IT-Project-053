@@ -33,7 +33,7 @@ export const fetchUser =  (userInfo) => async dispatch => {
 	if(data.success === false){
 		return dispatch(setErrors(data.msg))
 	}
-	localStorage.setItem("token", data.token);
+	localStorage.setItem("token", "Bearer" + data.token);
 	dispatch(emptyErrors());
 	dispatch(setUser(data.user));
 }
