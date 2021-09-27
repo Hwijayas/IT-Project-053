@@ -37,11 +37,7 @@ const useStyles = makeStyles({
 export const DealColumn = ({
     stage,
     dealIds,
-    data,
-}: {
-    stage: string;
-    dealIds: Identifier[];
-    data: RecordMap<Deal>;
+    data
 }) => {
     const classes = useStyles();
     return (

@@ -10,7 +10,7 @@ import { logout, verifyUser } from './actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
 import { DealListContent } from './components/deals/DealListContent';
-import Modal from './components/deals/Modal';
+import Deals from './components/deals/Deals';
 
 const App = () => {
   /*authenticate user if jwt exists */
@@ -42,7 +42,7 @@ const App = () => {
       <Switch>
         <ProtectedRoute exact path='/' loggedIn={userReducer.loggedIn} component={Dashboard}/>
         <Route exact path='/about' component={About}/>
-        <ProtectedRoute  exact path='/deals' loggedIn={userReducer.loggedIn} open={open} component={Modal}/>
+        <ProtectedRoute  exact path='/deals' loggedIn={userReducer.loggedIn} open={open} component={Deals}/>
         <PublicRoute path="/login" loggedIn={userReducer.loggedIn} open={open} handleClose={handleClose} component={LoginComponent}/>
         <PublicRoute path="/sign-up" loggedIn={userReducer.loggedIn} open={open} handleClose={handleClose} component={LoginComponent} />
       </Switch>

@@ -1,35 +1,71 @@
 import Axios from "axios"
 import { Redirect } from "react-router";
-const passport = require('passport');
-//const url = 'http://bits-please-api.herokuapp.com/user';
-const url = 'http://localhost:5000/user';
+const url = 'http://bits-please-api.herokuapp.com/user';
+//const url = 'http://localhost:5000/user';
 
+export const setDeal= (payload) => ({ type: "SET_DEAL", payload})
 
-//const token = 
+export const setErrors = (errorsArr) => ({
+    type: "SET_DEAL_ERRORS",
+    payload: errorsArr
+})
+
+const token = localStorage.getItem('token');
 
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json",
-    "Authorization": localStorage.getItem('token')
+    "Authorization": token
 } 
-
-export const setErrors = (errorsArr) => ({
-    type: "SET_ERRORS",
-    payload: errorsArr
-})
 
 
 export const addDeal = (data) => async dispatch =>{
-    console.log(typeof(token))
-    console.log(data);
+    console.log(localStorage.getItem('token'));
     const response = await Axios.post(`${url}/deal`, {
-
-        data:{
-            dealName: data.dealName,
-            value: data.dealValue,
-            customer: "61488cf91509c3be64a8b211",
-            status: data.status,
+        
+        dealName: data.dealName,
+        value: data.dealValue,
+        customer: {
+            "name": data.customerName,
+            "company": data.customerCompanyName,
+            "email": data.customerEmail,
+            "phone": data.customerPhone
         },
+        
+    }, {headers: headers}).catch(err => {
+        console.log(err);
+        alert(err);
+    });
+
+    const responseOK = response && response.status === 201 
+
+    if(responseOK){
+        return <Redirect to="/deals" />
+    }
+}
+
+
+export const viewDeals = () => async dispatch =>{
+    const deal = await Axios.get(`${url}/deal`, {
+        headers: headers
+    }).catch(err => {
+        console.log(err);
+        alert(err);
+        
+    });
+    if(deal){
+        console.log(deal.data)
+        return deal.data;
+    }
+
+    dispatch(setDeal(deal.data))
+    
+}
+
+
+export const updateDeals = (data, dealId) => async dispatch =>{
+    const response = await Axios.put(`${url}/deal/${dealId}`, {
+        params: {id: dealId}
 
     }, {headers: headers}).catch(err => {
         console.log(err);
@@ -45,42 +81,10 @@ export const addDeal = (data) => async dispatch =>{
     }
 }
 
-
-
-export const viewDeals = () => async dispatch =>{
-    const deals = await Axios.get(`${url}/deal`, {
-
-    }).catch(err => {
-        console.log(err);
-        alert(err);
-        return dispatch(setErrors(deals.msg))
-    });
-
-    return deals;
-}
-
-export const updateDeals = (data, dealId) => async dispatch =>{
-    const response = await Axios.put(`${url}/deal/${dealId}`, {
-        params: {id: dealId}
-
-    }).catch(err => {
-        console.log(err);
-        alert(err);
-        return dispatch(setErrors(data.msg))
-    });
-
-    const responseOK = response && response.status === 201 
-
-    if(responseOK){
-        alert(response.msg);
-        return <Redirect to="/" />
-    }
-}
-
 export const updateDealStatus = (dealId, data) => async dispatch =>{
     const response = await Axios.put(`${url}/deal/${dealId}/status`,{
         status:""
-    }).catch(err => {
+    }, {headers: headers}).catch(err => {
         console.log(err);
         alert(err);
         return dispatch(setErrors(response.msg))
@@ -90,19 +94,23 @@ export const updateDealStatus = (dealId, data) => async dispatch =>{
 
     if(responseOK){
         alert(response.msg);
-        return <Redirect to="/" />
+        return <Redirect to="/deals" />
     }
 }
 
 export const deleteDeal = (dealId) => async dispatch =>{
-    Axios.delete(`${url}/deal/${dealId}`, {
-        params: {id: dealId}
+    const res = Axios.delete(`${url}/deal/${dealId}`, {
+        params: {id: dealId},
+        headers: headers
 
-    }).catch(err => {
+    }, {headers: headers}).catch(err => {
         console.log(err);
         alert(err);
         
     });
 
+    if(res.success === false){
+        return dispatch(setErrors(res.msg))
+    }
 
 }

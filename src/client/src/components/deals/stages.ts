@@ -1,10 +1,9 @@
 export const stages = [
-    'opportunity',
-    'proposal-sent',
-    'in-negociation',
-    'won',
-    'lost',
-    'delayed',
+    'Pending',
+    'Accepted',
+    'Declined',
+    'Done',
+    
 ];
 
 export const stageNames = {
