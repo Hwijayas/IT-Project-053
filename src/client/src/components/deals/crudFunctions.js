@@ -1,6 +1,6 @@
 import Axios from "axios"
 import { Redirect } from "react-router";
-const url = 'http://bits-please-api.herokuapp.com/user';
+const url = 'https://bits-please-api.herokuapp.com/user';
 //const url = 'http://localhost:5000/user';
 
 export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
@@ -57,14 +57,14 @@ export const viewDeals = () => async dispatch =>{
         
     });
     if(typeof(deal) !== "undefined"){
-        console.log(deal.data)
+        //console.log(deal.data)
+        dispatch(setDeal(deal.data))
         return deal.data;
     }
 
-    dispatch(setDeal(deal.data))
+    //dispatch(setDeal(deal.data))
     
 }
-
 
 export const updateDeals = (data, dealId) => async dispatch =>{
     const response = await Axios.put(`${url}/deal/${dealId}`, {

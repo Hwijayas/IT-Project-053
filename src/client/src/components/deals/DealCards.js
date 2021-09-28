@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@mui/material';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -14,12 +15,17 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const DealCards = ({ data, index }) => {
+export const DealCards = ({ data }) => {
+
+    const classes = useStyles();
+
     return (
-        <div>
-            
+        
+        <div className={classes.root}>
+            <Button>Test</Button>
+            {/* <h1> test </h1> */}
         </div>
     )
 }
 
-export default DealCards
+

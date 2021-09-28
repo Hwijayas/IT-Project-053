@@ -1,14 +1,15 @@
 const defaultState = {
-    dealList: [],
+    dealList: {},
     dealErrors: '',
 }
 
 const dealReducer = (state = defaultState, action) => {
     switch(action.type){
         case "SET_DEALS":
+            console.log("action called")
             return {
                 ...state,
-                dealList: [...state.dealList, action.payload]
+                dealList: {...action.payload}
             }
         
         case "DELETE_DEAL":
