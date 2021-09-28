@@ -3,10 +3,8 @@ import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Droppable } from 'react-beautiful-dnd';
 import { Identifier, RecordMap } from 'react-admin';
-
-import { DealCards } from './DealCards';
+import {DealCards} from "./DealCards"
 import { stageNames } from './stage';
-import { Deal } from './types';
 
 const useStyles = makeStyles({
     root: {
@@ -35,7 +33,7 @@ const useStyles = makeStyles({
 });
 
 export const DealColumn = ({stage , dealIds, data}) => {
-
+    //console.log(dealIds)
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -53,9 +51,12 @@ export const DealColumn = ({stage , dealIds, data}) => {
                             (snapshot.isDraggingOver ? ' isDraggingOver' : '')
                         }
                     >
-                        {/* {dealIds.map((id, index) => (
-                            <DealCards key={id} index={index} deal={data[id]} />
-                        ))} */}
+                        {dealIds.map((id, index) => (
+                            <DealCards key={id._id} index={index} deal={id} />
+                        ))}
+                        {/* {dealIds.map((id, index) =>{
+                            console.log(id)
+                        })} */}
                         
                         {droppableProvided.placeholder}
                     </div>

@@ -1,5 +1,5 @@
 const defaultState = {
-    dealList: {},
+    dealList: [],
     dealErrors: '',
 }
 
@@ -9,7 +9,7 @@ const dealReducer = (state = defaultState, action) => {
             console.log("action called")
             return {
                 ...state,
-                dealList: {...action.payload}
+                dealList: [...action.payload]
             }
         
         case "DELETE_DEAL":

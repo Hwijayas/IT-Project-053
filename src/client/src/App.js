@@ -9,7 +9,6 @@ import {ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
 import { logout, verifyUser } from './actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
-import { DealListContent } from './components/deals/DealListContent';
 import Deals from './components/deals/Deals';
 import Modal from "./components/deals/Modal"
 

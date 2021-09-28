@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Box} from '@mui/material'
 import { defaults } from 'lodash';
 import { DealCards } from './DealCards';
-import { DealCard } from './DealCard';
+
 
 const Deals = ( handleClose,  open) => {
     //const [deals, setDeals] = useState({});
@@ -33,13 +33,28 @@ const Deals = ( handleClose,  open) => {
     },[dispatch]);
     
     
-    if(Object.keys(deals.dealList).length !== 0){
-        console.log(deals.dealList)
-    }
+    // if(Object.keys(deals.dealList).length !== 0){
+    //     console.log(deals.dealList)
+    // }
     
-    function onDragEnd() {
+    const onDragEnd = () => async result => {
+        const { destination, source, draggableId } = result;
 
+        if (!destination) {
+            return;
+        }
+
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ) {
+            return;
+        }
     }
+
+    // console.log(deals.dealList.filter(function(e){
+    //     return e.status === "Pending"
+    // }))
     
 
     return(
@@ -54,7 +69,11 @@ const Deals = ( handleClose,  open) => {
                         <DealColumn
                             stage={stage}
                             data={deals}
-                            //dealIds= {deals.dealList.filter(function(e))}
+                            dealIds= {deals.dealList.filter(function(e){
+                                if(e.status === stage){
+                                    return e
+                                }
+                            })}
                             key={index}
                         />
                     )

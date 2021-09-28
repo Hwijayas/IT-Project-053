@@ -1,6 +1,6 @@
 import Axios from "axios"
 import { Redirect } from "react-router";
-const url = 'https://bits-please-api.herokuapp.com/user';
+const url = 'http://bits-please-api.herokuapp.com/user';
 //const url = 'http://localhost:5000/user';
 
 export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
