@@ -20,10 +20,10 @@ const Modal = ({ handleClose,  open}) => {
         //const res = deleteDeal({"dealId": "615189adec86de2478df3739"})
        
         if(res){
-			await dispatch(res);
+			dispatch(res);
         }
     };
-
+    
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>

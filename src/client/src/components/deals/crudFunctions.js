@@ -3,19 +3,21 @@ import { Redirect } from "react-router";
 const url = 'http://bits-please-api.herokuapp.com/user';
 //const url = 'http://localhost:5000/user';
 
-export const setDeal= (payload) => ({ type: "SET_DEAL", payload})
+export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
 
 export const setErrors = (errorsArr) => ({
     type: "SET_DEAL_ERRORS",
     payload: errorsArr
 })
 
+//export const deleteDeal= (payload) => ({ type: "DELETE_DEAL", payload})
+
 const token = localStorage.getItem('token');
 
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json",
-    "Authorization": token
+    "Authorization": localStorage.getItem('token')
 } 
 
 
@@ -40,7 +42,8 @@ export const addDeal = (data) => async dispatch =>{
     const responseOK = response && response.status === 201 
 
     if(responseOK){
-        return <Redirect to="/deals" />
+        dispatch(setDeal(response.deal))
+        //return <Redirect to="/deals" />
     }
 }
 
@@ -53,7 +56,7 @@ export const viewDeals = () => async dispatch =>{
         alert(err);
         
     });
-    if(deal){
+    if(typeof(deal) !== "undefined"){
         console.log(deal.data)
         return deal.data;
     }
@@ -112,5 +115,4 @@ export const deleteDeal = (dealId) => async dispatch =>{
     if(res.success === false){
         return dispatch(setErrors(res.msg))
     }
-
 }

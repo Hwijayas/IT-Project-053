@@ -4,29 +4,31 @@ import { DragDropContext, OnDragEndResponder} from "react-beautiful-dnd";
 import isEqual from 'lodash/isEqual';
 import { stages } from './stages';
 import {DealColumn} from "./DealColumn"
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import { defaults } from 'lodash';
 
 const Deals = ( handleClose,  open) => {
-    const [deals, setDeals] = useState({});
+    //const [deals, setDeals] = useState({});
+    const deals = useSelector(state => state.dealReducer)
     const dispatch = useDispatch();
-    
+    //console.log(Object.keys(deals).length === 0)
     useEffect(() => {
         
+        
         async function getDeals() {
-            let response = viewDeals()
+            let response = viewDeals();
             
-            if(response){
-                setDeals(response)
+            if(typeof(response) !== "undefined"){
                 dispatch(response)
             }
+            
         }
 
-        getDeals();
+        getDeals(); 
         
-        
-    },[]);
+    },[deals.dealList, dispatch]);
     
-    console.log(deals)
+    console.log(deals.dealList)
     
     
     function onDragEnd() {

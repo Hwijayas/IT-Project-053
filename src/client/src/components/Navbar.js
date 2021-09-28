@@ -27,7 +27,7 @@ const Navbar = (props) => {
                 <NavLink to="/deals" activeStyle>
                     About
                 </NavLink>
-                <NavLink to="/contact" activeStyle>
+                <NavLink to="/modal" activeStyle>
                     Contact
                 </NavLink>
                 {props.loggedIn ?
