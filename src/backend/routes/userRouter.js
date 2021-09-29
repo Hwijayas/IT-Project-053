@@ -5,7 +5,7 @@ const dealController = require('../controllers/dealController');
 const customerController = require('../controllers/customerController');
 
 router.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.status(200).json({ success: true, msg: 'You are successfully authenticated to this route!', user: req.user });
+  res.status(200).json({ success: true, msg: 'You are successfully authenticated to this route!' });
   console.log(req.user);
 });
 
@@ -38,5 +38,8 @@ router.put('/customer/:id', passport.authenticate('jwt', { session: false }), cu
 
 // Delete an existing deal
 router.delete('/customer/:id', passport.authenticate('jwt', { session: false }), customerController.userDeleteCustomer);
+
+// Update status of deal deletion
+router.put('/deal/:id/flag', passport.authenticate('jwt', { session: false }), dealController.flagDealDeletion);
 
 module.exports = router;

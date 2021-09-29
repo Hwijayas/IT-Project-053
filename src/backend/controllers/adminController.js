@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const utils = require('../lib/utils');
 const Admin = require('../models/admin');
+const deal = require('../models/deal');
 const User = require('../models/user');
 
 // Function to register admin
@@ -103,7 +104,35 @@ const adminDeleteUser = (req, res) => {
   });
 };
 
+// Function to get all deals that are flagged for deletion
+const adminGetAllFlaggedDeals = async (req, res) => {
+  deal.find({ delStatus: true }, (err, deals) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ success: false, msg: 'Bad request' });
+    } else {
+      res.send(deals);
+    }
+  });
+};
+
+const adminDeleteDeal = (req, res) => {
+  const dealId = req.params.id;
+  deal.findOneAndDelete({ _id: dealId, delStatus: true }, (err, deal) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ success: false, msg: 'Bad request' });
+    } else if (deal != null) {
+      res.status(200).json({ success: true, msg: 'Deal deleted!' });
+    } else {
+      res.status(404).json({ success: false, msg: 'Deal not found!' });
+    }
+  });
+};
+
 module.exports.adminRegisterHandler = adminRegisterHandler;
 module.exports.adminLoginHandler = adminLoginHandler;
 module.exports.adminGetAllUsers = adminGetAllUsers;
 module.exports.adminDeleteUser = adminDeleteUser;
+module.exports.adminGetAllFlaggedDeals = adminGetAllFlaggedDeals;
+module.exports.adminDeleteDeal = adminDeleteDeal;
