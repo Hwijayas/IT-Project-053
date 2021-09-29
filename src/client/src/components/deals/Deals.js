@@ -1,42 +1,13 @@
-import React, {useEffect, useState} from 'react'
-import {setUpdate, viewDeals, deleteDeal} from "./crudFunctions"
 import { DragDropContext} from "react-beautiful-dnd";
 import { stages } from './stage';
 import {DealColumn} from "./DealColumn"
-import {useDispatch, useSelector, connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Box} from '@mui/material'
 
 
 const Deals = () => {
     
     const deals = useSelector(state => state.dealReducer)
-    const dispatch = useDispatch();
-    
-    useEffect(() => {
-        //dispatch(setUpdate(false))
-        async function getDeals() {
-        
-            let response = viewDeals();
-            
-            if(typeof(response) !== "undefined"){
-                dispatch(response)
-                
-            }
-            
-        }
-
-        getDeals();
-        
-    },[dispatch]);
-
-    // useEffect(() => {
-    //     console.log(deals.dealList)
-    // },[deals.dealList])
-    //console.log(deals.dealList)
-    
-    // if(Object.keys(deals.dealList).length !== 0){
-    //     console.log(deals.dealList)
-    // }
     
     const onDragEnd = () => async result => {
         const { destination, source, draggableId } = result;

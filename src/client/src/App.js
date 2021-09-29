@@ -11,15 +11,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
 import Deals from './components/deals/Deals';
 import Modal from "./components/deals/Modal"
+import { viewDeals } from './components/deals/crudFunctions';
 
 const App = () => {
   /*authenticate user if jwt exists */
   const userReducer = useSelector(state => state.userReducer)
-  const dealReducer = useSelector(state => state.dealReducer)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
-  },[userReducer.loggedIn, dispatch, dealReducer.update]);
+    dispatch(viewDeals())
+  },[userReducer.loggedIn, dispatch]);
   
   /*sign-in modal handles*/
   const [open, setOpen] = useState(true);

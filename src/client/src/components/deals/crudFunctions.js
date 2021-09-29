@@ -1,5 +1,4 @@
 import Axios from "axios"
-import React ,{useEffect}from 'react'
 import { Redirect } from "react-router";
 const url = "https://bits-please-api.herokuapp.com/user";
 //const url = 'http://localhost:5000/user';
