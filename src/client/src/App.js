@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
 import Deals from './components/deals/Deals';
 import Modal from "./components/deals/Modal"
-import { viewDeals } from './components/deals/crudFunctions';
 
 const App = () => {
   /*authenticate user if jwt exists */
@@ -19,7 +18,6 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
-    dispatch(viewDeals())
   },[userReducer.loggedIn, dispatch]);
   
   /*sign-in modal handles*/

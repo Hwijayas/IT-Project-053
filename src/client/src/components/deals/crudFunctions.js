@@ -114,13 +114,12 @@ export const deleteDeal = (dealId) => async (dispatch) =>{
     });
 
     // if(res.status === 200){
-    //     console.log(res)
     //     dispatch(setDelete(dealId))
     // }
     
-    // if(res.success === false){
-    //     return dispatch(setErrors(res.msg))
-    // }
+    if(res.success === false){
+        return dispatch(setErrors(res.msg))
+    }
     
     
 }
