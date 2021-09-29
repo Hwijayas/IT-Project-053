@@ -22,7 +22,7 @@
     "react-hook-form": "^7.15.4",
     "react-icons": "^4.2.0",
     "react-loader-spinner": "^4.0.0",
-    "react-router": "^5.2.0",
+    "react-router": "^5.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "redux-thunk": "^2.3.0",

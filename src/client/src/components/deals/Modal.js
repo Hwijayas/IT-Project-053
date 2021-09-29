@@ -1,13 +1,12 @@
-import { makeStyles } from '@mui/styles';
+
 import {useForm, Controller} from 'react-hook-form'
-import {Box, TextField, Button, Dialog, DialogContent, DialogActions, Grid, Select, MenuItem, InputLabel} from '@mui/material';
+import {Box, TextField, Button, Dialog, DialogContent, DialogActions} from '@mui/material';
 import "./Modal.css"
-import {useDispatch, useSelector} from 'react-redux';
-import {addDeal, deleteDeal, viewDeals } from "./crudFunctions"
-import { Redirect } from 'react-router';
+import {useDispatch} from 'react-redux';
+import {addDeal} from "./crudFunctions"
 
 //modal window for getting inputs, need to change it to be reuasable
-const Modal = ({ handleClose,  open}) => {
+const Modal = ({handleClose, open}) => {
     const dispatch = useDispatch();
     const { handleSubmit, control} = useForm();
     const showHideClassName = open ? "modal display-block" : "modal display-none";
@@ -23,6 +22,7 @@ const Modal = ({ handleClose,  open}) => {
 			dispatch(res);
         }
     };
+
     
 
     return (

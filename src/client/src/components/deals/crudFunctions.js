@@ -5,14 +5,16 @@ const url = 'http://bits-please-api.herokuapp.com/user';
 
 export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
 
+export const add_Deal= (payload) => ({ type: "ADD_DEAL", payload})
+
+export const setUpdate= (payload) => ({ type: "SET_UPDATE", payload})
+
 export const setErrors = (errorsArr) => ({
     type: "SET_DEAL_ERRORS",
     payload: errorsArr
 })
 
-//export const deleteDeal= (payload) => ({ type: "DELETE_DEAL", payload})
-
-const token = localStorage.getItem('token');
+export const setDelete= (payload) => ({ type: "DELETE_DEAL", payload})
 
 const headers = {
 	"Content-Type": "application/json",
@@ -42,8 +44,7 @@ export const addDeal = (data) => async dispatch =>{
     const responseOK = response && response.status === 201 
 
     if(responseOK){
-        dispatch(setDeal(response.deal))
-        //return <Redirect to="/deals" />
+        dispatch(add_Deal(response.data.deal))
     }
 }
 
@@ -57,12 +58,9 @@ export const viewDeals = () => async dispatch =>{
         
     });
     if(typeof(deal) !== "undefined"){
-        //console.log(deal.data)
         dispatch(setDeal(deal.data))
         return deal.data;
     }
-
-    //dispatch(setDeal(deal.data))
     
 }
 
@@ -106,7 +104,7 @@ export const deleteDeal = (dealId) => async dispatch =>{
         params: {id: dealId},
         headers: headers
 
-    }, {headers: headers}).catch(err => {
+    }).catch(err => {
         console.log(err);
         alert(err);
         
@@ -114,5 +112,10 @@ export const deleteDeal = (dealId) => async dispatch =>{
 
     if(res.success === false){
         return dispatch(setErrors(res.msg))
+    }
+
+    if(res.success === true){
+        dispatch(setDelete(dealId))
+        dispatch(setUpdate(true));
     }
 }

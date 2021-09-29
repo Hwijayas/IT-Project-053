@@ -1,37 +1,35 @@
-import React, { useState , useEffect} from 'react'
-import {setDeal, viewDeals } from "./crudFunctions"
-import { DragDropContext, OnDragEndResponder} from "react-beautiful-dnd";
-import isEqual from 'lodash/isEqual';
+import React, {useEffect, useState} from 'react'
+import {setUpdate, viewDeals} from "./crudFunctions"
+import { DragDropContext} from "react-beautiful-dnd";
 import { stages } from './stage';
 import {DealColumn} from "./DealColumn"
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector, connect} from 'react-redux';
 import {Box} from '@mui/material'
-import { defaults } from 'lodash';
-import { DealCards } from './DealCards';
 
 
-const Deals = ( handleClose,  open) => {
-    //const [deals, setDeals] = useState({});
+const Deals = () => {
+    
     const deals = useSelector(state => state.dealReducer)
     const dispatch = useDispatch();
-    //console.log(Object.keys(deals).length === 0)
+    
     useEffect(() => {
-        //viewDeals()
-        
+        //dispatch(setUpdate(false))
         async function getDeals() {
+        
             let response = viewDeals();
             
             if(typeof(response) !== "undefined"){
                 dispatch(response)
+                
             }
             
         }
 
         getDeals();
-        
-        
+        //dispatch(setUpdate(true))
+        //console.log(deals.update)
     },[dispatch]);
-    
+
     
     // if(Object.keys(deals.dealList).length !== 0){
     //     console.log(deals.dealList)
@@ -51,10 +49,6 @@ const Deals = ( handleClose,  open) => {
             return;
         }
     }
-
-    // console.log(deals.dealList.filter(function(e){
-    //     return e.status === "Pending"
-    // }))
     
 
     return(
@@ -87,3 +81,4 @@ const Deals = ( handleClose,  open) => {
 }
 
 export default Deals
+
