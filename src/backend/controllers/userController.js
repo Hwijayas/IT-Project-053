@@ -34,7 +34,7 @@ const userRegisterHandler = (req, res) => {
             const jwt = utils.issueJWT(user);
             res.json({
               success: true,
-              user:user.userEmail,
+              user: user.userEmail,
               token: jwt.token,
               expiresIn: jwt.expires,
             });
