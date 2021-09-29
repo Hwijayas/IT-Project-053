@@ -7,6 +7,7 @@ const dealSchema = mongoose.Schema({
   value: Number,
   customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
   status: { type: String, default: 'Pending' }, // Pending, Accepted, Declined, Done
+  delStatus: { type: Boolean, default: false } 
 });
 
 module.exports = mongoose.model('Deal', dealSchema);
