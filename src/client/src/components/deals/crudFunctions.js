@@ -1,6 +1,7 @@
 import Axios from "axios"
+import React ,{useEffect}from 'react'
 import { Redirect } from "react-router";
-const url = 'http://bits-please-api.herokuapp.com/user';
+const url = "https://bits-please-api.herokuapp.com/user";
 //const url = 'http://localhost:5000/user';
 
 export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
@@ -25,6 +26,7 @@ const headers = {
 
 export const addDeal = (data) => async dispatch =>{
     console.log(localStorage.getItem('token'));
+    console.log(data)
     const response = await Axios.post(`${url}/deal`, {
         
         dealName: data.dealName,
@@ -35,6 +37,7 @@ export const addDeal = (data) => async dispatch =>{
             "email": data.customerEmail,
             "phone": data.customerPhone
         },
+        status: data.status
         
     }, {headers: headers}).catch(err => {
         console.log(err);
@@ -58,6 +61,7 @@ export const viewDeals = () => async dispatch =>{
         
     });
     if(typeof(deal) !== "undefined"){
+        console.log(deal.data)
         dispatch(setDeal(deal.data))
         return deal.data;
     }
@@ -99,7 +103,7 @@ export const updateDealStatus = (dealId, data) => async dispatch =>{
     }
 }
 
-export const deleteDeal = (dealId) => async dispatch =>{
+export const deleteDeal = (dealId) => async (dispatch) =>{
     const res = Axios.delete(`${url}/deal/${dealId}`, {
         params: {id: dealId},
         headers: headers
@@ -110,12 +114,14 @@ export const deleteDeal = (dealId) => async dispatch =>{
         
     });
 
-    if(res.success === false){
-        return dispatch(setErrors(res.msg))
-    }
-
-    if(res.success === true){
-        dispatch(setDelete(dealId))
-        dispatch(setUpdate(true));
-    }
+    // if(res.status === 200){
+    //     console.log(res)
+    //     dispatch(setDelete(dealId))
+    // }
+    
+    // if(res.success === false){
+    //     return dispatch(setErrors(res.msg))
+    // }
+    
+    
 }

@@ -9,7 +9,6 @@ const dealReducer = (state = defaultState, action) => {
         case "SET_DEALS":
             return {
                 ...state,
-                update: true,
                 dealList: [...action.payload]
             }
         case "ADD_DEAL":
@@ -19,10 +18,11 @@ const dealReducer = (state = defaultState, action) => {
             }
 
         case "DELETE_DEAL":
-            console.log("action called")
+            console.log("delete called")
+            const newList = [state.dealList.filter(item => item._id !== action.payload)]
             return{
                 ...state,
-                dealList : [state.dealList.filter(item => item._id !== action.payload)]
+                dealList : newList
             }
         case "SET_DEAL_ERRORS":
             return {
@@ -31,6 +31,7 @@ const dealReducer = (state = defaultState, action) => {
             }
         
         case "SET_UPDATE":
+            
             return{
                 ...state,
                 update: action.payload

@@ -1,9 +1,10 @@
-import React ,{}from 'react'
+import React ,{useEffect}from 'react'
 import { Button } from '@mui/material';
 import { Card, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Draggable } from 'react-beautiful-dnd';
-import {deleteDeal} from "./crudFunctions"
+import {deleteDeal, viewDeals, setDelete} from "./crudFunctions"
+import {useDispatch} from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,12 +23,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-
-
 export const DealCards = ({ deal, index }) => {
 
+    const dispatch = useDispatch();
     const classes = useStyles();
+
+    const onDelete = async () =>{
+
+        if(typeof(deal._id) !== "undefined"){
+
+            dispatch(deleteDeal(deal._id))
+            dispatch(setDelete(deal._id))
+        }
+    }
+
+    useEffect(() => {},[dispatch]);
+    
     return (
         
 
@@ -77,10 +88,10 @@ export const DealCards = ({ deal, index }) => {
                                     })}
                                 </Typography>
                             </div>
-                            <Grid container justify="flex-end">
+                            <Grid container justifyContent="flex-end">
                                 <Button 
                                     className={classes.delete_button} 
-                                    onClick={deleteDeal(deal._id)}
+                                    onClick={onDelete}
                                     variant="contained"
                                     >
                                         Delete

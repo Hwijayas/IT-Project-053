@@ -1,6 +1,6 @@
 
 import {useForm, Controller} from 'react-hook-form'
-import {Box, TextField, Button, Dialog, DialogContent, DialogActions} from '@mui/material';
+import {Box, TextField, Button, Dialog, DialogContent, DialogActions, MenuItem, Select, InputLabel} from '@mui/material';
 import "./Modal.css"
 import {useDispatch} from 'react-redux';
 import {addDeal} from "./crudFunctions"
@@ -159,15 +159,16 @@ const Modal = ({handleClose, open}) => {
                     {/* <Controller
 		    	    	name="dealValue"
 		    	    	control={control}
-		    	    	defaultValue="Pending"
+		    	    	
 		    	    	render={({ field: { onChange, status }, fieldState: { error } }) => (
-                            <>
-                                <InputLabel variant="standard" >Status</InputLabel>
+                            
+                                <InputLabel variant="standard" >Status
                                     <Select
                                       labelId="status-select"
                                       id="status"
                                       value={status}
                                       label="Status"
+                                      defaultValue= "Pending"
                                       onChange={onChange}
                                     >
                                       <MenuItem value={"Pending"}>Pending</MenuItem>
@@ -175,7 +176,8 @@ const Modal = ({handleClose, open}) => {
                                       <MenuItem value={"Declined"}>Declined</MenuItem>
                                       <MenuItem value={"Done"}>Done</MenuItem>
                                     </Select>
-                            </>
+                                </InputLabel>
+                            
 		    	    	)}
 		    	    	rules={{ required: 'Deal Status required' }}
                         

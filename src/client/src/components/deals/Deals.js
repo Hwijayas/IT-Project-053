@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {setUpdate, viewDeals} from "./crudFunctions"
+import {setUpdate, viewDeals, deleteDeal} from "./crudFunctions"
 import { DragDropContext} from "react-beautiful-dnd";
 import { stages } from './stage';
 import {DealColumn} from "./DealColumn"
@@ -26,10 +26,13 @@ const Deals = () => {
         }
 
         getDeals();
-        //dispatch(setUpdate(true))
-        //console.log(deals.update)
+        
     },[dispatch]);
 
+    // useEffect(() => {
+    //     console.log(deals.dealList)
+    // },[deals.dealList])
+    //console.log(deals.dealList)
     
     // if(Object.keys(deals.dealList).length !== 0){
     //     console.log(deals.dealList)

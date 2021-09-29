@@ -15,10 +15,11 @@ import Modal from "./components/deals/Modal"
 const App = () => {
   /*authenticate user if jwt exists */
   const userReducer = useSelector(state => state.userReducer)
+  const dealReducer = useSelector(state => state.dealReducer)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
-  },[userReducer.loggedIn, dispatch]);
+  },[userReducer.loggedIn, dispatch, dealReducer.update]);
   
   /*sign-in modal handles*/
   const [open, setOpen] = useState(true);
