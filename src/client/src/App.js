@@ -1,12 +1,12 @@
 //this entire chunk of code is slightly modified from https://github.com/zeroabsolute/MonorepoHerokuDeployment/blob/master/src/web-client/src/App.js
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import './css/App.css';
 import Navbar from './components/Navbar';
 import Dashboard from './components/dashboard/Dashboard';
 import About from './components/pages/About';
 import {ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
-import { logout, verifyUser } from './actions/userActions';
+import { logout, verifyUser} from './actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
 
@@ -19,14 +19,6 @@ const App = () => {
   },[userReducer.loggedIn, dispatch]);
   
   /*sign-in modal handles*/
-  const [open, setOpen] = useState(true);
-	const handleOpen = () => {
-		setOpen(true);
-	};
-	const handleClose = () => {
-		setOpen(false);
-    <Redirect to='/'/>
-	};
   const handleLogout = () => {
     dispatch(logout());
     return (
@@ -34,17 +26,20 @@ const App = () => {
     )
   }
   return (
+    <>
     <div className='App'>
       <Router>
-      <Navbar loggedIn={userReducer.loggedIn} handleOpen={handleOpen} handleLogout={handleLogout}/>
+      <Navbar loggedIn={userReducer.loggedIn} handleLogout={handleLogout}/>
       <Switch>
-        <ProtectedRoute exact path='/' loggedIn={userReducer.loggedIn} component={Dashboard}/>
+        <ProtectedRoute exact path='/' component={Dashboard}/>
+        <ProtectedRoute exact path='/change-password' component={LoginComponent} /> 
         <Route exact path='/about' component={About}/>
-        <PublicRoute path="/login" loggedIn={userReducer.loggedIn} open={open} handleClose={handleClose} component={LoginComponent}/>
-        <PublicRoute path="/sign-up" loggedIn={userReducer.loggedIn} open={open} handleClose={handleClose} component={LoginComponent} />
+        <PublicRoute path="/login" component={LoginComponent}/>
+        <PublicRoute path="/sign-up" component={LoginComponent} />
       </Switch>
       </Router>
     </div>
+    </>
   );
 };
 export default App;

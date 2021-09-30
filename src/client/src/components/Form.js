@@ -1,10 +1,11 @@
 import React from 'react';
 import {Box,Button,ButtonGroup,Card,TextField} from '@mui/material'
 import { makeStyles } from '@mui/styles';
-import { fetchUser, signUp ,emptyErrors, setLoading} from '../actions/userActions';
+import { fetchUser, signUp ,emptyErrors, setLoading, userChangePassword} from '../actions/userActions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form'
-import { Redirect } from 'react-router';
+import { Redirect, useHistory} from 'react-router';
+import {Link} from 'react-router-dom'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Chip from '@mui/material/Chip';
@@ -38,7 +39,8 @@ const RedirectForm = (props) => {
 	}
   return <Button href={path} variant="outlined" color='secondary'>{content}</Button>
 }
-const Form = ({ handleClose, route}) => {
+const Form = ({route, handleClose}) => {
+  const history = useHistory();
   const user = useSelector(state => state.userReducer)
   const classes = useStyles();
   const { handleSubmit, control } = useForm();
@@ -47,6 +49,10 @@ const Form = ({ handleClose, route}) => {
 		dispatch(emptyErrors());
 		dispatch(setLoading(true));
 		let res;
+		if (!!data.newPassword){
+			res = (userChangePassword({password: data.password, newPassword:data.newPassword}))
+		}
+		
 		if (!data.firstName) {
 			res = (fetchUser({"userEmail":data.userEmail, "password":data.password}))
 		}else{
@@ -55,19 +61,83 @@ const Form = ({ handleClose, route}) => {
 		if(res){
 			await dispatch(res);
 			dispatch(setLoading(false));
-			<Redirect to="/"/>
+			<Redirect to={history.location.from}/>
 		}else{
 			dispatch(setLoading(false));
 		}
   };
 
-
+  if (route === 'change-password'){
+	  return (
+		  <>
+		  <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+			<Card variant='default' disableElevation={true}>
+			<img className='form-img' src='/BitsRMl_logo.svg' alt='logo' />
+			</Card>
+			<Controller
+				name="password"
+				control={control}
+				defaultValue=""
+				render={({ field: { onChange, password }, fieldState: { error } }) => (
+					<TextField
+						label="Old Password"
+						variant="outlined"
+						required
+						value={password}
+						onChange={onChange}
+						error={!!error}
+						helperText={error ? error.message : null}
+						type="password"
+					/>
+				)}
+				rules={{ required: 'Password required', minLength: 6 }}
+			/>
+      <Box sx={{height:20}}/>
+			<Controller
+				name="newPassword"
+				control={control}
+				defaultValue=""
+				render={({ field: { onChange, newPassword }, fieldState: { error } }) => (
+					<TextField
+						label="New Password"
+						variant="outlined"
+						required
+						value={newPassword}
+						onChange={onChange}
+						error={!!error}
+						helperText={error ? error.message : null}
+						type="password"
+					/>
+				)}
+				rules={{ required: 'Password required', minLength: 6 }}
+			/>
+        <Box sx={{height:20}}/>
+			{
+				!!user.loginErrors ? 
+					<>
+					<Chip label={user.loginErrors} variant="filled" size='small' color='error' onDelete={null} />
+					<Box sx={{height:10}}/>
+					</>:null
+			}
+			<ButtonGroup variant="text" aria-label="text button group">
+				<Button variant="contained" onClick={handleClose} component={Link} to="/">
+					Cancel
+				</Button>
+				<Button type='submit' variant="contained" color="primary">
+					Submit
+				</Button>
+			</ButtonGroup>
+			</form>
+		  </>
+	  ) 
+  }else {
   return (
 	  <>
 	<Backdrop
-	sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-	open={(user.loading)}
-  	><CircularProgress color="inherit" />
+		sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+		open={(user.loading)}
+  	>
+		<CircularProgress color="inherit" />
     </Backdrop>
 	
 	<form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
@@ -166,9 +236,6 @@ const Form = ({ handleClose, route}) => {
 					</>:null
 			}
 			<ButtonGroup variant="text" aria-label="text button group">
-				<Button variant="contained" onClick={handleClose}>
-					Cancel
-				</Button>
 				<Button type='submit' variant="contained" color="primary">
 					Submit
 				</Button>
@@ -178,7 +245,7 @@ const Form = ({ handleClose, route}) => {
       <Box sx={{height:20}}/>
 		</form>
 		</>
-	);
+	)};
 };
 
 export default Form;

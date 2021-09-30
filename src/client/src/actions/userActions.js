@@ -1,7 +1,6 @@
 import { Redirect } from "react-router";
 
-const url = 'https://bits-please-api.herokuapp.com/user';
-//const url = 'http://localhost:5000/user';
+const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000/user' : process.env.HD_REACT_APP_API_URL;
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json"
@@ -22,7 +21,25 @@ export const setLoading = (loading)=>({
 	type: "SET_LOADING",
 	payload: loading
 })
+export const setAuth = (menuState)=>({
+	type: "SET_AUTH",
+	payload: menuState,
+})
+export const userChangePassword = (userInfo) => async dispatch => {
+	const token = localStorage.getItem("token");
+	const res = await fetch(`${url}/change-password`, {
+		method: "POST",
+		headers:{...headers, "Authorization": `${token}`},
+		body: JSON.stringify(userInfo)
+	})
+	const data = await res.json();
+	if(data.success === false){
+		return dispatch(setErrors(data.msg));
+	}else{
+		dispatch(emptyErrors());
 
+	}
+}
 export const fetchUser =  (userInfo) => async dispatch => {
 	const res = await fetch(`${url}/login`, {
 		method: "POST",
@@ -64,8 +81,9 @@ export const verifyUser = () => async dispatch => {
 			headers: {...headers, "Authorization": `${token}`}
 	})
 	const data = await res.json();
+	console.log(data);
 	if (data.success === true){
-			dispatch(setUser(data.user))
+			dispatch(setUser(data.user));
 	}else{
 			localStorage.clear();
 			<Redirect to="/login" />

@@ -1,18 +1,28 @@
 const defaultState = {
     loggedIn: false,
-    user: {},
+    user: {
+      email:'',
+      fistName:'',
+      lastName:''
+    },
     loginErrors: '',
     updateErrors:[],
     loading: false,
+    authPopUp: true
 }
 
 const userReducer = (state = defaultState, action) => {
   switch(action.type){
+    case "SET_AUTH":
+      return {
+        ...state,
+        authPopUp:action.payload
+      }
     case "SET_USER":
       return {
           ...state,
           loggedIn: true,
-          user: {...action.payload}
+          user: action.payload
       }
     case "LOGOUT":
       localStorage.clear();

@@ -5,8 +5,14 @@ const dealController = require('../controllers/dealController');
 const customerController = require('../controllers/customerController');
 
 router.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.status(200).json({ success: true, msg: 'You are successfully authenticated to this route!' });
-  console.log(req.user);
+  res.status(200).json({
+    success: true,
+    user: {
+      "email": req.user.userEmail,
+      "firstName": req.user.userFirstName,
+      "lastName": req.user.userLastName,
+    },
+  });
 });
 
 // Validate an existing user and issue a JWT

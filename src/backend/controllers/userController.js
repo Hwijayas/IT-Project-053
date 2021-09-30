@@ -34,7 +34,11 @@ const userRegisterHandler = (req, res) => {
             const jwt = utils.issueJWT(user);
             res.json({
               success: true,
-              user: user.userEmail,
+              user: {
+                email: user.userEmail,
+                firstName: user.firstName,
+                lastName: user.lastName,
+              },
               token: jwt.token,
               expiresIn: jwt.expires,
             });
@@ -61,11 +65,15 @@ const userLoginHandler = (req, res, next) => {
         const tokenObject = utils.issueJWT(user);
 
         res.status(200).json({
-          success: true,
-          user: user.userEmail,
-          token: tokenObject.token,
-          expiresIn: tokenObject.expires,
-        });
+              success: true,
+              user: {
+                email: user.userEmail,
+                firstName: user.firstName,
+                lastName: user.lastName,
+              },
+              token: tokenObject.token,
+              expiresIn: tokenObject.expires,
+            });
       } else {
         res.status(401).json({ success: false, msg: 'you entered the wrong password' });
       }
