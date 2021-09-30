@@ -14,6 +14,8 @@ export const setErrors = (errorsArr) => ({
     payload: errorsArr
 })
 
+export const updateDeal= (id, status) => ({ type: "UPDATE_DEAL", payload : {id: id, status: status}})
+
 export const setDelete= (payload) => ({ type: "DELETE_DEAL", payload})
 
 const headers = {
@@ -60,7 +62,7 @@ export const viewDeals = () => async dispatch =>{
         
     });
     if(typeof(deal) !== "undefined"){
-        console.log(deal.data)
+        //console.log(deal.data)
         dispatch(setDeal(deal.data))
         return deal.data;
     }

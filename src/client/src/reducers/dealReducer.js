@@ -12,9 +12,11 @@ const dealReducer = (state = defaultState, action) => {
                 dealList: [...action.payload]
             }
         case "ADD_DEAL":
+            console.log(action.payload.status)
             return{
                 ...state,
                 dealList: [...state.dealList, action.payload]
+                
             }
 
         case "DELETE_DEAL":
@@ -35,6 +37,18 @@ const dealReducer = (state = defaultState, action) => {
                 ...state,
                 update: action.payload
             }
+
+        case "UPDATE_DEAL":
+            
+            return{
+                
+                ...state,
+                dealList : state.dealList.map((deal, index) =>
+                            deal._id === action.payload.id ? 
+                            {...deal, status: action.payload.status} : deal
+                            )
+            }
+            
         default: return state
     }
 

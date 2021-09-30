@@ -5,7 +5,7 @@ import "./Modal.css"
 import {useDispatch} from 'react-redux';
 import {addDeal, updateDeals, setEdit} from "./crudFunctions"
 
-//modal window for getting inputs, need to change it to be reuasable
+//modal window for getting inputs, change between edit mode or add mode
 const Modal = ({handleClose, open, edit}) => {
     const dispatch = useDispatch();
     const { handleSubmit, control} = useForm();
@@ -22,8 +22,6 @@ const Modal = ({handleClose, open, edit}) => {
         }
         dispatch(setEdit(false))
     };
-
-    console.log(edit);
 
     return (
         

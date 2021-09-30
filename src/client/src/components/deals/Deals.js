@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {setUpdate, viewDeals, deleteDeal, setEdit} from "./crudFunctions"
+import {setDeal, viewDeals, deleteDeal, setEdit, updateDeal} from "./crudFunctions"
 import { DragDropContext} from "react-beautiful-dnd";
 import { stages } from './stage';
 import {DealColumn} from "./DealColumn"
@@ -32,7 +32,8 @@ const Deals = () => {
         
     },[dispatch, deals.update]);
 
-    const onDragEnd = () => async result => {
+    function onDragEnd (result) {
+        
         const { destination, source, draggableId } = result;
 
         if (!destination) {
@@ -45,6 +46,28 @@ const Deals = () => {
         ) {
             return;
         }
+        
+        // within same column
+        if (source.droppableId === destination.droppableId){
+
+            const allDeals = Array.from(deals.dealList);
+            const [reorderedItem] = allDeals.splice(source.index, 1);
+            allDeals.splice(destination.index, 0, reorderedItem);
+
+            //update local state
+            dispatch(setDeal(allDeals))
+        }
+
+        //other column
+        else{
+            //const sourceColumnAllDeals = Array.from(deals.dealList);
+            //sourceColumnAllDeals.splice(source.index, 1);
+
+            //update local state
+            dispatch(updateDeal(draggableId, destination.droppableId))
+        }
+
+
     }
 
     const showModalWindow = () => {
