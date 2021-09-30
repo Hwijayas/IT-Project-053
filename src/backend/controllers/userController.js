@@ -103,8 +103,10 @@ const userUpdatePasswordHandler = async (req, res) => {
     res.status(400).json({ success: false, msg: 'Error' });
   }
 
+  // new token
+  const jwt = utils.issueJWT(user);
   res.status(200).json({
-    success: true, msg: 'updated password',
+    success: true, msg: 'updated password', token: jwt,
   });
 };
 
