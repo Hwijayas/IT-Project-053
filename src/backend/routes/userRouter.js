@@ -21,6 +21,9 @@ router.post('/login', userController.userLoginHandler);
 // Register a new user
 router.post('/register', userController.userRegisterHandler);
 
+// update password
+router.put('/password', passport.authenticate('jwt', { session: false }), userController.userUpdatePasswordHandler);
+
 // Create a new deal
 router.post('/deal', passport.authenticate('jwt', { session: false }), dealController.userCreateDeal);
 
