@@ -1,6 +1,6 @@
 import { Redirect } from "react-router";
 
-const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000/user' : process.env.HD_REACT_APP_API_URL;
+const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000/user' : 'https://bits-please-api.herokuapp.com/user';
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json"
