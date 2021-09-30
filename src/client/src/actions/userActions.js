@@ -38,7 +38,8 @@ export const userChangePassword = (userInfo) => async dispatch => {
 	const res = await fetch(`${url}/password`, {
 		method: "PUT",
 		headers:{...headers, "Authorization": `${token}`},
-		body: JSON.stringify(userInfo)
+		body: JSON.stringify(userInfo),
+		mode: 'cors',
 	})
 	const data = await res.json();
 	if(data.success === false){
