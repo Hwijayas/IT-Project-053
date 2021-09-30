@@ -28,7 +28,7 @@ export const setAuth = (menuState)=>({
 export const userChangePassword = (userInfo) => async dispatch => {
 	const token = localStorage.getItem("token");
 	const res = await fetch(`${url}/change-password`, {
-		method: "POST",
+		method: "PUT",
 		headers:{...headers, "Authorization": `${token}`},
 		body: JSON.stringify(userInfo)
 	})

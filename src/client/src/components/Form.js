@@ -51,17 +51,17 @@ const Form = ({route, handleClose}) => {
 		let res;
 		if (!!data.newPassword){
 			res = (userChangePassword({password: data.password, newPassword:data.newPassword}))
-		}
-		
-		if (!data.firstName) {
-			res = (fetchUser({"userEmail":data.userEmail, "password":data.password}))
 		}else{
-			res = (signUp(data))
+			if (!data.firstName) {
+				res = (fetchUser({"userEmail":data.userEmail, "password":data.password}))
+			}else{
+				res = (signUp(data))
+			}
 		}
 		if(res){
 			await dispatch(res);
 			dispatch(setLoading(false));
-			<Redirect to={history.location.from}/>
+			<Redirect to="/"/>
 		}else{
 			dispatch(setLoading(false));
 		}
