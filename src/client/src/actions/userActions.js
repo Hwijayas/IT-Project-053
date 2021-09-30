@@ -33,6 +33,7 @@ export const setAuth = (menuState)=>({
 	payload: menuState,
 })
 export const userChangePassword = (userInfo) => async dispatch => {
+	
 	const token = localStorage.getItem("token");
 	const res = await fetch(`${url}/password`, {
 		method: "PUT",
@@ -52,6 +53,11 @@ export const userChangePassword = (userInfo) => async dispatch => {
 		
 	}
 }
+const welcomeUser = (dispatch, getState) => {
+	const state = getState();
+	dispatch(setMsg(`Logged In as ${state.userReducer.user.email}`));
+
+}
 export const fetchUser =  (userInfo) => async dispatch => {
 	const res = await fetch(`${url}/login`, {
 		method: "POST",
@@ -62,6 +68,7 @@ export const fetchUser =  (userInfo) => async dispatch => {
 	if(data.success === false){
 		return dispatch(setErrors(data.msg))
 	}
+	dispatch(welcomeUser);
 	localStorage.setItem("token", data.token);
 	dispatch(emptyErrors());
 	dispatch(setUser(data.user));
@@ -77,13 +84,15 @@ export const signUp = (userInfo) => async dispatch => {
 	if(data.success === false){
 		return dispatch(setErrors(data.msg))
 	}
-	dispatch(setMsg("Account Added!"));
+	dispatch(welcomeUser);
 	localStorage.setItem("token", data.token);
 	dispatch(emptyErrors());
 	dispatch(setUser(data.user));
 }
 
 export const verifyUser = () => async dispatch => {
+	console.log('api: ');
+	console.log(url);
 	const token = localStorage.getItem('token');
 	if (!token){
 		localStorage.clear();
@@ -97,7 +106,7 @@ export const verifyUser = () => async dispatch => {
 	console.log(data);
 	if (data.success === true){
 			dispatch(setUser(data.user));
-			dispatch(setMsg("Logged In"));
+			dispatch(welcomeUser);
 	}else{
 			localStorage.clear();
 			<Redirect to="/login" />

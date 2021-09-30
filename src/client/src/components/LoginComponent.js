@@ -35,7 +35,6 @@ const LoginComponent = (props) => {
       
       <DialogContent>
         <Form route={route} handleClose={handleClose}/>
-        
       </DialogContent>
     </Dialog>
     </>

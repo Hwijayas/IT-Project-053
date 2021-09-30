@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import { fetchUser, signUp ,emptyErrors, setLoading, userChangePassword} from '../actions/userActions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form'
-import { Redirect, useHistory} from 'react-router';
+import { Redirect} from 'react-router';
 import {Link} from 'react-router-dom'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -40,7 +40,6 @@ const RedirectForm = (props) => {
   return <Button href={path} variant="outlined" color='secondary'>{content}</Button>
 }
 const Form = ({route, handleClose}) => {
-  const history = useHistory();
   const user = useSelector(state => state.userReducer)
   const classes = useStyles();
   const { handleSubmit, control } = useForm();

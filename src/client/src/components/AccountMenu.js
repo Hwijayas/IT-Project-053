@@ -35,7 +35,7 @@ const AccountMenu = () => {
     setAnchorEl(null);
   };
   return (
-    <React.Fragment>
+    <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="Account settings">
           <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
@@ -95,12 +95,13 @@ const AccountMenu = () => {
           </ListItemIcon>
           Logout
         </MenuItem>
-        </>:
+        </>:<>
         <MenuItem component={Link} to="/login">
           <Avatar /> Log In Here
-        </MenuItem>}
+        </MenuItem>
+        </>}
       </Menu>
-    </React.Fragment>
+      </>
   );
 }
 export default AccountMenu
