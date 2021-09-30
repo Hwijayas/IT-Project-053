@@ -85,29 +85,33 @@ const userLoginHandler = (req, res, next) => {
 
 // Function to update password - user
 const userUpdatePasswordHandler = async (req, res) => {
-  const isValid = utils.validPassword(req.body.oldPassword, req.user.hash, req.user.salt);
+  try {
+    const isValid = utils.validPassword(req.body.oldPassword, req.user.hash, req.user.salt);
 
-  if (!isValid) {
-    res.status(401).json({ success: false, msg: 'you entered the wrong old password' });
+    if (!isValid) {
+      res.status(401).json({ success: false, msg: 'you entered the wrong old password' });
+    } else {
+      // get new hash and salt
+      const saltHash = utils.genPassword(req.body.newPassword);
+    
+      const { salt } = saltHash;
+      const { hash } = saltHash;
+    
+      const user = await User.findByIdAndUpdate(req.user._id, { hash, salt }, { new: true });
+    
+      if (user === null) {
+        res.status(400).json({ success: false, msg: 'Error' });
+      }
+      
+      //new token
+      const jwt = utils.issueJWT(user);
+      res.status(200).json({
+        success: true, msg: 'updated password', token: jwt,
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
-
-  // get new hash and salt
-  const saltHash = utils.genPassword(req.body.newPassword);
-
-  const { salt } = saltHash;
-  const { hash } = saltHash;
-
-  const user = await User.findByIdAndUpdate(req.user._id, { hash, salt }, { new: true });
-
-  if (user === null) {
-    res.status(400).json({ success: false, msg: 'Error' });
-  }
-
-  // new token
-  const jwt = utils.issueJWT(user);
-  res.status(200).json({
-    success: true, msg: 'updated password', token: jwt,
-  });
 };
 
 module.exports.userRegisterHandler = userRegisterHandler;
