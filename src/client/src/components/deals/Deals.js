@@ -4,13 +4,15 @@ import { DragDropContext} from "react-beautiful-dnd";
 import { stages } from './stage';
 import {DealColumn} from "./DealColumn"
 import {useDispatch, useSelector, connect} from 'react-redux';
-import {Box} from '@mui/material'
+import {Box, Button, Grid } from '@mui/material'
+import Modal from "./Modal"
 
 
 const Deals = () => {
     
     const deals = useSelector(state => state.dealReducer)
     const dispatch = useDispatch();
+    const [showModal, SetShowModal] = useState(false)
     
     useEffect(() => {
         async function getDeals() {
@@ -41,13 +43,31 @@ const Deals = () => {
             return;
         }
     }
+
+    const showModalWindow = () => {
+        SetShowModal(true)
+    };
+    
+    const hideModalWindow = () => {
+        SetShowModal(false)
+    };
     
 
     return(
-        //<DealCards key={index}>{item}</DealCards>
         
         <DragDropContext onDragEnd={onDragEnd}>
+            
             <Box sx={{height:20} }/>
+            <Grid container justifyContent="flex-end">
+                <Button 
+                    onClick={showModalWindow} 
+                    variant="contained"
+                    > 
+                    Add Deals 
+                </Button>
+            </Grid>
+
+            <Modal open={showModal} handleClose={hideModalWindow}></Modal>
             <Box display="flex">
                 {stages.map((stage, index) => {
                     
