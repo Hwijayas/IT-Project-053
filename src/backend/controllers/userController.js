@@ -65,15 +65,15 @@ const userLoginHandler = (req, res, next) => {
         const tokenObject = utils.issueJWT(user);
 
         res.status(200).json({
-              success: true,
-              user: {
-                email: user.userEmail,
-                firstName: user.firstName,
-                lastName: user.lastName,
-              },
-              token: tokenObject.token,
-              expiresIn: tokenObject.expires,
-            });
+          success: true,
+          user: {
+            email: user.userEmail,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+          token: tokenObject.token,
+          expiresIn: tokenObject.expires,
+        });
       } else {
         res.status(401).json({ success: false, msg: 'you entered the wrong password' });
       }
@@ -83,5 +83,31 @@ const userLoginHandler = (req, res, next) => {
     });
 };
 
+// Function to update password - user
+const userUpdatePasswordHandler = async (req, res) => {
+  const isValid = utils.validPassword(req.body.oldPassword, req.user.hash, req.user.salt);
+
+  if (!isValid) {
+    res.status(401).json({ success: false, msg: 'you entered the wrong old password' });
+  }
+
+  // get new hash and salt
+  const saltHash = utils.genPassword(req.body.newPassword);
+
+  const { salt } = saltHash;
+  const { hash } = saltHash;
+
+  const user = await User.findByIdAndUpdate(req.user._id, { hash, salt }, { new: true });
+
+  if (user === null) {
+    res.status(400).json({ success: false, msg: 'Error' });
+  }
+
+  res.status(200).json({
+    success: true, msg: 'updated password',
+  });
+};
+
 module.exports.userRegisterHandler = userRegisterHandler;
 module.exports.userLoginHandler = userLoginHandler;
+module.exports.userUpdatePasswordHandler = userUpdatePasswordHandler;
