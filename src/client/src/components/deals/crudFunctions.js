@@ -7,6 +7,10 @@ export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
 
 export const add_Deal= (payload) => ({ type: "ADD_DEAL", payload})
 
+export const clearCurrent= () => ({ type: "CLEAR_CURRENT_DEAL"})
+
+export const setCurrent= (payload) => ({ type: "SET_CURRENT_DEAL", payload})
+
 export const setEdit= (payload) => ({ type: "SET_EDITING", payload})
 
 export const setErrors = (errorsArr) => ({
@@ -70,8 +74,12 @@ export const viewDeals = () => async dispatch =>{
 }
 
 export const updateDeals = (data, dealId) => async dispatch =>{
+    console.log("updating")
+    console.log(data)
     const response = await Axios.put(`${url}/deal/${dealId}`, {
-        params: {id: dealId}
+        params: {id: dealId},
+        dealName: data.dealName, 
+        value: data.dealValue 
 
     }, {headers: headers}).catch(err => {
         console.log(err);
@@ -89,8 +97,9 @@ export const updateDeals = (data, dealId) => async dispatch =>{
 
 export const updateDealStatus = (dealId, data) => async dispatch =>{
     const response = await Axios.put(`${url}/deal/${dealId}/status`,{
-        status:""
+        status: data
     }, {headers: headers}).catch(err => {
+
         console.log(err);
         alert(err);
         return dispatch(setErrors(response.msg))
@@ -100,7 +109,7 @@ export const updateDealStatus = (dealId, data) => async dispatch =>{
 
     if(responseOK){
         alert(response.msg);
-        return <Redirect to="/deals" />
+        //dispatch(updateDeal(dealId, data))
     }
 }
 

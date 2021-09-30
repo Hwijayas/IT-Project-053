@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { Card, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Draggable } from 'react-beautiful-dnd';
-import {deleteDeal, setDelete, setEdit} from "./crudFunctions"
+import {deleteDeal, setCurrent, setDelete, setEdit} from "./crudFunctions"
 import {useDispatch} from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
@@ -41,9 +41,9 @@ export const DealCards = ({ deal, index }) => {
 
         if(typeof(deal._id) !== "undefined"){
             dispatch(setEdit(true))
+            dispatch(setCurrent(deal._id))
         }
     }
-    
     return (
         
 

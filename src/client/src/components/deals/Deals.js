@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {setDeal, viewDeals, deleteDeal, setEdit, updateDeal} from "./crudFunctions"
+import {setDeal, viewDeals, setEdit, updateDeal, updateDealStatus} from "./crudFunctions"
 import { DragDropContext} from "react-beautiful-dnd";
 import { stages } from './stage';
 import {DealColumn} from "./DealColumn"
-import {useDispatch, useSelector, connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Box, Button, Grid } from '@mui/material'
 import Modal from "./Modal"
 
@@ -29,6 +29,8 @@ const Deals = () => {
         if(deals.update){
             showModalWindow()
         }
+
+        //console.log(deals.dealList)
         
     },[dispatch, deals.update]);
 
@@ -65,6 +67,7 @@ const Deals = () => {
 
             //update local state
             dispatch(updateDeal(draggableId, destination.droppableId))
+            dispatch(updateDealStatus(draggableId, destination.droppableId))
         }
 
 
@@ -94,7 +97,7 @@ const Deals = () => {
                 </Button>
             </Grid>
 
-            <Modal open={showModal} handleClose={hideModalWindow} edit={deals.update}></Modal>
+            <Modal open={showModal} handleClose={hideModalWindow} edit={deals.update} currentId={deals.currentDeal}></Modal>
             <Box display="flex">
                 {stages.map((stage, index) => {
                     

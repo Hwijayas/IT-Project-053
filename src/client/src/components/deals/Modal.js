@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {addDeal, updateDeals, setEdit} from "./crudFunctions"
 
 //modal window for getting inputs, change between edit mode or add mode
-const Modal = ({handleClose, open, edit}) => {
+const Modal = ({handleClose, open, edit, currentId}) => {
     const dispatch = useDispatch();
     const { handleSubmit, control} = useForm();
     const showHideClassName = open ? "modal display-block" : "modal display-none";
@@ -15,12 +15,13 @@ const Modal = ({handleClose, open, edit}) => {
         console.log("submit")
         
         let res;
-        {edit === true ? res = updateDeals(data): res = addDeal(data)}
+        {edit === true ? res = updateDeals(data, currentId): res = addDeal(data)}
        
         if(res){
 			dispatch(res);
         }
         dispatch(setEdit(false))
+        handleClose()
     };
 
     return (

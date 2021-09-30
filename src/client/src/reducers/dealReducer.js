@@ -1,7 +1,8 @@
 const defaultState = {
     dealList: [],
     dealErrors: '',
-    update: false
+    update: false,
+    currentDeal: ""
 }
 
 const dealReducer = (state = defaultState, action) => {
@@ -23,7 +24,7 @@ const dealReducer = (state = defaultState, action) => {
             console.log("delete called")
             return{
                 ...state,
-                dealList : [state.dealList.filter(item => item._id !== action.payload)]
+                dealList : state.dealList.filter(item => item._id !== action.payload)
             }
         case "SET_DEAL_ERRORS":
             return {
@@ -41,14 +42,26 @@ const dealReducer = (state = defaultState, action) => {
         case "UPDATE_DEAL":
             
             return{
-                
                 ...state,
                 dealList : state.dealList.map((deal, index) =>
                             deal._id === action.payload.id ? 
                             {...deal, status: action.payload.status} : deal
                             )
             }
-            
+        
+        case "SET_CURRENT_DEAL":
+        
+            return{
+                ...state,
+                currentDeal: action.payload
+            }
+
+        // case "CLEAR_CURRENT_DEAL":
+    
+        //     return{
+        //         ...state,
+        //         currentDeal: ""
+        //     }
         default: return state
     }
 
