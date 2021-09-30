@@ -5,6 +5,7 @@ const defaultState = {
       fistName:'',
       lastName:''
     },
+    message:'',
     loginErrors: '',
     updateErrors:[],
     loading: false,
@@ -13,6 +14,18 @@ const defaultState = {
 
 const userReducer = (state = defaultState, action) => {
   switch(action.type){
+    case "CLEAR_MESSAGE":{
+      return{
+        ...state,
+        message:''
+      }
+    }
+    case "SET_MESSAGE":{
+      return {
+        ...state,
+        message: action.payload
+      }
+    }
     case "SET_AUTH":
       return {
         ...state,

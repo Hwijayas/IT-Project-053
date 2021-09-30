@@ -11,7 +11,7 @@ import { Redirect } from 'react-router';
 import {Link} from 'react-router-dom'
 import {Logout, Password} from '@mui/icons-material/';
 import {useDispatch, useSelector} from 'react-redux'
-import { logout } from '../actions/userActions';
+import { logout, setMsg} from '../actions/userActions';
 
 const AccountMenu = () => {
   const userReducer = useSelector(state => state.userReducer);
@@ -22,6 +22,7 @@ const AccountMenu = () => {
   const open = Boolean(anchorEl);
   const handleLogout = () => {
     console.log('logout pressed')
+    dispatch(setMsg("logged out"));
     dispatch(logout());
     return (
       <Redirect to="/login"/>

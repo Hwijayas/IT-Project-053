@@ -5,6 +5,7 @@ import './css/App.css';
 import Navbar from './components/Navbar';
 import Dashboard from './components/dashboard/Dashboard';
 import About from './components/pages/About';
+import CustomizedSnackbars from './components/SnackBar'
 import {ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
 import { logout, verifyUser} from './actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,6 +39,7 @@ const App = () => {
         <PublicRoute path="/sign-up" component={LoginComponent} />
       </Switch>
       </Router>
+      <CustomizedSnackbars/>
     </div>
     </>
   );
