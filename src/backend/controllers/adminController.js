@@ -14,6 +14,7 @@ const adminRegisterHandler = (req, res) => {
         return res.status(422).json({
            message: 'Admin already exists',
         });
+<<<<<<< Updated upstream
     }
         const saltHash = utils.genPassword(req.body.password);
   
@@ -41,6 +42,34 @@ const adminRegisterHandler = (req, res) => {
                 token: jwt.token,
                 expiresIn: jwt.expires,
               });
+=======
+      }
+      const saltHash = utils.genPassword(req.body.password);
+
+      const { salt } = saltHash;
+      const { hash } = saltHash;
+
+      const newAdmin = new Admin({
+        _id: new mongoose.Types.ObjectId(),
+        adminEmail: req.body.adminEmail,
+        adminFirstName: req.body.firstName,
+        adminLastName: req.body.lastName,
+        hash,
+        salt,
+      });
+
+      try {
+        newAdmin.save()
+          .then(() => {
+            const jwt = utils.issueJWT(admin, true);
+            res.json({
+              success: true,
+              userEmail: admin.adminEmail,
+              firstName: admin.adminFirstName,
+              lastName: admin.adminLastName,
+              token: jwt.token,
+              expiresIn: jwt.expires,
+>>>>>>> Stashed changes
             });
         } catch (err) {
           res.json({ success: false, msg: err });
@@ -61,7 +90,7 @@ const adminLoginHandler = (req, res, next) => {
       const isValid = utils.validPassword(req.body.password, admin.hash, admin.salt);
 
       if (isValid) {
-        const tokenObject = utils.issueJWT(admin);
+        const tokenObject = utils.issueJWT(admin, true);
 
         res.status(200).json({
           success: true,

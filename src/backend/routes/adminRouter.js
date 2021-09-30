@@ -3,8 +3,13 @@ const passport = require('passport');
 const adminController = require('../controllers/adminController');
 
 router.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
+<<<<<<< Updated upstream
   res.status(200).json({ success: true, msg: 'You are successfully authenticated to this route!' });
   console.log(req.user);
+=======
+  res.status(200).json({ success: true, msg: 'You are successfully authenticated to this route!', admin: req.admin });
+  console.log(req.admin);
+>>>>>>> Stashed changes
 });
 
 router.post('/login', adminController.adminLoginHandler);
@@ -17,6 +22,12 @@ router.delete('/users/:id', passport.authenticate('jwt', { session: false }), ad
 
 router.get('/deals/flagged', passport.authenticate('jwt', { session: false }), adminController.adminGetAllFlaggedDeals);
 
+<<<<<<< Updated upstream
 router.delete('/deals/:id', passport.authenticate('jwt', { session: false }), adminController.adminDeleteDeal);
 
 module.exports = router;
+=======
+router.delete('/deals/flagged/:id', passport.authenticate('jwt', { session: false }), adminController.adminDeleteDeal);
+
+module.exports = router;
+>>>>>>> Stashed changes
