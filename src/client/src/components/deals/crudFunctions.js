@@ -7,7 +7,7 @@ export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
 
 export const add_Deal= (payload) => ({ type: "ADD_DEAL", payload})
 
-export const setUpdate= (payload) => ({ type: "SET_UPDATE", payload})
+export const setEdit= (payload) => ({ type: "SET_EDITING", payload})
 
 export const setErrors = (errorsArr) => ({
     type: "SET_DEAL_ERRORS",

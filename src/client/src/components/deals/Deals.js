@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {setUpdate, viewDeals, deleteDeal} from "./crudFunctions"
+import {setUpdate, viewDeals, deleteDeal, setEdit} from "./crudFunctions"
 import { DragDropContext} from "react-beautiful-dnd";
 import { stages } from './stage';
 import {DealColumn} from "./DealColumn"
@@ -21,13 +21,16 @@ const Deals = () => {
             
             if(typeof(response) !== "undefined"){
                 dispatch(response)
-                
             }
         }
 
         getDeals();
+
+        if(deals.update){
+            showModalWindow()
+        }
         
-    },[dispatch]);
+    },[dispatch, deals.update]);
 
     const onDragEnd = () => async result => {
         const { destination, source, draggableId } = result;
@@ -50,6 +53,7 @@ const Deals = () => {
     
     const hideModalWindow = () => {
         SetShowModal(false)
+        dispatch(setEdit(false))
     };
     
 
@@ -67,7 +71,7 @@ const Deals = () => {
                 </Button>
             </Grid>
 
-            <Modal open={showModal} handleClose={hideModalWindow}></Modal>
+            <Modal open={showModal} handleClose={hideModalWindow} edit={deals.update}></Modal>
             <Box display="flex">
                 {stages.map((stage, index) => {
                     

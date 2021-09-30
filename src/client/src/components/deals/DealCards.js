@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { Card, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Draggable } from 'react-beautiful-dnd';
-import {deleteDeal, setDelete} from "./crudFunctions"
+import {deleteDeal, setDelete, setEdit} from "./crudFunctions"
 import {useDispatch} from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
@@ -17,8 +17,8 @@ const useStyles = makeStyles(theme => ({
     cardText: {
         marginLeft: theme.spacing(1),
     },
-    delete_button: {
-        float: 'right',
+    button: {
+        
     }
 }));
 
@@ -34,6 +34,13 @@ export const DealCards = ({ deal, index }) => {
 
             dispatch(deleteDeal(deal._id))
             dispatch(setDelete(deal._id))
+        }
+    }
+
+    const onEdit = async () =>{
+
+        if(typeof(deal._id) !== "undefined"){
+            dispatch(setEdit(true))
         }
     }
     
@@ -88,12 +95,20 @@ export const DealCards = ({ deal, index }) => {
                             </div>
                             <Grid container justifyContent="flex-end">
                                 <Button 
-                                    className={classes.delete_button} 
+                                    className={classes.button} 
+                                    onClick={onEdit}
+                                    variant="contained"
+                                    >
+                                        Edit
+                                </Button> 
+                                <Button 
+                                    className={classes.button} 
                                     onClick={onDelete}
                                     variant="contained"
                                     >
                                         Delete
                                 </Button> 
+
                             </Grid>
                             
                         </div>
