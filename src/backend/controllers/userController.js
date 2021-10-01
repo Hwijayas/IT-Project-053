@@ -84,9 +84,9 @@ const userLoginHandler = (req, res, next) => {
 };
 
 // Function to update password - user
-const userUpdatePasswordHandler = async (req, res) => {
+const userUpdatePasswordHandler = async (req, res, next) => {
   try {
-    const isValid = utils.validPassword(req.body.oldPassword, req.user.hash, req.user.salt);
+    const isValid = utils.validPassword(req.body.password, req.user.hash, req.user.salt);
 
     if (!isValid) {
       res.status(401).json({ success: false, msg: 'you entered the wrong old password' });
@@ -110,7 +110,7 @@ const userUpdatePasswordHandler = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    next(err);
   }
 };
 
