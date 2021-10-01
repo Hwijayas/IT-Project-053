@@ -37,7 +37,9 @@ export const userChangePassword = (userInfo) => async dispatch => {
 	const token = localStorage.getItem("token");
 	const res = await fetch(`${url}/password`, {
 		method: "PUT",
-		headers:{...headers, "Authorization": `${token}`},
+		headers:{...headers,
+			"Authorization": `${token}`,
+			'Access-Control-Allow-Origin':'*'},
 		body: JSON.stringify(userInfo),
 		mode: 'cors',
 	})
