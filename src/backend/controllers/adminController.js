@@ -28,11 +28,10 @@ const adminRegisterHandler = (req, res) => {
         hash,
         salt,
       });
-
       try {
         newAdmin.save()
           .then(() => {
-            const jwt = utils.issueJWT(admin);
+            const jwt = utils.issueJWT(admin, true);
             res.json({
               success: true,
               userEmail: admin.adminEmail,
@@ -61,7 +60,7 @@ const adminLoginHandler = (req, res, next) => {
       const isValid = utils.validPassword(req.body.password, admin.hash, admin.salt);
 
       if (isValid) {
-        const tokenObject = utils.issueJWT(admin);
+        const tokenObject = utils.issueJWT(admin, true);
 
         res.status(200).json({
           success: true,

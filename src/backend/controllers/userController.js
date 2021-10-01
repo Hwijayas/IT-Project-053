@@ -31,7 +31,7 @@ const userRegisterHandler = (req, res) => {
       try {
         newUser.save()
           .then(() => {
-            const jwt = utils.issueJWT(user);
+            const jwt = utils.issueJWT(user, false);
             res.json({
               success: true,
               user: {
@@ -62,7 +62,7 @@ const userLoginHandler = (req, res, next) => {
       const isValid = utils.validPassword(req.body.password, user.hash, user.salt);
 
       if (isValid) {
-        const tokenObject = utils.issueJWT(user);
+        const tokenObject = utils.issueJWT(user, false);
 
         res.status(200).json({
           success: true,
@@ -104,7 +104,7 @@ const userUpdatePasswordHandler = async (req, res) => {
       }
       
       //new token
-      const jwt = utils.issueJWT(user);
+      const jwt = utils.issueJWT(user, false);
       res.status(200).json({
         success: true, msg: 'updated password', token: jwt,
       });

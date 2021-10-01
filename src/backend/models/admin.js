@@ -7,6 +7,11 @@ const adminSchema = mongoose.Schema({
   adminLastName: String,
   hash: String,
   salt: String,
+  isAdmin: {
+    type: Boolean,
+    default: true,
+    immutable: true
+  }
 });
 
 module.exports = mongoose.model('Admin', adminSchema);
