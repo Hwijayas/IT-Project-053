@@ -1,6 +1,7 @@
 import Axios from "axios"
 import { Redirect } from "react-router";
-const url = "https://bits-please-api.herokuapp.com/user";
+const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000/user' : 'https://bits-please-api.herokuapp.com/user';
+//const url = "https://bits-please-api.herokuapp.com/user";
 //const url = 'http://localhost:5000/user';
 
 export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
@@ -68,20 +69,23 @@ export const viewDeals = () => async dispatch =>{
         
     });
     if(typeof(deal) !== "undefined"){
-        //console.log(deal.data)
+        console.log(deal.data)
         dispatch(setDeal(deal.data))
         return deal.data;
     }
     
 }
 
-export const updateDeals = (data, dealId) => async dispatch =>{
+
+
+export const updateDeals = (data, dealId, customer) => async dispatch =>{
     console.log("updating")
     console.log(data)
     const response = await Axios.put(`${url}/deal/${dealId}`, {
         params: {id: dealId},
         dealName: data.dealName, 
-        value: data.dealValue 
+        value: data.dealValue,
+        customer: customer
 
     }, {headers: {...headers,
         'Access-Control-Allow-Origin':'*' }}).catch(err => {
@@ -97,6 +101,28 @@ export const updateDeals = (data, dealId) => async dispatch =>{
         return <Redirect to="/deals" />
     }
 }
+
+
+/*
+export const updateDeals =  async (data, dealId) =>{
+    await Axios({
+        url: `${url}/deal/${dealId}`,
+        params: {id: dealId},
+        headers: {...headers,
+            'Access-Control-Allow-Origin':'*' },
+        method: 'put',
+        data: {
+            dealName: data.dealName, 
+            value: data.dealValue 
+        }
+    
+    }).catch(err => {
+        console.log(err);
+        alert(err);
+        //return dispatch(setErrors(data.msg))
+    });
+}
+*/
 
 export const updateDealStatus = (dealId, data) => async dispatch =>{
     const response = await Axios.put(`${url}/deal/${dealId}/status`,{

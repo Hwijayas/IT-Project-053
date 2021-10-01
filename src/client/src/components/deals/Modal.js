@@ -1,8 +1,8 @@
 
 import {useForm, Controller} from 'react-hook-form'
-import {Box, TextField, Button, Dialog, DialogContent, DialogActions, MenuItem, Select, InputLabel} from '@mui/material';
+import {Box, TextField, Button, Dialog, DialogContent, DialogActions} from '@mui/material';
 import "./Modal.css"
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {addDeal, updateDeals, setEdit} from "./crudFunctions"
 
 //modal window for getting inputs, change between edit mode or add mode
@@ -10,15 +10,18 @@ const Modal = ({handleClose, open, edit, currentId}) => {
     const dispatch = useDispatch();
     const { handleSubmit, control} = useForm();
     const showHideClassName = open ? "modal display-block" : "modal display-none";
+	const deals = useSelector(state => state.dealReducer)
     
     const onSubmit = async (data) => {
         console.log("submit")
-        
+        const customer  = deals.dealList.filter(item => item._id === currentId)
+		
         let res;
-        {edit === true ? res = updateDeals(data, currentId): res = addDeal(data)}
+        {edit === true ? res = updateDeals(data, currentId, customer[0]): res = addDeal(data)}
        
         if(res){
 			dispatch(res);
+			
         }
         dispatch(setEdit(false))
         handleClose()

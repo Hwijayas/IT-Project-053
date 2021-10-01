@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
     cardContent: {
         padding: theme.spacing(1),
         display: 'flex',
+        height: 70
     },
     cardText: {
         marginLeft: theme.spacing(1),
