@@ -22,10 +22,12 @@ export const updateDeal= (id, status) => ({ type: "UPDATE_DEAL", payload : {id: 
 
 export const setDelete= (payload) => ({ type: "DELETE_DEAL", payload})
 
+const token = localStorage.getItem("token");
+
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json",
-    "Authorization": localStorage.getItem('token')
+    "Authorization": `${token}`,
 } 
 
 
