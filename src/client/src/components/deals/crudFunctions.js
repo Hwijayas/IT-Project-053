@@ -83,7 +83,8 @@ export const updateDeals = (data, dealId) => async dispatch =>{
         dealName: data.dealName, 
         value: data.dealValue 
 
-    }, {headers: headers}).catch(err => {
+    }, {headers: {...headers,
+        'Access-Control-Allow-Origin':'*' }}).catch(err => {
         console.log(err);
         alert(err);
         return dispatch(setErrors(data.msg))
@@ -100,7 +101,8 @@ export const updateDeals = (data, dealId) => async dispatch =>{
 export const updateDealStatus = (dealId, data) => async dispatch =>{
     const response = await Axios.put(`${url}/deal/${dealId}/status`,{
         status: data
-    }, {headers: headers}).catch(err => {
+    }, {headers: {...headers,
+            'Access-Control-Allow-Origin':'*' }}).catch(err => {
 
         console.log(err);
         alert(err);
