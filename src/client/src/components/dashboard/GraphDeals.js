@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Link } from '@material-ui/core';
-import {AttachMoneyIcon} from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Link } from '@mui/material';
+import {AttachMoney as AttachMoneyIcon} from '@mui/icons-material';
 import { ResponsiveBar } from '@nivo/bar';
 import {useSelector} from 'react-redux';
 
@@ -17,19 +17,27 @@ export const DealsChart = () => {
                     return acc;
                 }, 0)
     }
+    const getDealsByStatus = () => {
+        return [{
+        'Pending': getAccumulatedDeals("Pending"),
+        'Accepted': getAccumulatedDeals("Accepted"),
+        'Declined': getAccumulatedDeals("Declined")*-1
+        
+        }]
+    }
+    const getRange = () => {
+        //20% margin
+        return {
+            min: data["Declined"] * 1.2,
+            max: Math.max(data["Pending"], data["Accepted"]) * 1.2
+        }
+    }
     //calculate new values every time
     useEffect(() => {
         // deal state we care about: Pending, Accepted, Declined
-        const getDealsByStatus = () => {
-            return {
-            'Pending': getAccumulatedDeals("Pending"),
-            'Accepted': getAccumulatedDeals("Accepted"),
-            'Declined': getAccumulatedDeals("Declined"),
-            }
-        }
-        setData(getDealsByStatus);
-    }, [dealReducer.dealList]);
-
+        setData(getDealsByStatus());
+    }, [getDealsByStatus]);
+    const range = getRange();
     return (
         <>
             <Box display="flex" alignItems="center">
@@ -40,7 +48,7 @@ export const DealsChart = () => {
                     underline="none"
                     variant="h5"
                     color="textSecondary"
-                    component={Link}
+                    component={RouterLink}
                     to="/deals"
                 >
                     Deal Overview

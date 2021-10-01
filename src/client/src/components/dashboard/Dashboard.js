@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
-import { GraphDeals as Chart } from './GraphDeals';
+import { Box } from '@mui/material';
+import { DealsChart as Chart } from './GraphDeals';
 
-export const Dashboard = () => {
+const Dashboard = () => {
     return (
         <>
             <Box display="flex" mt="2em">
@@ -29,3 +29,4 @@ export const Dashboard = () => {
         </>
     );
 };
+export default Dashboard
