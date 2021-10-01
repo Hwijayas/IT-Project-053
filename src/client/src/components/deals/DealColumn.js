@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Typography} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Droppable } from 'react-beautiful-dnd';
 import {DealCards} from "./DealCards"
 import { stageNames } from './stage';

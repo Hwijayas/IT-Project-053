@@ -10,6 +10,7 @@ import {ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
 import { logout, verifyUser} from './actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
+import Deals from "./components/deals/Deals"
 
 const App = () => {
   /*authenticate user if jwt exists */
@@ -34,6 +35,7 @@ const App = () => {
       <Navbar loggedIn={userReducer.loggedIn} handleLogout={handleLogout}/>
       <Switch>
         <ProtectedRoute exact path='/' component={Dashboard}/>
+        <ProtectedRoute exact path='/deals' component={Deals} /> 
         <ProtectedRoute exact path='/change-password' component={LoginComponent} /> 
         <Route exact path='/about' component={About}/>
         <PublicRoute path="/login" component={LoginComponent}/>

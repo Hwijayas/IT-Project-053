@@ -1,7 +1,6 @@
 
-import { Button } from '@mui/material';
-import { Card, Typography, Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, Card, Typography, Grid} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Draggable } from 'react-beautiful-dnd';
 import {deleteDeal, setCurrent, setDelete, setEdit} from "./crudFunctions"
 import {useDispatch} from 'react-redux';
