@@ -2,7 +2,7 @@
 import {useForm, Controller} from 'react-hook-form'
 import {Box, TextField, Button, Dialog, DialogContent, DialogActions, MenuItem, Select, InputLabel} from '@mui/material';
 import "./Modal.css"
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {addDeal, updateDeals, setEdit} from "./crudFunctions"
 
 //modal window for getting inputs, change between edit mode or add mode
