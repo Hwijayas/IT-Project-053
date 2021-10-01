@@ -7,6 +7,11 @@ const userSchema = mongoose.Schema({
   userLastName: String,
   hash: String,
   salt: String,
+  isAdmin: {
+    type: Boolean,
+    default: false,
+    immutable: true
+  }
 });
 
 module.exports = mongoose.model('User', userSchema);

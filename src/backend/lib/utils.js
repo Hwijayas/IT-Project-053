@@ -54,13 +54,14 @@ const genPassword = (password) => {
  * @param {*} user - The user object.
  * We need this to set the JWT `sub` payload property to the MongoDB user ID
  */
-const issueJWT = (user) => {
+const issueJWT = (user, admin) => {
   const { _id } = user;
 
   const expiresIn = '1d';
 
   const payload = {
     sub: _id,
+    admin: admin,
     iat: Date.now(),
   };
 
