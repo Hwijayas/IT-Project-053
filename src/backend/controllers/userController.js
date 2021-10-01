@@ -10,7 +10,8 @@ const userRegisterHandler = (req, res) => {
     .then((user) => {
       if (user.length >= 1) {
         return res.status(422).json({
-          message: 'User already exists',
+          success: false,
+          msg: 'User already exists',
         });
       }
       const saltHash = utils.genPassword(req.body.password);
@@ -33,9 +34,11 @@ const userRegisterHandler = (req, res) => {
             const jwt = utils.issueJWT(user, false);
             res.json({
               success: true,
-              userEmail: user.userEmail,
-              firstName: user.userFirstName,
-              lastName: user.userLastName,
+              user: {
+                email: user.userEmail,
+                firstName: user.firstName,
+                lastName: user.lastName,
+              },
               token: jwt.token,
               expiresIn: jwt.expires,
             });
@@ -63,7 +66,11 @@ const userLoginHandler = (req, res, next) => {
 
         res.status(200).json({
           success: true,
-          userEmail: user.userEmail,
+          user: {
+            email: user.userEmail,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
           token: tokenObject.token,
           expiresIn: tokenObject.expires,
         });
@@ -76,8 +83,6 @@ const userLoginHandler = (req, res, next) => {
     });
 };
 
-<<<<<<< Updated upstream
-=======
 // Function to update password - user
 const userUpdatePasswordHandler = async (req, res) => {
   try {
@@ -109,6 +114,6 @@ const userUpdatePasswordHandler = async (req, res) => {
   }
 };
 
->>>>>>> Stashed changes
 module.exports.userRegisterHandler = userRegisterHandler;
 module.exports.userLoginHandler = userLoginHandler;
+module.exports.userUpdatePasswordHandler = userUpdatePasswordHandler;

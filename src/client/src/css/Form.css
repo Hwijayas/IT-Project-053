@@ -34,11 +34,11 @@
 
 .form-container {
   margin: 100px auto;
-  width: 500px;
-  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.2);
+  width: 800px;
+  /* box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.2); */
   position: relative;
   border-radius: 10px;
-  height: 600px;
+  height: 800px;
   display: grid;
   grid-template-columns: 1fr 1fr; 
   /* box-shadow: 0 -1px 4px rgba(0, 0, 0, .35); */
@@ -58,21 +58,22 @@
 .form-content {
   border-radius: 0 10px 10px 0;
   position: relative;
+  width: 500px;
   background: linear-gradient(90deg, rgb(40, 40, 40) 0%, rgb(17, 17, 17) 100%);
 }
 
 .form {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 .form h1 {
   font-size: var(--h1-font-size);
@@ -83,7 +84,7 @@
 }
 
 .form-inputs {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   width: 80%;
 }
 
@@ -116,7 +117,7 @@
 }
 
 .form-input-btn {
-  width: 80%;
+  width: 50%;
   height: 50px;
   margin-top: 10px;
   border-radius: 2px;
@@ -139,11 +140,17 @@
     rgb(12, 99, 250) 100%
   );
   transition: all 0.4s ease-out;
+  border-radius: 20px;
+}
+
+.form-change-btn{
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .form-input-login {
   font-size: var(--small-font-size);
-  margin-top: 10px;
+  margin-top: 15px;
   color: #fff;
   width: 80%;
   text-align: center;

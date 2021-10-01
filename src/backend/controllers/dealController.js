@@ -1,77 +1,59 @@
-const mongoose = require('mongoose');
 const Deal = require('../models/deal');
+const customerController = require('./customerController');
 
 // Function to create deals
 const userCreateDeal = async (req, res) => {
-  try {
-    Deal.find({
-      name: req.body.name,
-      // eslint-disable-next-line no-underscore-dangle
-      user: req.user._id,
-      value: req.body.value,
-      prefContact: req.body.prefContact,
-      contact: req.body.contact,
-      // eslint-disable-next-line consistent-return
-    }).exec()
-      // eslint-disable-next-line consistent-return
-      .then((data) => {
-        if (data.length >= 1) {
-          return res.status(422).json({
-            message: 'Deal already exists',
-            deal: data,
-          });
-        }
-        const newDeal = new Deal({
-          _id: new mongoose.Types.ObjectId(),
-          // eslint-disable-next-line no-underscore-dangle
-          user: req.user._id,
-          name: req.body.name,
-          value: req.body.value,
-          prefContact: req.body.prefContact,
-          contact: req.body.contact,
-        });
+  const customer = await customerController.addCustomer(req.body.customer, req.user._id);
 
-        newDeal.save()
-          .then(() => {
-            res.status(201).json({ success: true, msg: 'Deal created!', deal: newDeal });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      });
+  // https://stackoverflow.com/questions/33305623/mongoose-create-document-if-not-exists-otherwise-update-return-document-in
+  const query = {
+    dealName: req.body.dealName,
+    value: req.body.value,
+    customer: customer._id,
+  };
+  const update = {
+    dealName: req.body.dealName,
+    value: req.body.value,
+    customer: customer._id,
+  };
+  const options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-    res.status(201);
-  } catch (error) {
-    console.log(error);
-  }
+  // Find the document or create one
+  const deal = await Deal.findOneAndUpdate(query, update, options);
+
+  // Add the user if not present
+  if (deal.user.indexOf(req.user._id) === -1) deal.user.push(req.user._id);
+  await deal.save();
+
+  return res.status(201).json({
+    success: true, msg: 'Deal created!', deal, customer,
+  });
 };
 
 // Function to update deals
-const userUpdateDeal = (req, res) => {
-  const dealId = req.params.id;
-  const newName = req.body.name;
-  const newValue = req.body.value;
-  const newPrefContact = req.body.prefContact;
-  const newContact = req.body.contact;
+const userUpdateDeal = async (req, res) => {
+  const deal = await Deal.findOneAndUpdate(
+    { _id: req.params.id, user: req.user._id },
+    { dealName: req.body.dealName, value: req.body.value },
+    { new: true },
+  );
 
-  Deal.findOneAndUpdate({ _id: dealId }, {
-    name: newName, value: newValue, prefContact: newPrefContact, contact: newContact,
-  }, { new: true }, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else if (deal != null) {
-      res.status(200).json({ success: true, msg: 'Deal updated!' });
-    } else {
-      res.status(404).json({ success: false, msg: 'Deal not found!' });
-    }
-  });
+  if (deal === null) {
+    res.status(400).json({ success: false, msg: 'Deal not found!' });
+  } else {
+    const customer = await customerController.addCustomer(req.body.customer, req.user._id);
+    deal.customer = customer._id;
+    await deal.save();
+    res.status(200).json({
+      success: true, msg: 'Deal updated!', deal, customer,
+    });
+  }
 };
 
 // Function to delete deals
 const userDeleteDeal = (req, res) => {
   const dealId = req.params.id;
-  Deal.findOneAndDelete({ _id: dealId }, (err, deal) => {
+  Deal.findOneAndDelete({ _id: dealId, user: req.user._id }, (err, deal) => {
     if (err) {
       console.log(err);
       res.status(400).json({ success: false, msg: 'Bad request' });
@@ -98,27 +80,31 @@ const updateDealStatus = (req, res) => {
   });
 };
 
+// view all Deals
+const viewDeals = async (req, res) => {
+  const deals = await Deal.find({ user: req.user._id }).populate('customer');
+  res.send(deals);
+};
+
 // Function to toggle deal deletion status
 const flagDealDeletion = (req, res) => {
   const dealId = req.params.id;
 
-  Deal.findOne({_id: dealId}, (err, deal) => {
+  Deal.findOne({ _id: dealId }, (err, deal) => {
     if (err) {
       console.log(err);
       res.status(404);
     } else {
       newDelStatus = !deal.delStatus;
-      Deal.findOneAndUpdate({_id: dealId}, {delStatus: newDelStatus}, {new: true}, (err, deal) => {
+      Deal.findOneAndUpdate({ _id: dealId }, { delStatus: newDelStatus }, { new: true }, (err, deal) => {
         if (err) {
           console.log(err);
           res.status(404);
+        } else if (deal == null) {
+          console.log(err);
+          res.status(404);
         } else {
-          if (deal == null) {
-            console.log(err);
-            res.status(404);
-          } else {
-            res.status(200).json({ success: true, msg: 'Deal deletion flag updated!'})
-          }
+          res.status(200).json({ success: true, msg: 'Deal deletion flag updated!' });
         }
       });
     }
@@ -129,4 +115,5 @@ module.exports.userCreateDeal = userCreateDeal;
 module.exports.userUpdateDeal = userUpdateDeal;
 module.exports.userDeleteDeal = userDeleteDeal;
 module.exports.updateDealStatus = updateDealStatus;
+module.exports.viewDeals = viewDeals;
 module.exports.flagDealDeletion = flagDealDeletion;
