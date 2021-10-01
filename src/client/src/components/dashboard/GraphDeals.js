@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 export const DealsChart = () => {
     const [data, setData] = useState([]);
     const dealReducer  = useSelector(state => state.dealReducer);
-    const deals = dealReducer.dealList;
+    const deals = dealReducer.dealList; //deals now populated, however undefined at first render/refresh, have to go to deals page then back
     const getAccumulatedDeals = (key) => {
         return deals.filter(deal => deal.status===key)
                 .reduce((acc, deal) => {
@@ -28,15 +28,17 @@ export const DealsChart = () => {
     const getRange = () => {
         //20% margin
         return {
-            min: data["Declined"] * 1.2,
+            min: data["Declined"] * 1.2, //(data[0].Pending) to index
             max: Math.max(data["Pending"], data["Accepted"]) * 1.2
         }
     }
+
+    console.log(data[0]) //data 
     //calculate new values every time
     useEffect(() => {
         // deal state we care about: Pending, Accepted, Declined
         setData(getDealsByStatus());
-    }, [getDealsByStatus]);
+    }, [/*getDealsByStatus*/]); //rn if getDealsByStatus is in dependency array, it'll spam in console and lag broswer
     const range = getRange();
     return (
         <>
