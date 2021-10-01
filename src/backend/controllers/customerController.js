@@ -37,32 +37,36 @@ const userAddsCustomer = async (req, res) => {
 };
 
 // handles updates customer request
-const userUpdateCustomer = async (req, res) => {
-  const oldCustomer = await Customer.findById(req.params.id);
+const userUpdateCustomer = async (req, res, next) => {
+  try {
+    const oldCustomer = await Customer.findById(req.params.id);
 
-  if (!oldCustomer) {
-    return res.status(401).json({ success: false, msg: 'could not find customer' });
-  }
+    if (!oldCustomer) {
+      return res.status(401).json({ success: false, msg: 'could not find customer' });
+    }
 
-  // Create new customer
-  const updatedCustomer = await addCustomer(req.body, req.user._id);
+    // Create new customer
+    const updatedCustomer = await addCustomer(req.body, req.user._id);
 
-  if (updatedCustomer._id !== oldCustomer._id) {
-    oldCustomer.user.forEach((present) => {
-      if (updatedCustomer.user.indexOf(present) === -1) updatedCustomer.user.push(present);
+    if (updatedCustomer._id !== oldCustomer._id) {
+      oldCustomer.user.forEach((present) => {
+        if (updatedCustomer.user.indexOf(present) === -1) updatedCustomer.user.push(present);
+      });
+      await updatedCustomer.save();
+
+      // Update all the references in Deal
+      await Deal.updateMany({ customer: oldCustomer._id }, { customer: updatedCustomer._id });
+
+      await Customer.findByIdAndDelete(oldCustomer._id);
+    }
+
+    return res.status(200).json({
+      success: true,
+      customer: updatedCustomer,
     });
-    await updatedCustomer.save();
-
-    // Update all the references in Deal
-    await Deal.updateMany({ customer: oldCustomer._id }, { customer: updatedCustomer._id });
-
-    await Customer.findByIdAndDelete(oldCustomer._id);
+  } catch (err){
+    next(err);
   }
-
-  return res.status(200).json({
-    success: true,
-    customer: updatedCustomer,
-  });
 };
 
 // Function to delete customer

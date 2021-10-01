@@ -31,22 +31,26 @@ const userCreateDeal = async (req, res) => {
 };
 
 // Function to update deals
-const userUpdateDeal = async (req, res) => {
-  const deal = await Deal.findOneAndUpdate(
-    { _id: req.params.id, user: req.user._id },
-    { dealName: req.body.dealName, value: req.body.value },
-    { new: true },
-  );
+const userUpdateDeal = async (req, res, next) => {
+  try {
+    const deal = await Deal.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
+      { dealName: req.body.dealName, value: req.body.value },
+      { new: true },
+    );
 
-  if (deal === null) {
-    res.status(400).json({ success: false, msg: 'Deal not found!' });
-  } else {
-    const customer = await customerController.addCustomer(req.body.customer, req.user._id);
-    deal.customer = customer._id;
-    await deal.save();
-    res.status(200).json({
-      success: true, msg: 'Deal updated!', deal, customer,
-    });
+    if (deal === null) {
+      res.status(400).json({ success: false, msg: 'Deal not found!' });
+    } else {
+      const customer = await customerController.addCustomer(req.body.customer, req.user._id);
+      deal.customer = customer._id;
+      await deal.save();
+      res.status(200).json({
+        success: true, msg: 'Deal updated!', deal, customer,
+      });
+    }
+  } catch (err){
+    next(err);
   }
 };
 
@@ -65,19 +69,23 @@ const userDeleteDeal = (req, res) => {
   });
 };
 
-const updateDealStatus = (req, res) => {
-  const dealId = req.params.id;
-  const newStatus = req.body.status;
-  Deal.findOneAndUpdate({ _id: dealId }, { status: newStatus }, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else if (deal != null) {
-      res.status(200).json({ success: true, msg: 'Deal status updated!' });
-    } else {
-      res.status(404).json({ success: false, msg: 'Deal not found!' });
-    }
-  });
+const updateDealStatus = (req, res, next) => {
+  try {
+    const dealId = req.params.id;
+    const newStatus = req.body.status;
+    Deal.findOneAndUpdate({ _id: dealId }, { status: newStatus }, (err, deal) => {
+      if (err) {
+        console.log(err);
+        res.status(400).json({ success: false, msg: 'Bad request' });
+      } else if (deal != null) {
+        res.status(200).json({ success: true, msg: 'Deal status updated!' });
+      } else {
+        res.status(404).json({ success: false, msg: 'Deal not found!' });
+      }
+    });
+  } catch (err){
+    next(err);
+  }
 };
 
 // view all Deals
@@ -87,28 +95,32 @@ const viewDeals = async (req, res) => {
 };
 
 // Function to toggle deal deletion status
-const flagDealDeletion = (req, res) => {
-  const dealId = req.params.id;
+const flagDealDeletion = (req, res, next) => {
+  try {
+    const dealId = req.params.id;
 
-  Deal.findOne({ _id: dealId }, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(404);
-    } else {
-      newDelStatus = !deal.delStatus;
-      Deal.findOneAndUpdate({ _id: dealId }, { delStatus: newDelStatus }, { new: true }, (err, deal) => {
-        if (err) {
-          console.log(err);
-          res.status(404);
-        } else if (deal == null) {
-          console.log(err);
-          res.status(404);
-        } else {
-          res.status(200).json({ success: true, msg: 'Deal deletion flag updated!' });
-        }
-      });
-    }
-  });
+    Deal.findOne({ _id: dealId }, (err, deal) => {
+      if (err) {
+        console.log(err);
+        res.status(404);
+      } else {
+        newDelStatus = !deal.delStatus;
+        Deal.findOneAndUpdate({ _id: dealId }, { delStatus: newDelStatus }, { new: true }, (err, deal) => {
+          if (err) {
+            console.log(err);
+            res.status(404);
+          } else if (deal == null) {
+            console.log(err);
+            res.status(404);
+          } else {
+            res.status(200).json({ success: true, msg: 'Deal deletion flag updated!' });
+          }
+        });
+      }
+    });
+  } catch (err){
+    next(err);
+  }
 };
 
 module.exports.userCreateDeal = userCreateDeal;
