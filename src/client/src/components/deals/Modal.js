@@ -10,12 +10,14 @@ const Modal = ({handleClose, open, edit, currentId}) => {
     const dispatch = useDispatch();
     const { handleSubmit, control} = useForm();
     const showHideClassName = open ? "modal display-block" : "modal display-none";
-    
+    const deals = useSelector(state => state.dealReducer)
+
     const onSubmit = async (data) => {
         console.log("submit")
+		const customer  = deals.dealList.filter(item => item._id === currentId)
         
         let res;
-        {edit === true ? res = updateDeals(data, currentId): res = addDeal(data)}
+        {edit === true ? res = updateDeals(data, currentId, customer[0]): res = addDeal(data)}
        
         if(res){
 			dispatch(res);

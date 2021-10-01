@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
     },
     cardText: {
         marginLeft: theme.spacing(1),
+        height: 70
     },
     button: {
         
