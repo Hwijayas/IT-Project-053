@@ -1,8 +1,15 @@
 const Deal = require('../models/deal');
 const customerController = require('./customerController');
 
+const USER_ONLY = 'Access Denied';
+
 // Function to create deals
 const userCreateDeal = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(401).json({
+      message: USER_ONLY,
+    });
+  }
   const customer = await customerController.addCustomer(req.body.customer, req.user._id);
 
   // https://stackoverflow.com/questions/33305623/mongoose-create-document-if-not-exists-otherwise-update-return-document-in
@@ -33,6 +40,11 @@ const userCreateDeal = async (req, res) => {
 // Function to update deals
 const userUpdateDeal = async (req, res, next) => {
   try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
     const deal = await Deal.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
       { dealName: req.body.dealName, value: req.body.value },
@@ -72,6 +84,11 @@ const userUpdateDeal = async (req, res, next) => {
 
 const updateDealStatus = (req, res, next) => {
   try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
     const dealId = req.params.id;
     const newStatus = req.body.status;
     Deal.findOneAndUpdate({ _id: dealId }, { status: newStatus }, (err, deal) => {
@@ -91,6 +108,11 @@ const updateDealStatus = (req, res, next) => {
 
 // view all Deals
 const viewDeals = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(401).json({
+      message: USER_ONLY,
+    });
+  }
   const deals = await Deal.find({ user: req.user._id, delStatus: false }).populate('customer');
   res.send(deals);
 };
@@ -98,6 +120,11 @@ const viewDeals = async (req, res) => {
 // Function to toggle deal deletion status
 const flagDealDeletion = (req, res, next) => {
   try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
     const dealId = req.params.id;
 
     Deal.findOne({ _id: dealId }, (err, deal) => {

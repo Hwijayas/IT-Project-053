@@ -1,5 +1,8 @@
 const Customer = require('../models/customer');
 const Deal = require('../models/deal');
+
+const USER_ONLY = 'Access Denied';
+
 // Add customer to DB
 const addCustomer = async (customerDetails, userID) => {
   // https://stackoverflow.com/questions/33305623/mongoose-create-document-if-not-exists-otherwise-update-return-document-in
@@ -29,6 +32,11 @@ const addCustomer = async (customerDetails, userID) => {
 
 // handler to create deals
 const userAddsCustomer = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(401).json({
+      message: USER_ONLY,
+    });
+  }
   const customer = await addCustomer(req.body, req.user._id);
   res.status(422).json({
     message: 'Customer added',
@@ -39,6 +47,12 @@ const userAddsCustomer = async (req, res) => {
 // handles updates customer request
 const userUpdateCustomer = async (req, res, next) => {
   try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
+
     const oldCustomer = await Customer.findById(req.params.id);
 
     if (!oldCustomer) {
@@ -71,6 +85,12 @@ const userUpdateCustomer = async (req, res, next) => {
 
 // Function to delete customer
 const userDeleteCustomer = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(401).json({
+      message: USER_ONLY,
+    });
+  }
+
   const customerID = req.params.id;
 
   const count = await Deal.countDocuments({ customer: customerID });
