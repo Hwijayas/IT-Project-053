@@ -10,7 +10,7 @@ router.post('/deal', passport.authenticate('jwt', { session: false }), dealContr
 router.put('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.userUpdateDeal);
 
 // // Delete an existing deal
-// router.delete('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.flagDealDeletion);
+router.delete('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.flagDealDeletion);
 
 // View All deals
 router.get('/deal', passport.authenticate('jwt', { session: false }), dealController.viewDeals);
@@ -26,8 +26,5 @@ router.put('/customer/:id', passport.authenticate('jwt', { session: false }), cu
 
 // Delete an existing deal
 router.delete('/customer/:id', passport.authenticate('jwt', { session: false }), customerController.userDeleteCustomer);
-
-// Update status of deal deletion
-router.put('/deal/:id/flag', passport.authenticate('jwt', { session: false }), dealController.flagDealDeletion);
 
 module.exports = router;
