@@ -1,6 +1,6 @@
 import { Redirect } from "react-router";
 
-const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000/user' : 'https://bits-please-api.herokuapp.com/user';
+const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000' : 'https://bits-please-api.herokuapp.com';
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json"
@@ -34,7 +34,7 @@ export const setAuth = (menuState)=>({
 })
 export const userChangePassword = (userInfo) => async dispatch => {
 	
-	const token = localStorage.getItem("token");
+	const token = await localStorage.getItem("token");
 	const res = await fetch(`${url}/password`, {
 		method: "PUT",
 		headers:{...headers,
@@ -50,7 +50,7 @@ export const userChangePassword = (userInfo) => async dispatch => {
 		dispatch(setMsg("Password Changed!"));
 		dispatch(emptyErrors());
 		if(data.token){
-			localStorage.setItem("token", data.token);
+			await localStorage.setItem("token", data.token);
 
 		}
 		
@@ -72,7 +72,7 @@ export const fetchUser =  (userInfo) => async dispatch => {
 		return dispatch(setErrors(data.msg))
 	}
 	dispatch(welcomeUser);
-	localStorage.setItem("token", data.token);
+	await localStorage.setItem("token", data.token);
 	dispatch(emptyErrors());
 	dispatch(setUser(data.user));
 }
@@ -88,7 +88,7 @@ export const signUp = (userInfo) => async dispatch => {
 		return dispatch(setErrors(data.msg))
 	}
 	dispatch(welcomeUser);
-	localStorage.setItem("token", data.token);
+	await localStorage.setItem("token", data.token);
 	dispatch(emptyErrors());
 	dispatch(setUser(data.user));
 }
@@ -96,9 +96,9 @@ export const signUp = (userInfo) => async dispatch => {
 export const verifyUser = () => async dispatch => {
 	console.log('api: ');
 	console.log(url);
-	const token = localStorage.getItem('token');
+	const token = await localStorage.getItem('token');
 	if (!token){
-		localStorage.clear();
+		await localStorage.clear();
 		return <Redirect to="/login" />
 	}
 	const res = await fetch(`${url}/protected`, {
@@ -114,7 +114,7 @@ export const verifyUser = () => async dispatch => {
 			if(!!token){
 				dispatch(setMsg("Session Expired, Please Log In agin."))
 			}
-			localStorage.clear();
+			await localStorage.clear();
 			<Redirect to="/login" />
 	}
 }

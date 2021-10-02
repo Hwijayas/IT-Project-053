@@ -54,21 +54,21 @@ const userUpdateDeal = async (req, res, next) => {
   }
 };
 
-// Function to delete deals
-const userDeleteDeal = (req, res) => {
-  // Todo: only flag the deal as delete
-  const dealId = req.params.id;
-  Deal.findOneAndDelete({ _id: dealId, user: req.user._id }, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else if (deal != null) {
-      res.status(200).json({ success: true, msg: 'Deal deleted!' });
-    } else {
-      res.status(404).json({ success: false, msg: 'Deal not found!' });
-    }
-  });
-};
+// // Function to delete deals
+// const userDeleteDeal = (req, res) => {
+//   //  only flag the deal as delete
+//   const dealId = req.params.id;
+//   Deal.findOneAndDelete({ _id: dealId, user: req.user._id }, (err, deal) => {
+//     if (err) {
+//       console.log(err);
+//       res.status(400).json({ success: false, msg: 'Bad request' });
+//     } else if (deal != null) {
+//       res.status(200).json({ success: true, msg: 'Deal deleted!' });
+//     } else {
+//       res.status(404).json({ success: false, msg: 'Deal not found!' });
+//     }
+//   });
+// };
 
 const updateDealStatus = (req, res, next) => {
   try {
@@ -91,8 +91,7 @@ const updateDealStatus = (req, res, next) => {
 
 // view all Deals
 const viewDeals = async (req, res) => {
-  // Todo: don't send deal flagged as delete
-  const deals = await Deal.find({ user: req.user._id }).populate('customer');
+  const deals = await Deal.find({ user: req.user._id, delStatus: false }).populate('customer');
   res.send(deals);
 };
 
@@ -128,7 +127,7 @@ const flagDealDeletion = (req, res, next) => {
 
 module.exports.userCreateDeal = userCreateDeal;
 module.exports.userUpdateDeal = userUpdateDeal;
-module.exports.userDeleteDeal = userDeleteDeal;
+// module.exports.userDeleteDeal = userDeleteDeal;
 module.exports.updateDealStatus = updateDealStatus;
 module.exports.viewDeals = viewDeals;
 module.exports.flagDealDeletion = flagDealDeletion;
