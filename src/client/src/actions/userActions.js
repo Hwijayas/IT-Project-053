@@ -111,6 +111,9 @@ export const verifyUser = () => async dispatch => {
 			dispatch(setUser(data.user));
 			dispatch(welcomeUser);
 	}else{
+			if(!!token){
+				dispatch(setMsg("Session Expired, Please Log In agin."))
+			}
 			localStorage.clear();
 			<Redirect to="/login" />
 	}
