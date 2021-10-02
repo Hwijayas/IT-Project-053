@@ -10,8 +10,7 @@ const userSchema = mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: false,
-    immutable: true
-  }
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -3,6 +3,7 @@ const { ExtractJwt } = require('passport-jwt');
 const fs = require('fs');
 const path = require('path');
 const User = require('mongoose').model('User');
+const utils = require('../lib/utils');
 
 const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
@@ -24,6 +25,10 @@ module.exports = (passport) => {
     User.findOne({ _id: jwtPayload.sub }, (err, user) => {
       // This flow look familiar?  It is the same as when we implemented
       // the `passport-local` strategy
+      const isValid = utils.validPassword(jwtPayload.hash, user.hash, user.salt);
+      if (!isValid) {
+        return done(null, false);
+      }
       if (err) {
         return done(err, false);
       }

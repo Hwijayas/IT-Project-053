@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const utils = require('../lib/utils');
 const User = require('../models/user');
 
@@ -15,14 +14,14 @@ const loginHandler = (req, res, next) => {
       const isValid = utils.validPassword(req.body.password, user.hash, user.salt);
 
       if (isValid) {
-        const tokenObject = utils.issueJWT(user, false);
+        const tokenObject = utils.issueJWT(user);
 
         res.status(200).json({
           success: true,
           user: {
             email: user.userEmail,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            firstName: user.userFirstName,
+            lastName: user.userLastName,
             isAdmin: user.isAdmin,
           },
           token: tokenObject.token,
@@ -58,7 +57,7 @@ const updatePasswordHandler = async (req, res, next) => {
       }
 
       // new token
-      const jwt = utils.issueJWT(user, false);
+      const jwt = utils.issueJWT(user);
       res.status(200).json({
         success: true, msg: 'updated password', token: jwt,
       });

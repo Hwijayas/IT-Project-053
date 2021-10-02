@@ -49,13 +49,14 @@ const userUpdateDeal = async (req, res, next) => {
         success: true, msg: 'Deal updated!', deal, customer,
       });
     }
-  } catch (err){
+  } catch (err) {
     next(err);
   }
 };
 
 // Function to delete deals
 const userDeleteDeal = (req, res) => {
+  // Todo: only flag the deal as delete
   const dealId = req.params.id;
   Deal.findOneAndDelete({ _id: dealId, user: req.user._id }, (err, deal) => {
     if (err) {
@@ -83,13 +84,14 @@ const updateDealStatus = (req, res, next) => {
         res.status(404).json({ success: false, msg: 'Deal not found!' });
       }
     });
-  } catch (err){
+  } catch (err) {
     next(err);
   }
 };
 
 // view all Deals
 const viewDeals = async (req, res) => {
+  // Todo: don't send deal flagged as delete
   const deals = await Deal.find({ user: req.user._id }).populate('customer');
   res.send(deals);
 };
@@ -104,21 +106,22 @@ const flagDealDeletion = (req, res, next) => {
         console.log(err);
         res.status(404);
       } else {
-        newDelStatus = !deal.delStatus;
-        Deal.findOneAndUpdate({ _id: dealId }, { delStatus: newDelStatus }, { new: true }, (err, deal) => {
-          if (err) {
-            console.log(err);
-            res.status(404);
-          } else if (deal == null) {
-            console.log(err);
-            res.status(404);
-          } else {
-            res.status(200).json({ success: true, msg: 'Deal deletion flag updated!' });
-          }
-        });
+        const newDelStatus = !deal.delStatus;
+        Deal.findOneAndUpdate({ _id: dealId }, { delStatus: newDelStatus },
+          { new: true }, (error, dealFound) => {
+            if (error) {
+              console.log(error);
+              res.status(404);
+            } else if (dealFound == null) {
+              console.log(error);
+              res.status(404);
+            } else {
+              res.status(200).json({ success: true, msg: 'Deal deletion flag updated!' });
+            }
+          });
       }
     });
-  } catch (err){
+  } catch (err) {
     next(err);
   }
 };

@@ -64,7 +64,7 @@ const userUpdateCustomer = async (req, res, next) => {
       success: true,
       customer: updatedCustomer,
     });
-  } catch (err){
+  } catch (err) {
     next(err);
   }
 };

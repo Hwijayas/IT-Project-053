@@ -90,7 +90,7 @@ const adminGetAllUsers = async (req, res) => {
   users.forEach((user) => {
     userMap[user._id] = user;
   });
-  res.send(userMap);
+  return res.send(userMap);
 };
 
 // Function to delete user
@@ -147,11 +147,11 @@ const adminDeleteDeal = (req, res) => {
   }
 
   const dealId = req.params.id;
-  deal.findOneAndDelete({ _id: dealId, delStatus: true }, (err, deal) => {
+  deal.findOneAndDelete({ _id: dealId, delStatus: true }, (err, dealFound) => {
     if (err) {
       console.log(err);
       res.status(400).json({ success: false, msg: 'Bad request' });
-    } else if (deal != null) {
+    } else if (dealFound != null) {
       res.status(200).json({ success: true, msg: 'Deal deleted!' });
     } else {
       res.status(404).json({ success: false, msg: 'Deal not found!' });
