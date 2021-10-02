@@ -25,14 +25,11 @@ module.exports = (passport) => {
     User.findOne({ _id: jwtPayload.sub }, (err, user) => {
       // This flow look familiar?  It is the same as when we implemented
       // the `passport-local` strategy
-      const isValid = utils.validPassword(jwtPayload.hash, user.hash, user.salt);
-      if (!isValid) {
-        return done(null, false);
-      }
+
       if (err) {
         return done(err, false);
       }
-      if (user) {
+      if ((user) && (jwtPayload.hash === user.hash)) {
         return done(null, user);
       }
       return done(null, false);

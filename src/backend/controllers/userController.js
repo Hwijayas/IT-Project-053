@@ -116,5 +116,5 @@ const userRegisterHandler = (req, res) => {
 // };
 
 module.exports.userRegisterHandler = userRegisterHandler;
-module.exports.userLoginHandler = userLoginHandler;
-module.exports.userUpdatePasswordHandler = userUpdatePasswordHandler;
+// module.exports.userLoginHandler = userLoginHandler;
+// module.exports.userUpdatePasswordHandler = userUpdatePasswordHandler;
