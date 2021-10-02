@@ -1,5 +1,7 @@
+const mongoose = require('mongoose');
 const deal = require('../models/deal');
 const User = require('../models/user');
+const utils = require('../lib/utils');
 
 const NOT_ADMIN = 'Unauthorized, Access to Admin only';
 
@@ -123,6 +125,12 @@ const adminDeleteUser = (req, res) => {
 
 // Function to get all deals that are flagged for deletion
 const adminGetAllFlaggedDeals = async (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+  
   deal.find({ delStatus: true }, (err, deals) => {
     if (err) {
       console.log(err);
@@ -134,12 +142,6 @@ const adminGetAllFlaggedDeals = async (req, res) => {
 };
 
 const adminDeleteDeal = (req, res) => {
-  if (!req.user.isAdmin) {
-    return res.status(401).json({
-      message: NOT_ADMIN,
-    });
-  }
-
   if (!req.user.isAdmin) {
     return res.status(401).json({
       message: NOT_ADMIN,
@@ -159,9 +161,103 @@ const adminDeleteDeal = (req, res) => {
   });
 };
 
+// Function to create a user account
+const adminCreateUser = (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+  
+  User.find({ userEmail: req.body.userEmail })
+    .exec()
+  // eslint-disable-next-line consistent-return
+    .then((user) => {
+      if (user.length >= 1) {
+        return res.status(422).json({
+          success: false,
+          msg: 'User already exists',
+        });
+      }
+    const saltHash = utils.genPassword(req.body.password);
+
+    const { salt } = saltHash;
+    const { hash } = saltHash;
+
+    const newUser = new User({
+      _id: new mongoose.Types.ObjectId(),
+      userEmail: req.body.userEmail,
+      userFirstName: req.body.firstName,
+      userLastName: req.body.lastName,
+      hash,
+      salt,
+    });
+
+    try {
+      newUser.save()
+        .then(() => {
+          const jwt = utils.issueJWT(user);
+          res.json({
+            success: true,
+            user: {
+              email: newUser.userEmail,
+              firstName: newUser.userFirstName,
+              lastName: newUser.userLastName,
+              isAdmin: newUser.isAdmin,
+            },
+            token: jwt.token,
+            expiresIn: jwt.expires,
+          });
+        });
+    } catch (err) {
+      res.json({ success: false, msg: err });
+    }
+  });
+}
+
+// Function to update user account
+const adminUpdateUser = (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+
+  User.findOne({_id: req.params.id}, (err, user) => {
+    if (err) {
+      console.log(err)
+      res.status(400).json({ success: false, msg: 'Bad request' });
+    } else if (user != null && !user.isAdmin) {
+      const newFirstName = req.body.newFirstName;
+      const newLastName = req.body.newLastName;
+  
+      User.findOneAndUpdate({_id: req.params.id}, {userFirstName: newFirstName, userLastName: newLastName}, {new: true}, (err, user) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(200).json({ 
+            success: true, 
+            msg: 'user details changed!',
+            user: {
+              firstName: user.userFirstName,
+              lastName: user.userLastName
+            }
+          });
+        }
+      });
+    } else if (user.isAdmin) {
+      res.status(405).json({ success: false, msg: 'not allowed to update admin details' });
+    } else {
+      res.status(404).json({ success: false, msg: 'user not found!' });
+    }
+  });
+}
+
 // module.exports.adminRegisterHandler = adminRegisterHandler;
 // module.exports.adminLoginHandler = adminLoginHandler;
 module.exports.adminGetAllUsers = adminGetAllUsers;
 module.exports.adminDeleteUser = adminDeleteUser;
 module.exports.adminGetAllFlaggedDeals = adminGetAllFlaggedDeals;
 module.exports.adminDeleteDeal = adminDeleteDeal;
+module.exports.adminCreateUser = adminCreateUser;
+module.exports.adminUpdateUser = adminUpdateUser;
