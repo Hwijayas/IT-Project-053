@@ -1,85 +1,90 @@
-const mongoose = require('mongoose');
-const utils = require('../lib/utils');
-const Admin = require('../models/admin');
 const deal = require('../models/deal');
 const User = require('../models/user');
 
-// Function to register admin
-const adminRegisterHandler = (req, res) => {
-  Admin.find({ adminEmail: req.body.adminEmail })
-    .exec()
-  // eslint-disable-next-line consistent-return
-    .then((admin) => {
-      if (admin.length >= 1) {
-        return res.status(422).json({
-          message: 'Admin already exists',
-        });
-      }
-      const saltHash = utils.genPassword(req.body.password);
+const NOT_ADMIN = 'Unauthorized, Access to Admin only';
 
-      const { salt } = saltHash;
-      const { hash } = saltHash;
+// // Function to register admin
+// const adminRegisterHandler = (req, res) => {
+//   Admin.find({ adminEmail: req.body.adminEmail })
+//     .exec()
+//   // eslint-disable-next-line consistent-return
+//     .then((admin) => {
+//       if (admin.length >= 1) {
+//         return res.status(422).json({
+//           message: 'Admin already exists',
+//         });
+//       }
+//       const saltHash = utils.genPassword(req.body.password);
+//
+//       const { salt } = saltHash;
+//       const { hash } = saltHash;
+//
+//       const newAdmin = new Admin({
+//         _id: new mongoose.Types.ObjectId(),
+//         adminEmail: req.body.adminEmail,
+//         adminFirstName: req.body.firstName,
+//         adminLastName: req.body.lastName,
+//         hash,
+//         salt,
+//       });
+//       try {
+//         newAdmin.save()
+//           .then(() => {
+//             const jwt = utils.issueJWT(admin, true);
+//             res.json({
+//               success: true,
+//               userEmail: admin.adminEmail,
+//               firstName: admin.adminFirstName,
+//               lastName: admin.adminLastName,
+//               token: jwt.token,
+//               expiresIn: jwt.expires,
+//             });
+//           });
+//       } catch (err) {
+//         res.json({ success: false, msg: err });
+//       }
+//     });
+// };
 
-      const newAdmin = new Admin({
-        _id: new mongoose.Types.ObjectId(),
-        adminEmail: req.body.adminEmail,
-        adminFirstName: req.body.firstName,
-        adminLastName: req.body.lastName,
-        hash,
-        salt,
-      });
-      try {
-        newAdmin.save()
-          .then(() => {
-            const jwt = utils.issueJWT(admin, true);
-            res.json({
-              success: true,
-              userEmail: admin.adminEmail,
-              firstName: admin.adminFirstName,
-              lastName: admin.adminLastName,
-              token: jwt.token,
-              expiresIn: jwt.expires,
-            });
-          });
-      } catch (err) {
-        res.json({ success: false, msg: err });
-      }
-    });
-};
-
-// Function to log in the admin
-const adminLoginHandler = (req, res, next) => {
-  Admin.findOne({ adminEmail: req.body.adminEmail })
-  // eslint-disable-next-line consistent-return
-    .then((admin) => {
-      if (!admin) {
-        return res.status(401).json({ success: false, msg: 'could not find user' });
-      }
-
-      // Function defined at bottom of app.js
-      const isValid = utils.validPassword(req.body.password, admin.hash, admin.salt);
-
-      if (isValid) {
-        const tokenObject = utils.issueJWT(admin, true);
-
-        res.status(200).json({
-          success: true,
-          adminEmail: admin.adminEmail,
-          token: tokenObject.token,
-          expiresIn: tokenObject.expires,
-        });
-      } else {
-        res.status(401).json({ success: false, msg: 'you entered the wrong password' });
-      }
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
+// // Function to log in the admin
+// const adminLoginHandler = (req, res, next) => {
+//   Admin.findOne({ adminEmail: req.body.adminEmail })
+//   // eslint-disable-next-line consistent-return
+//     .then((admin) => {
+//       if (!admin) {
+//         return res.status(401).json({ success: false, msg: 'could not find user' });
+//       }
+//
+//       // Function defined at bottom of app.js
+//       const isValid = utils.validPassword(req.body.password, admin.hash, admin.salt);
+//
+//       if (isValid) {
+//         const tokenObject = utils.issueJWT(admin, true);
+//
+//         res.status(200).json({
+//           success: true,
+//           adminEmail: admin.adminEmail,
+//           token: tokenObject.token,
+//           expiresIn: tokenObject.expires,
+//         });
+//       } else {
+//         res.status(401).json({ success: false, msg: 'you entered the wrong password' });
+//       }
+//     })
+//     .catch((err) => {
+//       next(err);
+//     });
+// };
 
 // Function to get all users
 // from https://stackoverflow.com/questions/14103615/mongoose-get-full-list-of-users by user soulcheck
 const adminGetAllUsers = async (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+
   const users = await User.find({});
   const userMap = {};
   users.forEach((user) => {
@@ -90,6 +95,19 @@ const adminGetAllUsers = async (req, res) => {
 
 // Function to delete user
 const adminDeleteUser = (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+
+  // prevent self delete
+  if (req.user._id === req.param.id) {
+    return res.status(401).json({
+      message: 'DELETING SELF, NOT SAFE',
+    });
+  }
+
   const userId = req.params.id;
   User.findOneAndDelete({ _id: userId }, (err, user) => {
     if (err) {
@@ -116,6 +134,18 @@ const adminGetAllFlaggedDeals = async (req, res) => {
 };
 
 const adminDeleteDeal = (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+
   const dealId = req.params.id;
   deal.findOneAndDelete({ _id: dealId, delStatus: true }, (err, deal) => {
     if (err) {
@@ -129,8 +159,8 @@ const adminDeleteDeal = (req, res) => {
   });
 };
 
-module.exports.adminRegisterHandler = adminRegisterHandler;
-module.exports.adminLoginHandler = adminLoginHandler;
+// module.exports.adminRegisterHandler = adminRegisterHandler;
+// module.exports.adminLoginHandler = adminLoginHandler;
 module.exports.adminGetAllUsers = adminGetAllUsers;
 module.exports.adminDeleteUser = adminDeleteUser;
 module.exports.adminGetAllFlaggedDeals = adminGetAllFlaggedDeals;
