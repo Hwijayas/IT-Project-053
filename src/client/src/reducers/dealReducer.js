@@ -3,14 +3,12 @@ const defaultState = {
     dealErrors: '',
     update: false,
     currentDeal: "",
-    populated: false
 }
 
 const dealReducer = (state = defaultState, action) => {
     switch(action.type){
         case "SET_DEALS":
             return {
-                populated: true, 
                 ...state,
                 dealList: [...action.payload]
             }
