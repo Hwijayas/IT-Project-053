@@ -56,10 +56,10 @@ const Navbar = (props) => {
                                     value="/"
                                 />
                                 <Tab
-                                    label={'About'}
+                                    label={'Graph'}
                                     component={Link}
-                                    to="/about"
-                                    value="/about"
+                                    to="/graph"
+                                    value="/graph"
                                 />
                                 <Tab
                                     label={'Companies'}
@@ -67,12 +67,12 @@ const Navbar = (props) => {
                                     to="/companies"
                                     value="/companies"
                                 />
-                                <Tab
+                                {/*<Tab
                                     label={'Deals'}
                                     component={Link}
                                     to="/deals"
                                     value="/deals"
-                                />
+                                />*/}
                             </Tabs>
                         </Box>
                         <Box display="flex">

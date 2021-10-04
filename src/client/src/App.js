@@ -35,8 +35,8 @@ const App = () => {
       <Router>
       <Navbar loggedIn={userReducer.loggedIn} handleLogout={handleLogout}/>
       <Switch>
-        <ProtectedRoute exact path='/' component={Dashboard}/>
-        <ProtectedRoute exact path='/deals' component={Deals} /> 
+        <ProtectedRoute exact path='/' component={Deals}/>
+        <ProtectedRoute exact path='/graph' component={Dashboard} /> 
         <ProtectedRoute exact path='/change-password' component={LoginComponent} /> 
         <Route exact path='/about' component={About}/>
         <PublicRoute path="/login" component={LoginComponent}/>
