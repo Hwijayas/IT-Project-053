@@ -3,7 +3,7 @@ const { ExtractJwt } = require('passport-jwt');
 const fs = require('fs');
 const path = require('path');
 const User = require('mongoose').model('User');
-const Admin = require('mongoose').model('Admin');
+
 
 const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
@@ -19,33 +19,19 @@ const options = {
 module.exports = (passport) => {
   // The JWT payload is passed into the verify callback
   passport.use(new JwtStrategy(options, ((jwtPayload, done) => {
-    console.log(jwtPayload);
 
-    if (!jwtPayload.admin) {
-      // We will assign the `sub` property on the JWT to the database ID of user
-      User.findOne({ _id: jwtPayload.sub }, (err, user) => {
+    // We will assign the `sub` property on the JWT to the database ID of user
+    User.findOne({ _id: jwtPayload.sub }, (err, user) => {
       // This flow look familiar?  It is the same as when we implemented
       // the `passport-local` strategy
+
       if (err) {
         return done(err, false);
       }
-      if (user) {
+      if ((user) && (jwtPayload.hash === user.hash)) {
         return done(null, user);
       }
       return done(null, false);
-      });
-    } else {
-      // handles admins
-      Admin.findOne({ _id: jwtPayload.sub }, (err, admin) => {
-
-      if (err) {
-        return done(err, false);
-      }
-      if (admin) {
-        return done(null, admin);
-      }
-      return done(null, false);
-      });
-    }
+    });
   })));
 };

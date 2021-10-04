@@ -9,6 +9,7 @@ require('dotenv').config();
 const server = require('http').Server(app);
 const userRoutes = require('./routes/userRouter');
 const adminRoutes = require('./routes/adminRouter');
+const accountRoutes = require('./routes/accountRouter');
 
 // mongoDB connection string
 const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@cluster0.g7t1y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -76,5 +77,6 @@ server.listen(PORT, (err) => {
  */
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
+app.use('/', accountRoutes);
 
 module.exports = app;

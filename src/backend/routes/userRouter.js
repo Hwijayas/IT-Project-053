@@ -1,28 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
-const userController = require('../controllers/userController');
 const dealController = require('../controllers/dealController');
 const customerController = require('../controllers/customerController');
-
-router.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.status(200).json({
-    success: true,
-    user: {
-      "email": req.user.userEmail,
-      "firstName": req.user.userFirstName,
-      "lastName": req.user.userLastName,
-    },
-  });
-});
-
-// Validate an existing user and issue a JWT
-router.post('/login', userController.userLoginHandler);
-
-// Register a new user
-router.post('/register', userController.userRegisterHandler);
-
-// update password
-router.put('/password', passport.authenticate('jwt', { session: false }), userController.userUpdatePasswordHandler);
 
 // Create a new deal
 router.post('/deal', passport.authenticate('jwt', { session: false }), dealController.userCreateDeal);
@@ -30,8 +9,8 @@ router.post('/deal', passport.authenticate('jwt', { session: false }), dealContr
 // Update an existing deal
 router.put('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.userUpdateDeal);
 
-// Delete an existing deal
-router.delete('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.userDeleteDeal);
+// // Delete an existing deal
+router.delete('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.flagDealDeletion);
 
 // View All deals
 router.get('/deal', passport.authenticate('jwt', { session: false }), dealController.viewDeals);
@@ -47,8 +26,5 @@ router.put('/customer/:id', passport.authenticate('jwt', { session: false }), cu
 
 // Delete an existing deal
 router.delete('/customer/:id', passport.authenticate('jwt', { session: false }), customerController.userDeleteCustomer);
-
-// Update status of deal deletion
-router.put('/deal/:id/flag', passport.authenticate('jwt', { session: false }), dealController.flagDealDeletion);
 
 module.exports = router;

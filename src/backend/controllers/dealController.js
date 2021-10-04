@@ -1,8 +1,15 @@
 const Deal = require('../models/deal');
 const customerController = require('./customerController');
 
+const USER_ONLY = 'Access Denied';
+
 // Function to create deals
 const userCreateDeal = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(401).json({
+      message: USER_ONLY,
+    });
+  }
   const customer = await customerController.addCustomer(req.body.customer, req.user._id);
 
   // https://stackoverflow.com/questions/33305623/mongoose-create-document-if-not-exists-otherwise-update-return-document-in
@@ -33,6 +40,11 @@ const userCreateDeal = async (req, res) => {
 // Function to update deals
 const userUpdateDeal = async (req, res, next) => {
   try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
     const deal = await Deal.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
       { dealName: req.body.dealName, value: req.body.value },
@@ -49,28 +61,18 @@ const userUpdateDeal = async (req, res, next) => {
         success: true, msg: 'Deal updated!', deal, customer,
       });
     }
-  } catch (err){
+  } catch (err) {
     next(err);
   }
 };
 
-// Function to delete deals
-const userDeleteDeal = (req, res) => {
-  const dealId = req.params.id;
-  Deal.findOneAndDelete({ _id: dealId, user: req.user._id }, (err, deal) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else if (deal != null) {
-      res.status(200).json({ success: true, msg: 'Deal deleted!' });
-    } else {
-      res.status(404).json({ success: false, msg: 'Deal not found!' });
-    }
-  });
-};
-
 const updateDealStatus = (req, res, next) => {
   try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
     const dealId = req.params.id;
     const newStatus = req.body.status;
     Deal.findOneAndUpdate({ _id: dealId }, { status: newStatus }, (err, deal) => {
@@ -83,20 +85,30 @@ const updateDealStatus = (req, res, next) => {
         res.status(404).json({ success: false, msg: 'Deal not found!' });
       }
     });
-  } catch (err){
+  } catch (err) {
     next(err);
   }
 };
 
 // view all Deals
 const viewDeals = async (req, res) => {
-  const deals = await Deal.find({ user: req.user._id }).populate('customer');
+  if (req.user.isAdmin) {
+    return res.status(401).json({
+      message: USER_ONLY,
+    });
+  }
+  const deals = await Deal.find({ user: req.user._id, delStatus: false }).populate('customer');
   res.send(deals);
 };
 
 // Function to toggle deal deletion status
 const flagDealDeletion = (req, res, next) => {
   try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
     const dealId = req.params.id;
 
     Deal.findOne({ _id: dealId }, (err, deal) => {
@@ -104,28 +116,29 @@ const flagDealDeletion = (req, res, next) => {
         console.log(err);
         res.status(404);
       } else {
-        newDelStatus = !deal.delStatus;
-        Deal.findOneAndUpdate({ _id: dealId }, { delStatus: newDelStatus }, { new: true }, (err, deal) => {
-          if (err) {
-            console.log(err);
-            res.status(404);
-          } else if (deal == null) {
-            console.log(err);
-            res.status(404);
-          } else {
-            res.status(200).json({ success: true, msg: 'Deal deletion flag updated!' });
-          }
-        });
+        const newDelStatus = !deal.delStatus;
+        Deal.findOneAndUpdate({ _id: dealId }, { delStatus: newDelStatus },
+          { new: true }, (error, dealFound) => {
+            if (error) {
+              console.log(error);
+              res.status(404);
+            } else if (dealFound == null) {
+              console.log(error);
+              res.status(404);
+            } else {
+              res.status(200).json({ success: true, msg: 'Deal deletion flag updated!' });
+            }
+          });
       }
     });
-  } catch (err){
+  } catch (err) {
     next(err);
   }
 };
 
 module.exports.userCreateDeal = userCreateDeal;
 module.exports.userUpdateDeal = userUpdateDeal;
-module.exports.userDeleteDeal = userDeleteDeal;
+// module.exports.userDeleteDeal = userDeleteDeal;
 module.exports.updateDealStatus = updateDealStatus;
 module.exports.viewDeals = viewDeals;
 module.exports.flagDealDeletion = flagDealDeletion;
