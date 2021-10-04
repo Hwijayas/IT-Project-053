@@ -198,10 +198,12 @@ const adminUpdateUser = (req, res) => {
       console.log(err);
       res.status(400).json({ success: false, msg: 'Bad request' });
     } else if (user != null && !user.isAdmin) {
+      const { newEmail } = req.body;
       const { newFirstName } = req.body;
       const { newLastName } = req.body;
 
-      User.findOneAndUpdate({ _id: req.params.id }, { userFirstName: newFirstName, userLastName: newLastName }, { new: true }, (error, userFound) => {
+      User.findOneAndUpdate({ _id: req.params.id }, { userEmail: newEmail, userFirstName: newFirstName, userLastName: newLastName }, 
+      { new: true }, (error, userFound) => {
         if (error) {
           console.log(error);
         } else {
@@ -209,6 +211,7 @@ const adminUpdateUser = (req, res) => {
             success: true,
             msg: 'user details changed!',
             user: {
+              userEmail: userFound.userEmail,
               firstName: userFound.userFirstName,
               lastName: userFound.userLastName,
             },
