@@ -55,6 +55,14 @@ const dealReducer = (state = defaultState, action) => {
                 ...state,
                 currentDeal: action.payload
             }
+        case "LOGOUT":
+            return {
+                ...state,
+                dealList: [],
+                dealErrors: '',
+                update: false,
+                currentDeal: "",
+            }
 
         // case "CLEAR_CURRENT_DEAL":
     

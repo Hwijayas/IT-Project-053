@@ -51,6 +51,7 @@ app.use('/status', (req, res) => {
 // Must first load the models
 require('./models/user');
 
+// https://github.com/zachgoll/express-jwt-authentication-starter/tree/final/
 // Pass the global passport object into the configuration function
 require('./config/passport')(passport);
 
