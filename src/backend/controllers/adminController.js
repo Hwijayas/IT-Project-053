@@ -215,7 +215,7 @@ const adminUpdateUser = (req, res) => {
           });
         }
       });
-    } else if (user.isAdmin) {
+    } else if (user != null && user.isAdmin) {
       res.status(405).json({ success: false, msg: 'not allowed to update admin details' });
     } else {
       res.status(404).json({ success: false, msg: 'user not found!' });
