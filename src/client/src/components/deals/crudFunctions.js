@@ -23,18 +23,15 @@ export const updateDeal= (id, status) => ({ type: "UPDATE_DEAL", payload : {id: 
 
 export const setDelete= (payload) => ({ type: "DELETE_DEAL", payload})
 
-const token = localStorage.getItem("token");
-
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json",
-    "Authorization": `${token}`,
 } 
 
 
 export const addDeal = (data) => async dispatch =>{
-    console.log(localStorage.getItem('token'));
     console.log(data)
+    const token = await localStorage.getItem("token");
     const response = await Axios.post(`${url}/deal`, {
         
         dealName: data.dealName,
@@ -47,7 +44,7 @@ export const addDeal = (data) => async dispatch =>{
         },
         status: data.status
         
-    }, {headers: headers}).catch(err => {
+    }, {headers: {...headers, "Authorization": `${token}`} }).catch(err => {
         console.log(err);
         alert(err);
     });
@@ -61,8 +58,9 @@ export const addDeal = (data) => async dispatch =>{
 
 
 export const viewDeals = () => async dispatch =>{
+    const token = await localStorage.getItem("token");
     const deal = await Axios.get(`${url}/deal`, {
-        headers: headers
+        headers: {...headers, "Authorization": `${token}`}
     }).catch(err => {
         console.log(err);
         alert(err);
@@ -81,13 +79,14 @@ export const viewDeals = () => async dispatch =>{
 export const updateDeals = (data, dealId, customer) => async dispatch =>{
     console.log("updating")
     console.log(data)
+    const token = await localStorage.getItem("token");
     const response = await Axios.put(`${url}/deal/${dealId}`, {
         params: {id: dealId},
         dealName: data.dealName, 
         value: data.dealValue,
         customer: customer
 
-    }, {headers: {...headers,
+    }, {headers: {...headers, "Authorization": `${token}`,
         'Access-Control-Allow-Origin':'*' }}).catch(err => {
         console.log(err);
         alert(err);
@@ -125,9 +124,10 @@ export const updateDeals =  async (data, dealId) =>{
 */
 
 export const updateDealStatus = (dealId, data) => async dispatch =>{
+    const token = await localStorage.getItem("token");
     const response = await Axios.put(`${url}/deal/${dealId}/status`,{
         status: data
-    }, {headers: {...headers,
+    }, {headers: {...headers, "Authorization": `${token}`,
             'Access-Control-Allow-Origin':'*' }}).catch(err => {
 
         console.log(err);
@@ -144,9 +144,10 @@ export const updateDealStatus = (dealId, data) => async dispatch =>{
 }
 
 export const deleteDeal = (dealId) => async (dispatch) =>{
+    const token = await localStorage.getItem("token");
     const res = Axios.delete(`${url}/deal/${dealId}`, {
         params: {id: dealId},
-        headers: headers
+        headers: {...headers, "Authorization": `${token}`}
 
     }).catch(err => {
         console.log(err);
