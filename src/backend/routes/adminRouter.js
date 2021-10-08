@@ -2,10 +2,6 @@ const router = require('express').Router();
 const passport = require('passport');
 const adminController = require('../controllers/adminController');
 
-
-// Register a new Admin
-router.post('/register', passport.authenticate('jwt', { session: false }), adminController.adminRegisterHandler);
-
 // Get list of users
 router.get('/users', passport.authenticate('jwt', { session: false }), adminController.adminGetAllUsers);
 
