@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 
 const Navbar = (props) => {
     const classes = useStyles();
-    const match = useRouteMatch(['/contacts', '/companies', '/deals']);
+    const match = useRouteMatch(['/contacts', '/companies', '/deals', '/users']);
     const currentPath = match?.path ?? '/';
 
     return (
@@ -60,6 +60,12 @@ const Navbar = (props) => {
                                     component={Link}
                                     to="/about"
                                     value="/about"
+                                />
+                                <Tab
+                                  label={'Users'}
+                                  component={Link}
+                                  to="/Users"
+                                  value="/Users"
                                 />
                                 <Tab
                                     label={'Companies'}

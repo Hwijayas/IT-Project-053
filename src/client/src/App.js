@@ -10,6 +10,7 @@ import {ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
 import { logout, verifyUser} from './actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
+import Users from './components/crudUsers'
 import Deals from "./components/deals/Deals"
 
 const App = () => {
@@ -36,7 +37,8 @@ const App = () => {
       <Switch>
         <ProtectedRoute exact path='/' component={Dashboard}/>
         <ProtectedRoute exact path='/deals' component={Deals} /> 
-        <ProtectedRoute exact path='/change-password' component={LoginComponent} /> 
+        <ProtectedRoute exact path='/change-password' component={LoginComponent} />
+        <ProtectedRoute exact path='/users' component={Users} />
         <Route exact path='/about' component={About}/>
         <PublicRoute path="/login" component={LoginComponent}/>
         <PublicRoute path="/sign-up" component={LoginComponent} />
