@@ -1,6 +1,5 @@
 const Deal = require('../models/deal');
 const customerController = require('./customerController');
-const deal = require('../models/deal');
 
 const NOT_ADMIN = 'Unauthorized, Access to Admin only';
 const USER_ONLY = 'Access Denied';
@@ -58,16 +57,12 @@ const GetFlagged = async (req, res) => {
     });
   }
 
-  deal.find({ delStatus: true }, (err, deals) => {
-    if (err) {
-      console.log(err);
-      res.status(400).json({ success: false, msg: 'Bad request' });
-    } else {
-      deals.populate('user');
-      deals.populate('customer');
-      res.send(deals);
-    }
-  });
+  const dealsFound = await Deal.find({ delStatus: true }).populate('customer');
+  if (dealsFound === null) {
+    res.status(400).json({ success: false, msg: 'Bad request' });
+  } else {
+    res.send(dealsFound);
+  }
 };
 
 // view all Deals
@@ -177,7 +172,7 @@ const Remove = (req, res) => {
   }
 
   const dealId = req.params.id;
-  deal.findOneAndDelete({ _id: dealId, delStatus: true }, (err, dealFound) => {
+  Deal.findOneAndDelete({ _id: dealId, delStatus: true }, (err, dealFound) => {
     if (err) {
       console.log(err);
       res.status(400).json({ success: false, msg: 'Bad request' });
