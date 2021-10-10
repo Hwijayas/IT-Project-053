@@ -44,8 +44,25 @@ const Create = async (req, res) => {
   });
 };
 
-// handles updates customer request
+// Function to get all users
+// from https://stackoverflow.com/questions/14103615/mongoose-get-full-list-of-users by user soulcheck
+const GetAll = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(401).json({
+      message: USER_ONLY,
+    });
+  }
 
+  const customersFound = await Customer.find({ user: req.user._id });
+  if (customersFound != null) {
+    return res.send(customersFound);
+  }
+  return res.status(400).json({
+    message: 'Error',
+  });
+};
+
+// handles updates customer request
 const Update = async (req, res, next) => {
   try {
     if (req.user.isAdmin) {
@@ -114,6 +131,7 @@ const Delete = async (req, res) => {
 };
 
 module.exports.Create = Create;
+module.exports.GetAll = GetAll;
 module.exports.Update = Update;
 module.exports.Delete = Delete;
 module.exports.addCustomer = addCustomer;

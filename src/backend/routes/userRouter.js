@@ -3,7 +3,7 @@ const passport = require('passport');
 const userController = require('../controllers/userController');
 
 // Create new user
-router.post('/', passport.authenticate('jwt', { session: false }), userController.Create);
+router.post('/', userController.Create);
 
 // Get list of users
 router.get('/', passport.authenticate('jwt', { session: false }), userController.GetAll);
