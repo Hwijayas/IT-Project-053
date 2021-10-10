@@ -31,21 +31,22 @@ const addCustomer = async (customerDetails, userID) => {
 };
 
 // handler to create deals
-const userAddsCustomer = async (req, res) => {
+const Create = async (req, res) => {
   if (req.user.isAdmin) {
     return res.status(401).json({
       message: USER_ONLY,
     });
   }
   const customer = await addCustomer(req.body, req.user._id);
-  res.status(422).json({
+  return res.status(422).json({
     message: 'Customer added',
     customer,
   });
 };
 
 // handles updates customer request
-const userUpdateCustomer = async (req, res, next) => {
+
+const Update = async (req, res, next) => {
   try {
     if (req.user.isAdmin) {
       return res.status(401).json({
@@ -53,7 +54,7 @@ const userUpdateCustomer = async (req, res, next) => {
       });
     }
 
-    const oldCustomer = await Customer.findById(req.params.id);
+    const oldCustomer = await Customer.findOne({ _id: req.params.id, user: req.user._id });
 
     if (!oldCustomer) {
       return res.status(401).json({ success: false, msg: 'could not find customer' });
@@ -84,7 +85,7 @@ const userUpdateCustomer = async (req, res, next) => {
 };
 
 // Function to delete customer
-const userDeleteCustomer = async (req, res) => {
+const Delete = async (req, res) => {
   if (req.user.isAdmin) {
     return res.status(401).json({
       message: USER_ONLY,
@@ -112,7 +113,7 @@ const userDeleteCustomer = async (req, res) => {
   }
 };
 
-module.exports.userAddsCustomer = userAddsCustomer;
-module.exports.userUpdateCustomer = userUpdateCustomer;
-module.exports.userDeleteCustomer = userDeleteCustomer;
+module.exports.Create = Create;
+module.exports.Update = Update;
+module.exports.Delete = Delete;
 module.exports.addCustomer = addCustomer;
