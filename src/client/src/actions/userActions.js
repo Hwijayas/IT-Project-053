@@ -1,6 +1,6 @@
 import { Redirect } from "react-router";
 
-const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000' : 'https://bits-please-api.herokuapp.com';
+const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000/users' : 'https://bits-please-api.herokuapp.com/users';
 const headers = {
 	"Content-Type": "application/json",
 	"Accept": "application/json"
@@ -78,7 +78,7 @@ export const fetchUser =  (userInfo) => async dispatch => {
 }
 
 export const signUp = (userInfo) => async dispatch => {
-	const res = await fetch(`${url}/register`, {
+	const res = await fetch(`${url}`, {
 		method: "POST",
 		headers: headers,
 		body: JSON.stringify(userInfo)

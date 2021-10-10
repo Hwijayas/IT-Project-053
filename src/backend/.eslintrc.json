@@ -19,6 +19,7 @@
     ],
     "rules": {
         "no-underscore-dangle": "off",
-        "linebreak-style": 0
+        "linebreak-style": 0,
+        "consistent-return": "warn"
     }
 }

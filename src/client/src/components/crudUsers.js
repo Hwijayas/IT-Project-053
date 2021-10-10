@@ -125,25 +125,25 @@ const Users = () => (
         {/*  render={DescriptionRenderer}*/}
         {/*/>*/}
       </Fields>
-      <CreateForm
-        title="Task Creation"
-        message="Create a new task!"
-        trigger="Create Task"
-        onSubmit={task => service.create(task)}
-        submitText="Create"
-        validate={(values) => {
-          const errors = {};
-          if (!values.title) {
-            errors.title = 'Please, provide task\'s title';
-          }
+      {/*<CreateForm*/}
+      {/*  title="Task Creation"*/}
+      {/*  message="Create a new task!"*/}
+      {/*  trigger="Create Task"*/}
+      {/*  onSubmit={task => service.create(task)}*/}
+      {/*  submitText="Create"*/}
+      {/*  validate={(values) => {*/}
+      {/*    const errors = {};*/}
+      {/*    if (!values.title) {*/}
+      {/*      errors.title = 'Please, provide task\'s title';*/}
+      {/*    }*/}
 
-          if (!values.description) {
-            errors.description = 'Please, provide task\'s description';
-          }
+      {/*    if (!values.description) {*/}
+      {/*      errors.description = 'Please, provide task\'s description';*/}
+      {/*    }*/}
 
-          return errors;
-        }}
-      />
+      {/*    return errors;*/}
+      {/*  }}*/}
+      {/*/>*/}
 
       <UpdateForm
         title="Task Update Process"

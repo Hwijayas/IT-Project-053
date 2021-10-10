@@ -8,8 +8,8 @@ const passport = require('passport');
 require('dotenv').config();
 const server = require('http').Server(app);
 const userRoutes = require('./routes/userRouter');
-const adminRoutes = require('./routes/adminRouter');
-const accountRoutes = require('./routes/accountRouter');
+const dealRoutes = require('./routes/dealRouter');
+const customerRoutes = require('./routes/customerRouter');
 
 // mongoDB connection string
 const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@cluster0.g7t1y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -48,9 +48,6 @@ app.use('/status', (req, res) => {
   );
 });
 
-// Must first load the models
-require('./models/user');
-
 // https://github.com/zachgoll/express-jwt-authentication-starter/tree/final/
 // Pass the global passport object into the configuration function
 require('./config/passport')(passport);
@@ -76,8 +73,8 @@ server.listen(PORT, (err) => {
 /**
  * -------------- ROUTES ----------------
  */
-app.use('/user', userRoutes);
-app.use('/admin', adminRoutes);
-app.use('/', accountRoutes);
+app.use('/users', userRoutes);
+app.use('/deals', dealRoutes);
+app.use('/customers', customerRoutes);
 
 module.exports = app;
