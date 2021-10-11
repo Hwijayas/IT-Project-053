@@ -3,6 +3,7 @@ import AccountMenu from "./AccountMenu";
 import { Tabs, Tab, Toolbar, AppBar, Box, Typography } from '@mui/material';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { makeStyles } from "@mui/styles";
+import {useSelector} from 'react-redux';
 
 const useStyles = makeStyles({
     root: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles({
 });
 
 const Navbar = (props) => {
+    const user = useSelector(state=>state.userReducer);
     const classes = useStyles();
     const match = useRouteMatch(['/contacts', '/companies', '/deals', '/users']);
     const currentPath = match?.path ?? '/';
@@ -61,12 +63,14 @@ const Navbar = (props) => {
                                     to="/about"
                                     value="/about"
                                 />
+                                {user.isAdmin ?
                                 <Tab
                                   label={'Users'}
                                   component={Link}
                                   to="/Users"
                                   value="/Users"
-                                />
+                                /> 
+                                :null}
                                 <Tab
                                     label={'Companies'}
                                     component={Link}
