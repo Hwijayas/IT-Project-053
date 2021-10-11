@@ -24,7 +24,7 @@ Confluence page - https://saumya-makkar.atlassian.net/wiki/spaces/BP/overview
 
 Trello board - https://trello.com/b/TfasDRie/it-project-team-53
 
-Discord channel - 
+Discord channel - https://discord.gg/qXadasCz
 
 Demo of the app - https://saumya-makkar.atlassian.net/wiki/spaces/BP/overview
 
