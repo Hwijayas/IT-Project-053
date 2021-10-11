@@ -63,7 +63,7 @@ const Navbar = (props) => {
                                     to="/graph"
                                     value="/graph"
                                 />
-                                {user.isAdmin ?
+                                {user.user.isAdmin ?
                                 <Tab
                                   label={'Users'}
                                   component={Link}
