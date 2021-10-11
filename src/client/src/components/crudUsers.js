@@ -75,14 +75,15 @@ const service = {
     return Promise.resolve(task);
   },
   update: (data) => {
-    const task = tasks.find(t => t.id === data.id);
-    task.title = data.title;
-    task.description = data.description;
+    const task = tasks.find(t => t._id === data._id);
+    task.userEmail = data.userEmail;
+    task.userFirstName = data.userFirstName;
+    task.userLastName = data.userLastName;
     return Promise.resolve(task);
   },
   delete: (data) => {
-    const task = tasks.find(t => t.id === data.id);
-    tasks = tasks.filter(t => t.id !== task.id);
+    const task = tasks.find(t => t._id === data._id);
+    tasks = tasks.filter(t => t._id !== task._id);
     return Promise.resolve(task);
   },
 };
@@ -94,7 +95,7 @@ const styles = {
 const Users = () => (
   <div style={styles.container}>
     <CRUDTable
-      caption="Tasks"
+      caption="Users"
       fetchItems={payload => service.fetchItems(payload)}
     >
       <Fields>
@@ -146,40 +147,43 @@ const Users = () => (
       {/*/>*/}
 
       <UpdateForm
-        title="Task Update Process"
-        message="Update task"
+        title="User Update Process"
+        message="Update User"
         trigger="Update"
         onSubmit={task => service.update(task)}
         submitText="Update"
         validate={(values) => {
           const errors = {};
 
-          if (!values.id) {
-            errors.id = 'Please, provide id';
+          if (!values._id) {
+            errors._id = 'Please, provide id';
           }
 
-          if (!values.title) {
-            errors.title = 'Please, provide task\'s title';
+          if (!values.userEmail) {
+            errors.title = 'Please, provide user\'s Email';
           }
 
-          if (!values.description) {
-            errors.description = 'Please, provide task\'s description';
+          if (!values.userFirstName) {
+            errors.title = 'Please, provide user\'s first name';
           }
 
+          if (!values.userLastName) {
+            errors.title = 'Please, provide user\'s last name';
+          }
           return errors;
         }}
       />
 
       <DeleteForm
-        title="Task Delete Process"
-        message="Are you sure you want to delete the task?"
+        title="User Delete Process"
+        message="Are you sure you want to delete the User?"
         trigger="Delete"
         onSubmit={task => service.delete(task)}
         submitText="Delete"
         validate={(values) => {
           const errors = {};
-          if (!values.id) {
-            errors.id = 'Please, provide id';
+          if (!values._id) {
+            errors._id = 'Please, provide id';
           }
           return errors;
         }}

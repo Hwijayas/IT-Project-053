@@ -95,31 +95,33 @@ export const DealCards = ({ deal, index }) => {
                                 </Typography>
                                 
                             </div>
-                            <Divider orientation='vertical'/>
-                            <div className={classes.cardText}>
-                            <Typography variant="body2">
-                                    Client: {deal.customer.name ? deal.customer.name : 'N/A'}
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                >
-                                    Company: <br/> {deal.customer.company}
-                                </Typography>
-                            </div>
+                            {/*<Divider orientation='vertical'/>*/}
+                            {/*<div className={classes.cardText}>*/}
+                            {/*<Typography variant="body2">*/}
+                            {/*        Client: {deal.customer.name ? deal.customer.name : 'N/A'}*/}
+                            {/*    </Typography>*/}
+                            {/*    <Typography*/}
+                            {/*        variant="body2"*/}
+                            {/*    >*/}
+                            {/*        Company: <br/> {deal.customer.company}*/}
+                            {/*    </Typography>*/}
+                            {/*</div>*/}
                             <Grid 
                             container
                             justifyContent="flex-end"
                             >
                                 
                                 <Button 
-                                    className={classes.button} 
+                                    className={classes.button}
+                                    style={{height: '30px', width : '50px'}}
                                     onClick={onView}
                                     variant="contained"
                                     >
                                         View
                                 </Button> 
                                 <Button 
-                                    className={classes.button} 
+                                    className={classes.button}
+                                    style={{height: '30px', width : '50px'}}
                                     onClick={onEdit}
                                     variant="contained"
                                     orientation="horizontal"
@@ -127,7 +129,8 @@ export const DealCards = ({ deal, index }) => {
                                         Edit
                                 </Button> 
                                 <Button 
-                                    className={classes.button} 
+                                    className={classes.button}
+                                    style={{height: '30px', width : '50px'}}
                                     onClick={onDelete}
                                     variant="contained"
                                     orientation="horizontal"

@@ -77,12 +77,12 @@ const Navbar = (props) => {
                                     to="/companies"
                                     value="/companies"
                                 />
-                                {/*<Tab
+                                {<Tab
                                     label={'Deals'}
                                     component={Link}
                                     to="/deals"
                                     value="/deals"
-                                />*/}
+                                />}
                             </Tabs>
                         </Box>
                         <Box display="flex">
