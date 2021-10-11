@@ -6,7 +6,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/dashboard/Dashboard';
 import About from './components/pages/About';
 import CustomizedSnackbars from './components/SnackBar'
-import {ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
+import {AdminRoute, ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
 import { logout, verifyUser} from './actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
@@ -38,7 +38,7 @@ const App = () => {
         <ProtectedRoute exact path='/' component={Dashboard}/>
         <ProtectedRoute exact path='/deals' component={Deals} /> 
         <ProtectedRoute exact path='/change-password' component={LoginComponent} />
-        <ProtectedRoute exact path='/users' component={Users} />
+        <AdminRoute exact path='/users' component={Users} />
         <Route exact path='/about' component={About}/>
         <PublicRoute path="/login" component={LoginComponent}/>
         <PublicRoute path="/sign-up" component={LoginComponent} />
