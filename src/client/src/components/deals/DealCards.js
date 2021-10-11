@@ -1,5 +1,5 @@
 
-import { Button, Card, Typography, Grid} from '@mui/material';
+import { Button, Card, Typography, Grid, Divider} from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles'
 import { Draggable } from 'react-beautiful-dnd';
 import {deleteDeal, setCurrent, setDelete, setEdit, setViewing} from "./crudFunctions"
@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
     },
     cardText: {
         marginLeft: theme.spacing(1),
+        height: 100
     },
     button: {
         
@@ -77,7 +78,7 @@ export const DealCards = ({ deal, index }) => {
                             </Typography>
 
                             <div className={classes.cardText}>
-                                <Typography variant="body2" gutterBottom>
+                                <Typography variant="body2">
                                     {deal.dealName}
                                 </Typography>
                                 <Typography
@@ -92,8 +93,24 @@ export const DealCards = ({ deal, index }) => {
                                         minimumSignificantDigits: 3,
                                     })}
                                 </Typography>
+                                
                             </div>
-                            <Grid container justifyContent="flex-end">
+                            <Divider orientation='vertical'/>
+                            <div className={classes.cardText}>
+                            <Typography variant="body2">
+                                    Client: {deal.customer.name ? deal.customer.name : 'N/A'}
+                                </Typography>
+                                <Typography
+                                    variant="body2"
+                                >
+                                    Company: <br/> {deal.customer.company}
+                                </Typography>
+                            </div>
+                            <Grid 
+                            container
+                            justifyContent="flex-end"
+                            >
+                                
                                 <Button 
                                     className={classes.button} 
                                     onClick={onView}
@@ -105,6 +122,7 @@ export const DealCards = ({ deal, index }) => {
                                     className={classes.button} 
                                     onClick={onEdit}
                                     variant="contained"
+                                    orientation="horizontal"
                                     >
                                         Edit
                                 </Button> 
@@ -112,9 +130,11 @@ export const DealCards = ({ deal, index }) => {
                                     className={classes.button} 
                                     onClick={onDelete}
                                     variant="contained"
+                                    orientation="horizontal"
                                     >
                                         Delete
                                 </Button> 
+                                
 
                             </Grid>
                             

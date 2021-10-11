@@ -77,7 +77,8 @@ const AccountMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {userReducer.loggedIn ?<>
+        {userReducer.loggedIn ?
+        <>
         <MenuItem>
           <Avatar/>
           {`${userReducer.user.firstName} ${userReducer.user.lastName}`}
@@ -95,11 +96,14 @@ const AccountMenu = () => {
           </ListItemIcon>
           Logout
         </MenuItem>
-        </>:<>
+        </>
+        :
+        <>
         <MenuItem component={Link} to="/login">
           <Avatar /> Log In Here
         </MenuItem>
-        </>}
+        </>
+        }
       </Menu>
       </>
   );
