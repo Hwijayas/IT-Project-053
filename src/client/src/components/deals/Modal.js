@@ -1,34 +1,36 @@
 
 import {useForm, Controller} from 'react-hook-form'
-import {Box, TextField, Button, Dialog, DialogContent, DialogActions} from '@mui/material';
+import {Box, TextField, Button, Dialog, DialogContent, DialogActions, Typography, Grid} from '@mui/material';
 import "./Modal.css"
 import {useDispatch, useSelector} from 'react-redux';
-import {addDeal, updateDeals, setEdit} from "./crudFunctions"
+import {addDeal, updateDeals, setEdit, setViewing} from "./crudFunctions"
 
 //modal window for getting inputs, change between edit mode or add mode
-const Modal = ({handleClose, open, edit, currentId}) => {
+const Modal = ({handleClose, open, currentId}) => {
     const dispatch = useDispatch();
     const { handleSubmit, control} = useForm();
     const showHideClassName = open ? "modal display-block" : "modal display-none";
 	const deals = useSelector(state => state.dealReducer)
+	const customer  = deals.dealList.filter(item => item._id === currentId)
     
     const onSubmit = async (data) => {
         console.log("submit")
-        const customer  = deals.dealList.filter(item => item._id === currentId)
 		
         let res;
-        {edit === true ? res = updateDeals(data, currentId, customer[0]): res = addDeal(data)}
+        {deals.edit === true ? res = updateDeals(data, currentId, customer[0]): res = addDeal(data)}
        
         if(res){
 			dispatch(res);
 			
         }
         dispatch(setEdit(false))
+		dispatch(setViewing(false))
         handleClose()
     };
-
+	
+	//console.log(deals.update, deals.view)
+	//console.log(customer[0])
     return (
-        
         
         <form onSubmit={handleSubmit(onSubmit)}>
             <Dialog open={open} 
@@ -36,7 +38,40 @@ const Modal = ({handleClose, open, edit, currentId}) => {
                 className={showHideClassName}  
                 fullWidth
                 maxWidth="sm">
-                {edit === false ?
+				{deals.view === true ? 
+					<DialogContent>
+						<Box sx={{height:20} }/>
+							<Typography variant="body2" gutterBottom>
+								{"Company Name : " + customer[0].customer.company}
+                    	    	
+                    		</Typography>
+							<Typography variant="body2" gutterBottom>
+								{"Customer Name : " + customer[0].customer.name}
+                    	    	
+                    		</Typography>
+							<Typography variant="body2" gutterBottom>
+								{"Customer Email : " + customer[0].customer.email}
+                    	    	
+                    		</Typography>
+							<Typography variant="body2" gutterBottom>
+								{"Customer Phone : " + customer[0].customer.phone}
+                    	    	
+                    		</Typography>
+							<Typography variant="body2" gutterBottom>
+								{"Deal Value : " + customer[0].value}
+                    	    	
+                    		</Typography>
+							<Typography variant="body2" gutterBottom>
+								{"Deal Status: " + customer[0].status}
+                    	    	
+                    		</Typography>
+							
+						<Box sx={{height:20, width: 50}}/>
+
+					</DialogContent>
+				
+				: 
+                (deals.edit === false) ?
                     <DialogContent>
                     
                         <Box sx={{height:20} }/>
@@ -160,34 +195,6 @@ const Modal = ({handleClose, open, edit, currentId}) => {
 		    	        />
 
                             
-                            
-                        {/* <Controller
-		    	        	name="dealValue"
-		    	        	control={control}
-                        
-		    	        	render={({ field: { onChange, status }, fieldState: { error } }) => (
-
-                                    <InputLabel variant="standard" >Status
-                                        <Select
-                                          labelId="status-select"
-                                          id="status"
-                                          value={status}
-                                          label="Status"
-                                          defaultValue= "Pending"
-                                          onChange={onChange}
-                                        >
-                                          <MenuItem value={"Pending"}>Pending</MenuItem>
-                                          <MenuItem value={"Accepted"}>Accepted</MenuItem>
-                                          <MenuItem value={"Declined"}>Declined</MenuItem>
-                                          <MenuItem value={"Done"}>Done</MenuItem>
-                                        </Select>
-                                    </InputLabel>
-
-		    	        	)}
-		    	        	rules={{ required: 'Deal Status required' }}
-                            
-		    	        /> */}
-
 
                     </DialogContent>
 
@@ -235,7 +242,8 @@ const Modal = ({handleClose, open, edit, currentId}) => {
 		    	        	rules={{ required: 'Deal Value required' }}
 		    	        />
                     </DialogContent>
-                }
+
+				}
                 <DialogActions>
 			        <Button variant="contained" onClick={handleClose}>
 			        	Cancel
