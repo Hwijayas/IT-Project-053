@@ -12,16 +12,22 @@ Source code for our frontend of our webapp
 
 docs/
 Contains all the documentation related to the app, can also be found on Confluence.
+
 put stuff here
   
 tests/
+
 put stuff here
 
 ## Links to tools
 Confluence page - https://saumya-makkar.atlassian.net/wiki/spaces/BP/overview
+
 Trello board - https://trello.com/b/TfasDRie/it-project-team-53
+
 Discord channel - 
+
 Demo of the app - https://saumya-makkar.atlassian.net/wiki/spaces/BP/overview
+
 
 ## Deployment
 BitsRM is written in JavaScript, using the React framework.
@@ -33,7 +39,11 @@ Navigate to the root directory of the backend and frontend and run npm install t
 
 ### Running a local development server
 
-Navigate to the root directory of the backend and frontend and run npm start this will start the development server on your local machine on port 3000. The application will be launched automatically in your default browser at http://localhost:3000
+Navigate to the root directory of the backend and frontend and run npm start
+
+this will start the development server on your local machine on port 3000.
+
+The application will be launched automatically in your default browser at http://localhost:3000
 
 ## Demo
 We currently have an accessible link to the application via: https://algorithms-in-action-staging.herokuapp.com/
