@@ -2,7 +2,7 @@
 import { Button, Card, Typography, Grid} from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles'
 import { Draggable } from 'react-beautiful-dnd';
-import {deleteDeal, setCurrent, setDelete, setEdit} from "./crudFunctions"
+import {deleteDeal, setCurrent, setDelete, setEdit, setViewing} from "./crudFunctions"
 import {useDispatch} from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     cardContent: {
         padding: theme.spacing(1),
         display: 'flex',
-        height: 70
+        height: 70,
     },
     cardText: {
         marginLeft: theme.spacing(1),
@@ -44,6 +44,11 @@ export const DealCards = ({ deal, index }) => {
             dispatch(setCurrent(deal._id))
         }
     }
+
+    const onView = async () => {
+        dispatch(setViewing(true))
+        dispatch(setCurrent(deal._id))
+    }
     return (
         
 
@@ -67,15 +72,10 @@ export const DealCards = ({ deal, index }) => {
                         elevation={snapshot.isDragging ? 3 : 1}
                     >   
                         <div className={classes.cardContent}>
-                            {/* <ReferenceField
-                                source="company_id"
-                                record={deal}
-                                reference="companies"
-                                resource="deals"
-                                basePath="/deals"
-                            >
-                                <LogoField size="small" />
-                            </ReferenceField> */}
+                            <Typography variant="body2" gutterBottom>
+                                {/* {deal.customer.company} */}
+                            </Typography>
+
                             <div className={classes.cardText}>
                                 <Typography variant="body2" gutterBottom>
                                     {deal.dealName}
@@ -94,6 +94,13 @@ export const DealCards = ({ deal, index }) => {
                                 </Typography>
                             </div>
                             <Grid container justifyContent="flex-end">
+                                <Button 
+                                    className={classes.button} 
+                                    onClick={onView}
+                                    variant="contained"
+                                    >
+                                        View
+                                </Button> 
                                 <Button 
                                     className={classes.button} 
                                     onClick={onEdit}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {setDeal, viewDeals, setEdit, updateDeal, updateDealStatus} from "./crudFunctions"
+import {setDeal, viewDeals, setEdit, updateDeal, updateDealStatus, setViewing} from "./crudFunctions"
 import { DragDropContext} from "react-beautiful-dnd";
 import { stages } from './stage';
 import {DealColumn} from "./DealColumn"
@@ -26,13 +26,13 @@ const Deals = () => {
 
         getDeals();
 
-        if(deals.update){
+        if(deals.update || deals.view){
             showModalWindow()
         }
 
         //console.log(deals.dealList)
         
-    },[dispatch, deals.update]);
+    },[dispatch, deals.update, deals.view]);
 
     function onDragEnd (result) {
         
@@ -80,6 +80,7 @@ const Deals = () => {
     const hideModalWindow = () => {
         SetShowModal(false)
         dispatch(setEdit(false))
+        dispatch(setViewing(false))
     };
     
 
@@ -97,7 +98,7 @@ const Deals = () => {
                 </Button>
             </Grid>
 
-            <Modal open={showModal} handleClose={hideModalWindow} edit={deals.update} currentId={deals.currentDeal}></Modal>
+            <Modal open={showModal} handleClose={hideModalWindow} currentId={deals.currentDeal}></Modal>
             <Box display="flex">
                 {stages.map((stage, index) => {
                     

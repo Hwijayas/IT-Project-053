@@ -8,6 +8,8 @@ export const setDeal= (payload) => ({ type: "SET_DEALS", payload})
 
 export const add_Deal= (payload) => ({ type: "ADD_DEAL", payload})
 
+export const setViewing= (payload) => ({ type: "SET_VIEWING", payload})
+
 export const clearCurrent= () => ({ type: "CLEAR_CURRENT_DEAL"})
 
 export const setCurrent= (payload) => ({ type: "SET_CURRENT_DEAL", payload})
