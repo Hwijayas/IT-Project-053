@@ -40,9 +40,7 @@ Navigate to the root directory of the backend and frontend and run npm install t
 ### Running a local development server
 
 Navigate to the root directory of the backend and frontend and run npm start
-
 this will start the development server on your local machine on port 3000.
-
 The application will be launched automatically in your default browser at http://localhost:3000
 
 ## Demo
