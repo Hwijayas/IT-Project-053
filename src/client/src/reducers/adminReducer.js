@@ -7,10 +7,10 @@ const defaultState = {
 }
 const adminReducer = (state = defaultState, action) => {
     switch (action.type){
-        case "SET_DEALS":{
+        case "SET_USERS":{
             return ({
                 ...state,
-                deals: action.payload
+                userList: action.payload
             })
         }
         case "SET_FLAGGED":{
@@ -19,5 +19,8 @@ const adminReducer = (state = defaultState, action) => {
                 flaggedDeals: action.payload
             })
         }
+        default: return state
     }
 }
+
+export default adminReducer

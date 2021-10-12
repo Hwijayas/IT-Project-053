@@ -62,7 +62,10 @@ const GetAll = async (req, res) => {
 
   const users = await User.find({});
   if (users != null) {
-    return res.send(users);
+    return res.status(200).json({
+      success: true,
+      users,
+    });
   }
   return res.status(400).json({
     message: 'Error',
