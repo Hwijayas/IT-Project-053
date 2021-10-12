@@ -13,12 +13,22 @@ const adminReducer = (state = defaultState, action) => {
                 userList: action.payload
             })
         }
-        case "SET_FLAGGED":{
-            return ({
+        case "UPDATE_USER":
+            return{
                 ...state,
-                flaggedDeals: action.payload
-            })
-        }
+                userList : state.userList.map((user, index) =>
+                  user._id === action.payload._id ?
+                    {...user, userEmail: action.payload.userEmail,
+                        userFirstName:action.payload.userFirstName,
+                        userLastName:action.payload.userLastName} : user
+                )
+            }
+        case "DELETE_USER":
+            console.log("delete called")
+            return{
+                ...state,
+                userList : state.userList.filter(item => item._id !== action.payload)
+            }
         default: return state
     }
 }

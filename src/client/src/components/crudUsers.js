@@ -10,12 +10,10 @@ import CRUDTable,
   DeleteForm,
 } from 'react-crud-table';
 import { useDispatch, useSelector } from 'react-redux';
-import { viewUsers} from '../actions/adminActions';
+import { viewUsers, deleteUser, updateUser} from '../actions/adminActions';
 
 // Component's Base CSS
 import '../css/table.css';
-
-// Todo: use the thunks to fetch update delete the users; allow access only to admin
 
 let tasks = [];
 
@@ -41,53 +39,44 @@ const getSorter = (data) => {
   return sorter;
 };
 
-
-let count = tasks.length;
-const service = {
-  fetchItems: (payload) => {
-    let result = Array.from(tasks);
-    result = result.sort(getSorter(payload.sort));
-    return Promise.resolve(result);
-  },
-  create: (task) => {
-    count += 1;
-    tasks.push({
-      ...task,
-      id: count,
-    });
-    return Promise.resolve(task);
-  },
-  update: (data) => {
-    const task = tasks.find(t => t._id === data._id);
-    task.userEmail = data.userEmail;
-    task.userFirstName = data.userFirstName;
-    task.userLastName = data.userLastName;
-    return Promise.resolve(task);
-  },
-  delete: (data) => {
-    const task = tasks.find(t => t._id === data._id);
-    tasks = tasks.filter(t => t._id !== task._id);
-    return Promise.resolve(task);
-  },
-};
-
 const styles = {
   container: { margin: 'auto', width: 'fit-content' },
 };
 
 const Users = () => {
   const dispatch = useDispatch();
-  dispatch(viewUsers());
   const adminReducer = useSelector(state => state.adminReducer)
 
-  tasks =  [...adminReducer.userList];
-  console.log(adminReducer.userList)
+  const FetchItems = async (payload) => {
+    await dispatch(viewUsers());
+    tasks =  [...adminReducer.userList];
+    let result = Array.from(tasks);
+    result = result.sort(getSorter(payload.sort));
+    return Promise.resolve(result);
+  };
+
+  const update = async (data) => {
+    const task = tasks.find(t => t._id === data._id);
+    task.userEmail = data.userEmail;
+    task.userFirstName = data.userFirstName;
+    task.userLastName = data.userLastName;
+    await dispatch(updateUser(data))
+    return Promise.resolve(task);
+  };
+
+  const  Delete =  async (data) => {
+    dispatch(deleteUser(data._id));
+    const task = tasks.find(t => t._id === data._id);
+    tasks = tasks.filter(t => t._id !== task._id);
+    return Promise.resolve(tasks);
+  };
+
 
   return (
     <div style={styles.container}>
       <CRUDTable
         caption="Users"
-        fetchItems={payload => service.fetchItems(payload)}
+        fetchItems={payload => FetchItems(payload)}
       >
         <Fields>
           {/*<Field*/}
@@ -98,18 +87,24 @@ const Users = () => {
           {/*/>*/}
           <Field
             name="userEmail"
-            label="userEmail"
+            label="Email"
             placeholder="User"
           />
           <Field
             name="userFirstName"
-            label="userFirstName"
+            label="First Name"
             placeholder="userFirstName"
           />
           <Field
             name="userLastName"
-            label="userLastName"
+            label="Last Name"
             placeholder="userFirstName"
+          />
+          <Field
+            name="isAdmin"
+            label="Admin"
+            placeholder="isAdmin"
+            hideInUpdateForm
           />
           {/*<Field*/}
           {/*  name="Email"*/}
@@ -141,7 +136,7 @@ const Users = () => {
           title="User Update Process"
           message="Update User"
           trigger="Update"
-          onSubmit={task => service.update(task)}
+          onSubmit={task => update(task)}
           submitText="Update"
           validate={(values) => {
             const errors = {};
@@ -169,7 +164,7 @@ const Users = () => {
           title="User Delete Process"
           message="Are you sure you want to delete the User?"
           trigger="Delete"
-          onSubmit={task => service.delete(task)}
+          onSubmit={task => Delete(task)}
           submitText="Delete"
           validate={(values) => {
             const errors = {};
