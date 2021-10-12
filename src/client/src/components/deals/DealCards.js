@@ -3,7 +3,7 @@ import { Button, Card, Typography, Grid, Divider} from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles'
 import { Draggable } from 'react-beautiful-dnd';
 import {deleteDeal, setCurrent, setDelete, setEdit, setViewing} from "./crudFunctions"
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,6 +28,8 @@ export const DealCards = ({ deal, index }) => {
 
     const dispatch = useDispatch();
     const classes = useStyles();
+
+    const userReducer = useSelector(state => state.userReducer)
 
     const onDelete = async () =>{
 
@@ -118,7 +120,9 @@ export const DealCards = ({ deal, index }) => {
                                     variant="contained"
                                     >
                                         View
-                                </Button> 
+                                </Button>
+                                {
+                                !userReducer.user.isAdmin ?
                                 <Button 
                                     className={classes.button}
                                     style={{height: '30px', width : '50px'}}
@@ -127,7 +131,8 @@ export const DealCards = ({ deal, index }) => {
                                     orientation="horizontal"
                                     >
                                         Edit
-                                </Button> 
+                                </Button>
+                                : null}
                                 <Button 
                                     className={classes.button}
                                     style={{height: '30px', width : '50px'}}
