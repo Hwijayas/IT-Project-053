@@ -50,39 +50,31 @@ const Navbar = (props) => {
                                 aria-label="Navigation Tabs"
                                 textColor='ffffff'
                                 indicatorColor='ffffff'
-                            >
-                                <Tab
-                                    label={'Dashboard'}
-                                    component={Link}
-                                    to="/"
-                                    value="/"
-                                />
-                                <Tab
-                                    label={'Graph'}
-                                    component={Link}
-                                    to="/graph"
-                                    value="/graph"
-                                />
+                            >{<Tab
+                              label={'Deals'}
+                              component={Link}
+                              to="/"
+                              value="/"
+                            />}
+                            {! user.user.isAdmin ?
+                            <Tab
+                              label={'Dashboard'}
+                              component={Link}
+                              to="/graph"
+                              value="/graph"
+                            />
+                              :null}
+
+
+
                                 {user.user.isAdmin ?
-                                <Tab
-                                  label={'Users'}
-                                  component={Link}
-                                  to="/Users"
-                                  value="/Users"
-                                /> 
-                                :null}
-                                <Tab
-                                    label={'Companies'}
+                                  <Tab
+                                    label={'Users'}
                                     component={Link}
-                                    to="/companies"
-                                    value="/companies"
-                                />
-                                {<Tab
-                                    label={'Deals'}
-                                    component={Link}
-                                    to="/deals"
-                                    value="/deals"
-                                />}
+                                    to="/Users"
+                                    value="/Users"
+                                  />
+                                  :null}
                             </Tabs>
                         </Box>
                         <Box display="flex">

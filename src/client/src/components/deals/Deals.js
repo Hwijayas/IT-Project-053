@@ -9,7 +9,7 @@ import Modal from "./Modal"
 
 
 const Deals = () => {
-    
+    const user = useSelector(state=>state.userReducer);
     const deals = useSelector(state => state.dealReducer)
     const dispatch = useDispatch();
     const [showModal, SetShowModal] = useState(false)
@@ -90,12 +90,14 @@ const Deals = () => {
             
             <Box sx={{height:20} }/>
             <Grid container justifyContent="flex-end">
-                <Button 
-                    onClick={showModalWindow} 
-                    variant="contained"
-                    > 
-                    Add Deals 
-                </Button>
+                {!user.user.isAdmin?
+                    <Button
+                      onClick={showModalWindow}
+                      variant="contained"
+                    >
+                        Add Deals
+                    </Button>
+                :null}
             </Grid>
 
             <Modal open={showModal} handleClose={hideModalWindow} currentId={deals.currentDeal}></Modal>

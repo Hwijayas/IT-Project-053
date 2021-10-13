@@ -60,7 +60,7 @@ const GetAll = async (req, res) => {
     });
   }
 
-  const users = await User.find({});
+  const users = await User.find({ isAdmin: false });
   if (users != null) {
     return res.status(200).json({
       success: true,
