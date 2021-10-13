@@ -34,43 +34,45 @@ const Deals = () => {
         
     },[dispatch, deals.update, deals.view]);
 
+
     function onDragEnd (result) {
         
-        const { destination, source, draggableId } = result;
+        if(!user.user.isAdmin){
+            const { destination, source, draggableId } = result;
+        
+            if (!destination) {
+                return;
+            }
 
-        if (!destination) {
-            return;
-        }
+            if (
+                destination.droppableId === source.droppableId &&
+                destination.index === source.index
+            ) {
+                return;
+            }
 
-        if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
-        ) {
-            return;
+            // within same column
+            if (source.droppableId === destination.droppableId){
+
+                const allDeals = Array.from(deals.dealList);
+                const [reorderedItem] = allDeals.splice(source.index, 1);
+                allDeals.splice(destination.index, 0, reorderedItem);
+
+                //update local state
+                dispatch(setDeal(allDeals))
+            }
+
+            //other column
+            else{
+                //const sourceColumnAllDeals = Array.from(deals.dealList);
+                //sourceColumnAllDeals.splice(source.index, 1);
+
+                //update local state
+                dispatch(updateDeal(draggableId, destination.droppableId))
+                dispatch(updateDealStatus(draggableId, destination.droppableId))
+            }
         }
         
-        // within same column
-        if (source.droppableId === destination.droppableId){
-
-            const allDeals = Array.from(deals.dealList);
-            const [reorderedItem] = allDeals.splice(source.index, 1);
-            allDeals.splice(destination.index, 0, reorderedItem);
-
-            //update local state
-            dispatch(setDeal(allDeals))
-        }
-
-        //other column
-        else{
-            //const sourceColumnAllDeals = Array.from(deals.dealList);
-            //sourceColumnAllDeals.splice(source.index, 1);
-
-            //update local state
-            dispatch(updateDeal(draggableId, destination.droppableId))
-            dispatch(updateDealStatus(draggableId, destination.droppableId))
-        }
-
-
     }
 
     const showModalWindow = () => {
