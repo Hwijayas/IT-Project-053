@@ -29,7 +29,7 @@ const useStyles = makeStyles({
             backgroundColor: '#dadadf',
         },
     },
-});
+}, {index: 1});
 
 export const DealColumn = ({stage , dealIds, data}) => {
     //console.log(dealIds)

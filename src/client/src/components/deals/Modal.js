@@ -17,7 +17,7 @@ const Modal = ({handleClose, open, currentId}) => {
         console.log("submit")
 		
         let res;
-        {deals.edit === true ? res = updateDeals(data, currentId, customer[0]): res = addDeal(data)}
+        {deals.update === true ? res = updateDeals(data, currentId, customer[0]): res = addDeal(data)}
        
         if(res){
 			dispatch(res);
@@ -28,8 +28,6 @@ const Modal = ({handleClose, open, currentId}) => {
         handleClose()
     };
 	
-	//console.log(deals.update, deals.view)
-	//console.log(customer[0])
     return (
         
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,7 +69,7 @@ const Modal = ({handleClose, open, currentId}) => {
 					</DialogContent>
 				
 				: 
-                (deals.edit === false) ?
+                (deals.update === false) ?
                     <DialogContent>
                     
                         <Box sx={{height:20} }/>

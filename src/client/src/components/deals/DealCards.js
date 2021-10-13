@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     button: {
         
     }
-}));
+}), {index: 1});
 
 
 export const DealCards = ({ deal, index }) => {
