@@ -60,6 +60,7 @@ const Form = ({route, handleClose}) => {
 		if(res){
 			await dispatch(res);
 			dispatch(setLoading(false));
+			handleClose();
 			<Redirect to="/"/>
 		}else{
 			dispatch(setLoading(false));
