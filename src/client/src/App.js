@@ -17,7 +17,6 @@ import { viewUsers } from './actions/adminActions';
 
 const App = () => {
   /*authenticate user if jwt exists */
-  console.log(process.env.NODE_ENV)
   const userReducer = useSelector(state => state.userReducer)
   const dispatch = useDispatch();
   useEffect(() => {

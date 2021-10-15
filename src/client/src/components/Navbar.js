@@ -80,8 +80,8 @@ const Navbar = (props) => {
                                   <Tab
                                     label={'Users'}
                                     component={Link}
-                                    to="/Users"
-                                    value="/Users"
+                                    to="/users"
+                                    value="/users"
                                   />
                                   :null}
                             </Tabs>

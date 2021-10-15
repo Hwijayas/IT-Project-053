@@ -16,8 +16,6 @@ import { setLoading } from '../actions/userActions';
 // Component's Base CSS
 import '../css/table.css';
 
-let tasks = [];
-
 const SORTERS = {
   NUMBER_ASCENDING: mapper => (a, b) => mapper(a) - mapper(b),
   NUMBER_DESCENDING: mapper => (a, b) => mapper(b) - mapper(a),
@@ -47,7 +45,12 @@ const styles = {
 const Users = () => {
   const dispatch = useDispatch();
   const adminReducer = useSelector(state => state.adminReducer)
-  const FetchItems = async (payload) => {
+  let tasks = [];
+  useEffect(() => {
+    tasks = [...adminReducer.userList]
+  }); 
+  const FetchItems = (payload) => {
+    dispatch(viewUsers());
     tasks =  [...adminReducer.userList];
     let result = Array.from(tasks);
     result = result.sort(getSorter(payload.sort));

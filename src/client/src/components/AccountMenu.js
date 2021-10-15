@@ -21,7 +21,6 @@ const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleLogout = () => {
-    console.log('logout pressed')
     dispatch(setMsg("logged out"));
     dispatch(logout());
     return (
