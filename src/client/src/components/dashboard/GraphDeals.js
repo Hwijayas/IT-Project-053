@@ -67,7 +67,7 @@ export const DealsChart = () => {
                         data={data}
                         keys={['Accepted', 'Pending', 'Declined']}
                         colors={['#61cdbb', '#97e3d5', '#e25c3b']}
-                        margin={{ top: 50, right: 50, bottom: 50, left: 0 }}
+                        margin={{ top: 50, right: 120, bottom: 50, left: 60 }}
                         padding={0.3}
                         valueScale={{
                             type: 'linear',

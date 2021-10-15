@@ -4,6 +4,9 @@ import { Tabs, Tab, Toolbar, AppBar, Box, Typography } from '@mui/material';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { makeStyles } from "@mui/styles";
 import {useSelector} from 'react-redux';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import Chip from '@mui/material/Chip';
 
 const useStyles = makeStyles({
     root: {
@@ -27,7 +30,13 @@ const Navbar = (props) => {
     const currentPath = match?.path ?? '/';
 
     return (
-        <>
+        <> 
+        <Backdrop
+		sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+		open={(user.loading)}
+  	>
+		<CircularProgress color="inherit" />
+    </Backdrop>
            <nav className={classes.root}>
            <AppBar position="static" color="primary">
                 <Toolbar variant="dense">

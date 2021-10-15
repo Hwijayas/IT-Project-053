@@ -1,5 +1,5 @@
 // https://github.com/xvicmanx/react-crud-table#examples
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import CRUDTable,
 {
@@ -11,6 +11,7 @@ import CRUDTable,
 } from 'react-crud-table';
 import { useDispatch, useSelector } from 'react-redux';
 import { viewUsers, deleteUser, updateUser} from '../actions/adminActions';
+import { setLoading } from '../actions/userActions';
 
 // Component's Base CSS
 import '../css/table.css';
@@ -46,9 +47,7 @@ const styles = {
 const Users = () => {
   const dispatch = useDispatch();
   const adminReducer = useSelector(state => state.adminReducer)
-
   const FetchItems = async (payload) => {
-    await dispatch(viewUsers());
     tasks =  [...adminReducer.userList];
     let result = Array.from(tasks);
     result = result.sort(getSorter(payload.sort));

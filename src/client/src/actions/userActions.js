@@ -51,9 +51,9 @@ export const userChangePassword = (userInfo) => async dispatch => {
 		dispatch(emptyErrors());
 		if(data.token){
 			await localStorage.setItem("token", data.token);
-
 		}
-		
+		<Redirect to="/login"/>
+		dispatch(setAuth(false));
 	}
 }
 const welcomeUser = (dispatch, getState) => {

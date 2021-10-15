@@ -2,6 +2,7 @@ import {useSelector } from 'react-redux'
 import { emptyErrors , setErrors } from './userActions';
 import Axios from 'axios'
 import { Redirect } from "react-router";
+import { setLoading } from './userActions';
 const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000' : 'https://bits-please-api.herokuapp.com';
 const headers = {
 	"Content-Type": "application/json",
@@ -18,6 +19,7 @@ const setDelete= (payload) => ({ type: "DELETE_USER", payload})
 export const update_User= (payload) => ({ type: "UPDATE_USER", payload : payload})
 
 export const viewUsers = () => async (dispatch) => {
+    dispatch(setLoading(true));
     const token = localStorage.getItem("token");
     const args = {
         method: 'GET',
@@ -28,6 +30,7 @@ export const viewUsers = () => async (dispatch) => {
     };
     const res = await fetch(`${url}/users`, args);
     const data = await res.json();
+    if(!!data){dispatch(setLoading(false));}
     if(data.success === "false"){
         dispatch(setErrors(data.msg))
     }else{

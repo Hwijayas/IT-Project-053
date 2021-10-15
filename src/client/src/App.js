@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
 import Users from './components/crudUsers'
 import Deals from "./components/deals/Deals"
+import { viewUsers } from './actions/adminActions';
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
+    if (userReducer.user.isAdmin) {dispatch(viewUsers());}
   },[userReducer.loggedIn, dispatch]);
   
   /*sign-in modal handles*/
