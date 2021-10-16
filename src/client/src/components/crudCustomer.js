@@ -10,7 +10,7 @@ import CRUDTable,
   DeleteForm,
 } from 'react-crud-table';
 import { useDispatch, useSelector } from 'react-redux';
-import { viewUsers, deleteUser, updateUser} from '../actions/adminActions';
+import { viewCustomers, updateCustomer, deleteCustomer, addCustomer} from '../actions/customerActions';
 import { setLoading } from '../actions/userActions';
 
 // Component's Base CSS
@@ -42,16 +42,17 @@ const styles = {
   container: { margin: 'auto', width: 'fit-content' },
 };
 
-const Users = () => {
+const Customers = () => {
   const dispatch = useDispatch();
-  const adminReducer = useSelector(state => state.adminReducer)
+  const customerReducer = useSelector(state => state.customerReducer)
   let tasks = [];
   useEffect(() => {
-    tasks = [...adminReducer.userList]
+    tasks = customerReducer.customerList;
   });
-  const FetchItems = (payload) => {
-    dispatch(viewUsers());
-    tasks =  [...adminReducer.userList];
+
+  const FetchItems = async (payload) => {
+    await dispatch(viewCustomers());
+    tasks =  [...customerReducer.customerList];
     let result = Array.from(tasks);
     result = result.sort(getSorter(payload.sort));
     return Promise.resolve(result);
@@ -59,15 +60,22 @@ const Users = () => {
 
   const update = async (data) => {
     const task = tasks.find(t => t._id === data._id);
-    task.userEmail = data.userEmail;
-    task.userFirstName = data.userFirstName;
-    task.userLastName = data.userLastName;
-    await dispatch(updateUser(data))
+    task.name = data.name;
+    task.company = data.company;
+    task.email = data.email;
+    task.phone = data.phone;
+    await dispatch(updateCustomer(data));
     return Promise.resolve(task);
   };
 
+  const create = async (task) => {
+    await dispatch(addCustomer(task))
+    tasks.push(task);
+    return Promise.resolve(tasks);
+  };
+
   const  Delete =  async (data) => {
-    dispatch(deleteUser(data._id));
+    dispatch(deleteCustomer(data._id));
     const task = tasks.find(t => t._id === data._id);
     tasks = tasks.filter(t => t._id !== task._id);
     return Promise.resolve(tasks);
@@ -77,66 +85,64 @@ const Users = () => {
   return (
     <div style={styles.container}>
       <CRUDTable
-        caption="Users"
+        caption="Customers"
         fetchItems={payload => FetchItems(payload)}
       >
         <Fields>
-          {/*<Field*/}
-          {/*  name="id"*/}
-          {/*  label="Id"*/}
-          {/*  hideInCreateForm*/}
-          {/*  readOnly*/}
-          {/*/>*/}
           <Field
-            name="userEmail"
+            name="name"
+            label="Name"
+            placeholder="name"
+          />
+          <Field
+            name="company"
+            label="Company"
+            placeholder="company"
+          />
+          <Field
+            name="email"
             label="Email"
-            placeholder="User"
+            placeholder="email"
           />
           <Field
-            name="userFirstName"
-            label="First Name"
-            placeholder="userFirstName"
+            name="phone"
+            label="Phone"
+            placeholder="phone"
           />
-          <Field
-            name="userLastName"
-            label="Last Name"
-            placeholder="userFirstName"
-          />
-          <Field
-            name="isAdmin"
-            label="Admin"
-            placeholder="isAdmin"
-            hideInUpdateForm
-          />
-          {/*<Field*/}
-          {/*  name="Email"*/}
-          {/*  label="Email"*/}
-          {/*  render={DescriptionRenderer}*/}
-          {/*/>*/}
         </Fields>
-        {/*<CreateForm*/}
-        {/*  title="Task Creation"*/}
-        {/*  message="Create a new task!"*/}
-        {/*  trigger="Create Task"*/}
-        {/*  onSubmit={task => service.create(task)}*/}
-        {/*  submitText="Create"*/}
-        {/*  validate={(values) => {*/}
-        {/*    const errors = {};*/}
-        {/*    if (!values.title) {*/}
-        {/*      errors.title = 'Please, provide task\'s title';*/}
-        {/*    }*/}
 
-        {/*    if (!values.description) {*/}
-        {/*      errors.description = 'Please, provide task\'s description';*/}
-        {/*    }*/}
+        <CreateForm
+          title="Customer Creation"
+          message="Add a new customer!"
+          trigger="Create"
+          onSubmit={(task) => create(task)}
+          submitText="Create"
+          validate={(values) => {
+            const errors = {};
 
-        {/*    return errors;*/}
-        {/*  }}*/}
-        {/*/>*/}
+            if (!values.name) {
+              errors.name = 'Please, provide customer\'s name';
+            }
+
+            if (!values.company) {
+              errors.company = 'Please, provide customer\'s first company';
+            }
+
+            if (!values.email) {
+              errors.email = 'Please, provide customer\'s email';
+            }
+
+            if (!values.phone) {
+              errors.phone = 'Please, provide customer\'s phone';
+            }
+
+            return errors;
+          }}
+        />
 
         <UpdateForm
-          title="User Update Process"
-          message="Update User"
+          title="Customer Update Process"
+          message="Update Customer"
           trigger="Update"
           onSubmit={task => update(task)}
           submitText="Update"
@@ -147,18 +153,21 @@ const Users = () => {
               errors._id = 'Please, provide id';
             }
 
-            if (!values.userEmail) {
-              errors.userEmail = 'Please, provide user\'s Email';
+            if (!values.name) {
+              errors.name = 'Please, provide customer\'s name';
             }
 
-            if (!values.userFirstName) {
-              errors.userFirstName = 'Please, provide user\'s first name';
+            if (!values.company) {
+              errors.company = 'Please, provide customer\'s first company';
             }
 
-            if (!values.userLastName) {
-              errors.userLastName = 'Please, provide user\'s last name';
+            if (!values.email) {
+              errors.email = 'Please, provide customer\'s email';
             }
 
+            if (!values.phone) {
+              errors.phone = 'Please, provide customer\'s phone';
+            }
             return errors;
           }}
         />
@@ -182,4 +191,4 @@ const Users = () => {
   );
 }
 
-export default Users;
+export default Customers;

@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 const Navbar = (props) => {
     const user = useSelector(state=>state.userReducer);
     const classes = useStyles();
-    const match = useRouteMatch(['/contacts', '/companies', '/deals', '/users']);
+    const match = useRouteMatch(['/contacts', '/companies', '/deals', '/users', '/customers']);
     const currentPath = match?.path ?? '/';
 
     return (
@@ -73,17 +73,24 @@ const Navbar = (props) => {
                               value="/graph"
                             />
                               :null}
+                            {! user.user.isAdmin ?
+                              <Tab
+                                label={'Customer'}
+                                component={Link}
+                                to="/customers"
+                                value="/customers"
+                              />
+                              :null}
 
 
-
-                                {user.user.isAdmin ?
-                                  <Tab
-                                    label={'Users'}
-                                    component={Link}
-                                    to="/users"
-                                    value="/users"
-                                  />
-                                  :null}
+                            {user.user.isAdmin ?
+                              <Tab
+                                label={'Users'}
+                                component={Link}
+                                to="/users"
+                                value="/users"
+                              />
+                              :null}
                             </Tabs>
                         </Box>
                         <Box display="flex">
