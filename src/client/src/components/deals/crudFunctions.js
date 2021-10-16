@@ -39,10 +39,10 @@ export const addDeal = (data) => async dispatch =>{
         dealName: data.dealName,
         value: data.dealValue,
         customer: {
-            "name": data.customerName,
-            "company": data.customerCompanyName,
-            "email": data.customerEmail,
-            "phone": data.customerPhone
+            name: data.customerName,
+            company: data.customerCompanyName,
+            email: data.customerEmail,
+            phone: data.customerPhone
         },
         status: data.status
         

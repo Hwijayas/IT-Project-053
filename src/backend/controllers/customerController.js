@@ -38,7 +38,8 @@ const Create = async (req, res) => {
     });
   }
   const customer = await addCustomer(req.body, req.user._id);
-  return res.status(422).json({
+  return res.status(200).json({
+    success: true,
     message: 'Customer added',
     customer,
   });
@@ -55,7 +56,10 @@ const GetAll = async (req, res) => {
 
   const customersFound = await Customer.find({ user: req.user._id });
   if (customersFound != null) {
-    return res.send(customersFound);
+    return res.status(200).json({
+      success: true,
+      customers: customersFound,
+    });
   }
   return res.status(400).json({
     message: 'Error',
