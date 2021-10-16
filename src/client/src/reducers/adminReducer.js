@@ -15,8 +15,6 @@ const adminReducer = (state = defaultState, action) => {
             return({
                 ...state,
                 userList: [],
-                deals: [],
-                flaggedDeals : [],
                 loading: false,
                 currentUser: null
             })
@@ -36,13 +34,6 @@ const adminReducer = (state = defaultState, action) => {
             return{
                 ...state,
                 userList : state.userList.filter(item => item._id !== action.payload)
-            }
-        case "LOGOUT":
-            return {
-                ...state,
-                userList: [],
-                loading: false,
-                currentUser: null
             }
 
         default: return state

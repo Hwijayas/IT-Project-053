@@ -6,7 +6,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/dashboard/Dashboard';
 import About from './components/pages/About';
 import CustomizedSnackbars from './components/SnackBar'
-import {AdminRoute, ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
+import {ProtectedRoute, PublicRoute} from './components/ProtectedRoute';
 import { logout, verifyUser} from './actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginComponent from './components/LoginComponent';
@@ -14,7 +14,7 @@ import Users from './components/crudUsers'
 import Deals from "./components/deals/Deals"
 import Customers from './components/crudCustomer'
 import { viewUsers } from './actions/adminActions';
-import { logOut as adminLogout } from './actions/adminActions';
+
 
 
 const App = () => {
@@ -23,13 +23,12 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
-    if (userReducer.user.isAdmin) {dispatch(viewUsers());}
+    if (userReducer.user.isAdmin !== null && userReducer.user.isAdmin) {dispatch(viewUsers());}
   },[userReducer.loggedIn, dispatch]);
   
   /*sign-in modal handles*/
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(adminLogout());
     return (
       <Redirect to="/login"/>
     )
@@ -44,7 +43,7 @@ const App = () => {
         <ProtectedRoute exact path='/graph' component={Dashboard} />
         <ProtectedRoute exact path='/change-password' component={LoginComponent} />
         <ProtectedRoute exact path='/customers' component={Customers} />
-        <AdminRoute exact path='/users' component={Users} />
+        <ProtectedRoute exact path='/users' component={Users} />
         <Route exact path='/about' component={About}/>
         <PublicRoute path="/login" component={LoginComponent}/>
         <PublicRoute path="/sign-up" component={LoginComponent} />

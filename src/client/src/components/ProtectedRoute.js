@@ -23,15 +23,5 @@ function PublicRoute({ component: Component, ...restOfProps }) {
         />
     );
 }
-function AdminRoute({ component: Component, ...restOfProps }) {
-    const userReducer = useSelector(state=>state.userReducer)
-    const isAdmin = userReducer.loggedIn && userReducer.isAdmin;
-    return (
-        <Route
-        render={() =>
-            !isAdmin ? <Component {...restOfProps} /> : <Redirect to="/" />
-        }
-        />
-    );
-}
-export  {ProtectedRoute, PublicRoute, AdminRoute};
+
+export  {ProtectedRoute, PublicRoute};
