@@ -13,6 +13,7 @@ import LoginComponent from './components/LoginComponent';
 import Users from './components/crudUsers'
 import Deals from "./components/deals/Deals"
 import { viewUsers } from './actions/adminActions';
+import { logOut as adminLogout } from './actions/adminActions';
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
   /*sign-in modal handles*/
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(adminLogout());
     return (
       <Redirect to="/login"/>
     )

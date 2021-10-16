@@ -13,6 +13,16 @@ const adminReducer = (state = defaultState, action) => {
                 userList: action.payload
             })
         }
+        case "LOGOUT":{
+            return({
+                ...state,
+                userList: [],
+                deals: [],
+                flaggedDeals : [],
+                loading: false,
+                currentUser: null
+            })
+        }
         case "UPDATE_USER":
             return{
                 ...state,

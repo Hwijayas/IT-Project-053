@@ -13,6 +13,9 @@ const setUsers = (data) => ({
     type:"SET_USERS",
     payload: data
 })
+export const logOut = () => ({
+    type: "LOGOUT"
+})
 
 const setDelete= (payload) => ({ type: "DELETE_USER", payload})
 

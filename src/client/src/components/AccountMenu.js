@@ -12,6 +12,7 @@ import {Link} from 'react-router-dom'
 import {Logout, Password} from '@mui/icons-material/';
 import {useDispatch, useSelector} from 'react-redux'
 import { logout, setMsg} from '../actions/userActions';
+import { logOut as adminLogout } from '../actions/adminActions';
 
 const AccountMenu = () => {
   const userReducer = useSelector(state => state.userReducer);
@@ -23,6 +24,7 @@ const AccountMenu = () => {
   const handleLogout = () => {
     dispatch(setMsg("logged out"));
     dispatch(logout());
+    dispatch(adminLogout());
     return (
       <Redirect to="/login"/>
     )
