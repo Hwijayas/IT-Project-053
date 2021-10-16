@@ -32,7 +32,7 @@ const Create = (req, res) => {
       try {
         newUser.save()
           .then(() => {
-            const jwt = utils.issueJWT(user);
+            const jwt = utils.issueJWT(newUser);
             res.json({
               success: true,
               user: {
