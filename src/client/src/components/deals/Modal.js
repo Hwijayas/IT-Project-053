@@ -17,7 +17,7 @@ const Modal = ({handleClose, open, currentId}) => {
         console.log("submit")
 		
         let res;
-        {deals.update === true ? res = updateDeals(data, currentId, customer[0]): res = addDeal(data)}
+        {deals.update === true ? res = updateDeals(data, currentId, customer[0].customer): res = addDeal(data)}
        
         if(res){
 			dispatch(res);
