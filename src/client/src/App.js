@@ -14,6 +14,8 @@ import Users from './components/crudUsers'
 import Deals from "./components/deals/Deals"
 import Customers from './components/crudCustomer'
 import { viewUsers } from './actions/adminActions';
+import { viewDeals } from './components/deals/crudFunctions'
+import { viewCustomers } from './actions/customerActions'
 
 
 
@@ -23,7 +25,14 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
-    if (userReducer.user.isAdmin !== null && userReducer.user.isAdmin) {dispatch(viewUsers());}
+    if (userReducer.user.isAdmin !== null && userReducer.user.isAdmin) {
+      dispatch(viewDeals())
+      dispatch(viewUsers());
+    }
+    if (userReducer.user.isAdmin !== null && !userReducer.user.isAdmin) {
+      dispatch(viewDeals())
+      dispatch(viewCustomers());
+    }
   },[userReducer.loggedIn, dispatch]);
   
   /*sign-in modal handles*/
