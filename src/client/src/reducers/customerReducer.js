@@ -24,13 +24,13 @@ const customerReducer = (state = defaultState, action) => {
         customerList : state.customerList.filter(item => item._id !== action.payload)
       }
 
-    case "UPDATE_DEAL":
+    case "UPDATE_CUSTOMER":
 
       return{
         ...state,
-        dealList : state.dealList.map((deal, index) =>
-          deal._id === action.payload.id ?
-            {...deal, status: action.payload.status} : deal
+        customerList : state.customerList.map((customer, index) =>
+          customer._id === action.payload.id ?
+            {...customer, status: action.payload.status} : customer
         )
       }
 
