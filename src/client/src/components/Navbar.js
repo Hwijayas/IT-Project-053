@@ -50,7 +50,7 @@ const Navbar = (props) => {
                                 alt="BitsRm Logo"
                             />
                             <Typography component="span" variant="h5">
-                                BitsRM
+                                BitsRM {user.user.isAdmin ? "Admin" : null}
                             </Typography>
                         </Box>
                         <Box>
