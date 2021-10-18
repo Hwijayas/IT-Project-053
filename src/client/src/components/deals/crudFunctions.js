@@ -81,48 +81,26 @@ export const viewDeals = () => async dispatch =>{
 export const updateDeals = (data, dealId, customer) => async dispatch =>{
     console.log("updating")
     console.log(data)
-    const token = await localStorage.getItem("token");
-    const response = await Axios.put(`${url}/${dealId}`, {
-        dealName: data.dealName, 
-        value: data.dealValue,
-        customer: customer
+    const token = localStorage.getItem("token");
 
-    }, {headers: {...headers, "Authorization": `${token}`,
-        'Access-Control-Allow-Origin':'*' }}).catch(err => {
-        console.log(err);
-        alert(err);
-        return dispatch(setErrors(data.msg))
-    });
+    const body = { dealName: data.dealName, value: data.dealValue, customer: customer };
 
-    const responseOK = response && response.status === 201 
+    const res = await fetch(`${url}/${dealId}`, {
+        method: "PUT",
+        headers:{...headers,
+            "Authorization": `${token}`,
+            'Access-Control-Allow-Origin':'*'},
+        body: JSON.stringify(body),
+        mode: 'cors',
+    })
+    const responseData = await res.json();
 
-    if(responseOK){
-        alert(response.msg);
-        return <Redirect to="/deals" />
+    if(responseData.success === true){
+        alert(responseData.msg);
+        return <Redirect to="/" />
     }
 }
 
-
-/*
-export const updateDeals =  async (data, dealId) =>{
-    await Axios({
-        url: `${url}/deal/${dealId}`,
-        params: {id: dealId},
-        headers: {...headers,
-            'Access-Control-Allow-Origin':'*' },
-        method: 'put',
-        data: {
-            dealName: data.dealName, 
-            value: data.dealValue 
-        }
-    
-    }).catch(err => {
-        console.log(err);
-        alert(err);
-        //return dispatch(setErrors(data.msg))
-    });
-}
-*/
 
 export const updateDealStatus = (dealId, data) => async dispatch =>{
     const token = await localStorage.getItem("token");
@@ -136,7 +114,7 @@ export const updateDealStatus = (dealId, data) => async dispatch =>{
         return dispatch(setErrors(response.msg))
     });
 
-    const responseOK = response && response.status === 201 
+    const responseOK = response && response.status === 201
 
     if(responseOK){
         alert(response.msg);
