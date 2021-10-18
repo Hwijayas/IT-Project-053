@@ -2,7 +2,7 @@ const defaultState = {
     dealList: [],
     dealErrors: '',
     update: false,
-    currentDeal: ""
+    view: false,
 }
 
 const dealReducer = (state = defaultState, action) => {
@@ -39,6 +39,13 @@ const dealReducer = (state = defaultState, action) => {
                 update: action.payload
             }
 
+        case "SET_VIEWING":
+            console.log("viewing")
+            return{
+                ...state,
+                view: action.payload
+            }
+
         case "UPDATE_DEAL":
             
             return{
@@ -61,15 +68,8 @@ const dealReducer = (state = defaultState, action) => {
                 dealList: [],
                 dealErrors: '',
                 update: false,
-                currentDeal: "",
             }
 
-        // case "CLEAR_CURRENT_DEAL":
-    
-        //     return{
-        //         ...state,
-        //         currentDeal: ""
-        //     }
         default: return state
     }
 

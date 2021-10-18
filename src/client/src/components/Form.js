@@ -59,16 +59,20 @@ const Form = ({route, handleClose}) => {
 		}
 		if(res){
 			await dispatch(res);
-			dispatch(setLoading(false));
 			<Redirect to="/"/>
-		}else{
-			dispatch(setLoading(false));
 		}
+		dispatch(setLoading(false));
   };
 
   if (route === 'change-password'){
 	  return (
 		  <>
+		  <Backdrop
+		sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+		open={(user.loading)}
+  	>
+		<CircularProgress color="inherit" />
+    </Backdrop>
 		  <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
 			<Card variant='default' disableElevation={true}>
 			<img className='form-img' src='/BitsRMl_logo.svg' alt='logo' />
@@ -138,7 +142,6 @@ const Form = ({route, handleClose}) => {
   	>
 		<CircularProgress color="inherit" />
     </Backdrop>
-	
 	<form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
 	<Card variant='default' disableElevation={true}>
 	<img className='form-img' src='/BitsRMl_logo.svg' alt='logo' />

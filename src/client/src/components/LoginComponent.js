@@ -18,8 +18,9 @@ const LoginComponent = (props) => {
   const route = (location.pathname.split('/')[1]);
   const userReducer = useSelector(state=>state.userReducer);
 	const handleClose = () => {
-		dispatch(setAuth(false));
     <Redirect to="/"/>
+		dispatch(setAuth(false));
+    
 	};
   useEffect((()=>{
     dispatch(setAuth(true))

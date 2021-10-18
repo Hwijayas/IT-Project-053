@@ -3,6 +3,10 @@ import AccountMenu from "./AccountMenu";
 import { Tabs, Tab, Toolbar, AppBar, Box, Typography } from '@mui/material';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { makeStyles } from "@mui/styles";
+import {useSelector} from 'react-redux';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import Chip from '@mui/material/Chip';
 
 const useStyles = makeStyles({
     root: {
@@ -20,12 +24,19 @@ const useStyles = makeStyles({
 });
 
 const Navbar = (props) => {
+    const user = useSelector(state=>state.userReducer);
     const classes = useStyles();
-    const match = useRouteMatch(['/contacts', '/companies', '/deals']);
+    const match = useRouteMatch(['/contacts', '/companies', '/deals', '/users', '/customers']);
     const currentPath = match?.path ?? '/';
 
     return (
-        <>
+        <> 
+        <Backdrop
+		sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+		open={(user.loading)}
+  	>
+		<CircularProgress color="inherit" />
+    </Backdrop>
            <nav className={classes.root}>
            <AppBar position="static" color="primary">
                 <Toolbar variant="dense">
@@ -39,7 +50,7 @@ const Navbar = (props) => {
                                 alt="BitsRm Logo"
                             />
                             <Typography component="span" variant="h5">
-                                BitsRM
+                                BitsRM {user.user.isAdmin ? "Admin" : null}
                             </Typography>
                         </Box>
                         <Box>
@@ -48,31 +59,38 @@ const Navbar = (props) => {
                                 aria-label="Navigation Tabs"
                                 textColor='ffffff'
                                 indicatorColor='ffffff'
-                            >
-                                <Tab
-                                    label={'Dashboard'}
-                                    component={Link}
-                                    to="/"
-                                    value="/"
-                                />
-                                <Tab
-                                    label={'About'}
-                                    component={Link}
-                                    to="/about"
-                                    value="/about"
-                                />
-                                <Tab
-                                    label={'Companies'}
-                                    component={Link}
-                                    to="/companies"
-                                    value="/companies"
-                                />
-                                <Tab
-                                    label={'Deals'}
-                                    component={Link}
-                                    to="/deals"
-                                    value="/deals"
-                                />
+                            >{<Tab
+                              label={'Deals'}
+                              component={Link}
+                              to="/"
+                              value="/"
+                            />}
+                            {! user.user.isAdmin ?
+                            <Tab
+                              label={'Dashboard'}
+                              component={Link}
+                              to="/graph"
+                              value="/graph"
+                            />
+                              :null}
+                            {! user.user.isAdmin ?
+                              <Tab
+                                label={'Customer'}
+                                component={Link}
+                                to="/customers"
+                                value="/customers"
+                              />
+                              :null}
+
+
+                            {user.user.isAdmin ?
+                              <Tab
+                                label={'Users'}
+                                component={Link}
+                                to="/users"
+                                value="/users"
+                              />
+                              :null}
                             </Tabs>
                         </Box>
                         <Box display="flex">
