@@ -1,9 +1,9 @@
 
-import { Button, Card, Typography, Grid} from '@mui/material';
+import { Button, Card, Typography, Grid, Divider} from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles'
 import { Draggable } from 'react-beautiful-dnd';
-import {deleteDeal, setCurrent, setDelete, setEdit} from "./crudFunctions"
-import {useDispatch} from 'react-redux';
+import {deleteDeal, setCurrent, setDelete, setEdit, setViewing} from "./crudFunctions"
+import {useDispatch, useSelector} from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -12,21 +12,24 @@ const useStyles = makeStyles(theme => ({
     cardContent: {
         padding: theme.spacing(1),
         display: 'flex',
-        height: 70
+        height: 70,
     },
     cardText: {
         marginLeft: theme.spacing(1),
+        height: 100
     },
     button: {
         
     }
-}));
+}), {index: 1});
 
 
 export const DealCards = ({ deal, index }) => {
 
     const dispatch = useDispatch();
     const classes = useStyles();
+
+    const userReducer = useSelector(state => state.userReducer)
 
     const onDelete = async () =>{
 
@@ -43,6 +46,11 @@ export const DealCards = ({ deal, index }) => {
             dispatch(setEdit(true))
             dispatch(setCurrent(deal._id))
         }
+    }
+
+    const onView = async () => {
+        dispatch(setViewing(true))
+        dispatch(setCurrent(deal._id))
     }
     return (
         
@@ -67,17 +75,12 @@ export const DealCards = ({ deal, index }) => {
                         elevation={snapshot.isDragging ? 3 : 1}
                     >   
                         <div className={classes.cardContent}>
-                            {/* <ReferenceField
-                                source="company_id"
-                                record={deal}
-                                reference="companies"
-                                resource="deals"
-                                basePath="/deals"
-                            >
-                                <LogoField size="small" />
-                            </ReferenceField> */}
+                            <Typography variant="body2" gutterBottom>
+                                {/* {deal.customer.company} */}
+                            </Typography>
+
                             <div className={classes.cardText}>
-                                <Typography variant="body2" gutterBottom>
+                                <Typography variant="body2">
                                     {deal.dealName}
                                 </Typography>
                                 <Typography
@@ -92,22 +95,54 @@ export const DealCards = ({ deal, index }) => {
                                         minimumSignificantDigits: 3,
                                     })}
                                 </Typography>
+                                
                             </div>
-                            <Grid container justifyContent="flex-end">
+                            {/*<Divider orientation='vertical'/>*/}
+                            {/*<div className={classes.cardText}>*/}
+                            {/*<Typography variant="body2">*/}
+                            {/*        Client: {deal.customer.name ? deal.customer.name : 'N/A'}*/}
+                            {/*    </Typography>*/}
+                            {/*    <Typography*/}
+                            {/*        variant="body2"*/}
+                            {/*    >*/}
+                            {/*        Company: <br/> {deal.customer.company}*/}
+                            {/*    </Typography>*/}
+                            {/*</div>*/}
+                            <Grid 
+                            container
+                            justifyContent="flex-end"
+                            >
+                                
                                 <Button 
-                                    className={classes.button} 
-                                    onClick={onEdit}
+                                    className={classes.button}
+                                    style={{height: '30px', width : '50px'}}
+                                    onClick={onView}
                                     variant="contained"
                                     >
-                                        Edit
-                                </Button> 
+                                        View
+                                </Button>
+                                {
+                                !userReducer.user.isAdmin ?
                                 <Button 
-                                    className={classes.button} 
+                                    className={classes.button}
+                                    style={{height: '30px', width : '50px'}}
+                                    onClick={onEdit}
+                                    variant="contained"
+                                    orientation="horizontal"
+                                    >
+                                        Edit
+                                </Button>
+                                : null}
+                                <Button 
+                                    className={classes.button}
+                                    style={{height: '30px', width : '50px'}}
                                     onClick={onDelete}
                                     variant="contained"
+                                    orientation="horizontal"
                                     >
                                         Delete
                                 </Button> 
+                                
 
                             </Grid>
                             

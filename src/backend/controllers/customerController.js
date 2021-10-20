@@ -31,21 +31,43 @@ const addCustomer = async (customerDetails, userID) => {
 };
 
 // handler to create deals
-const userAddsCustomer = async (req, res) => {
+const Create = async (req, res) => {
   if (req.user.isAdmin) {
     return res.status(401).json({
       message: USER_ONLY,
     });
   }
   const customer = await addCustomer(req.body, req.user._id);
-  res.status(422).json({
+  return res.status(200).json({
+    success: true,
     message: 'Customer added',
     customer,
   });
 };
 
+// Function to get all users
+// from https://stackoverflow.com/questions/14103615/mongoose-get-full-list-of-users by user soulcheck
+const GetAll = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(401).json({
+      message: USER_ONLY,
+    });
+  }
+
+  const customersFound = await Customer.find({ user: req.user._id });
+  if (customersFound != null) {
+    return res.status(200).json({
+      success: true,
+      customers: customersFound,
+    });
+  }
+  return res.status(400).json({
+    message: 'Error',
+  });
+};
+
 // handles updates customer request
-const userUpdateCustomer = async (req, res, next) => {
+const Update = async (req, res, next) => {
   try {
     if (req.user.isAdmin) {
       return res.status(401).json({
@@ -53,7 +75,7 @@ const userUpdateCustomer = async (req, res, next) => {
       });
     }
 
-    const oldCustomer = await Customer.findById(req.params.id);
+    const oldCustomer = await Customer.findOne({ _id: req.params.id, user: req.user._id });
 
     if (!oldCustomer) {
       return res.status(401).json({ success: false, msg: 'could not find customer' });
@@ -84,7 +106,7 @@ const userUpdateCustomer = async (req, res, next) => {
 };
 
 // Function to delete customer
-const userDeleteCustomer = async (req, res) => {
+const Delete = async (req, res) => {
   if (req.user.isAdmin) {
     return res.status(401).json({
       message: USER_ONLY,
@@ -112,7 +134,8 @@ const userDeleteCustomer = async (req, res) => {
   }
 };
 
-module.exports.userAddsCustomer = userAddsCustomer;
-module.exports.userUpdateCustomer = userUpdateCustomer;
-module.exports.userDeleteCustomer = userDeleteCustomer;
+module.exports.Create = Create;
+module.exports.GetAll = GetAll;
+module.exports.Update = Update;
+module.exports.Delete = Delete;
 module.exports.addCustomer = addCustomer;

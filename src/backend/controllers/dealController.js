@@ -1,10 +1,11 @@
 const Deal = require('../models/deal');
 const customerController = require('./customerController');
 
+const NOT_ADMIN = 'Unauthorized, Access to Admin only';
 const USER_ONLY = 'Access Denied';
 
 // Function to create deals
-const userCreateDeal = async (req, res) => {
+const Create = async (req, res) => {
   if (req.user.isAdmin) {
     return res.status(401).json({
       message: USER_ONLY,
@@ -26,72 +27,19 @@ const userCreateDeal = async (req, res) => {
   const options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
   // Find the document or create one
-  const deal = await Deal.findOneAndUpdate(query, update, options);
+  const dealFound = await Deal.findOneAndUpdate(query, update, options);
 
   // Add the user if not present
-  if (deal.user.indexOf(req.user._id) === -1) deal.user.push(req.user._id);
-  await deal.save();
+  if (dealFound.user.indexOf(req.user._id) === -1) dealFound.user.push(req.user._id);
+  await dealFound.save();
 
   return res.status(201).json({
-    success: true, msg: 'Deal created!', deal, customer,
+    success: true, msg: 'Deal created!', deal: dealFound, customer,
   });
 };
 
-// Function to update deals
-const userUpdateDeal = async (req, res, next) => {
-  try {
-    if (req.user.isAdmin) {
-      return res.status(401).json({
-        message: USER_ONLY,
-      });
-    }
-    const deal = await Deal.findOneAndUpdate(
-      { _id: req.params.id, user: req.user._id },
-      { dealName: req.body.dealName, value: req.body.value },
-      { new: true },
-    );
-
-    if (deal === null) {
-      res.status(400).json({ success: false, msg: 'Deal not found!' });
-    } else {
-      const customer = await customerController.addCustomer(req.body.customer, req.user._id);
-      deal.customer = customer._id;
-      await deal.save();
-      res.status(200).json({
-        success: true, msg: 'Deal updated!', deal, customer,
-      });
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
-const updateDealStatus = (req, res, next) => {
-  try {
-    if (req.user.isAdmin) {
-      return res.status(401).json({
-        message: USER_ONLY,
-      });
-    }
-    const dealId = req.params.id;
-    const newStatus = req.body.status;
-    Deal.findOneAndUpdate({ _id: dealId }, { status: newStatus }, (err, deal) => {
-      if (err) {
-        console.log(err);
-        res.status(400).json({ success: false, msg: 'Bad request' });
-      } else if (deal != null) {
-        res.status(200).json({ success: true, msg: 'Deal status updated!' });
-      } else {
-        res.status(404).json({ success: false, msg: 'Deal not found!' });
-      }
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
 // view all Deals
-const viewDeals = async (req, res) => {
+const Get = async (req, res) => {
   if (req.user.isAdmin) {
     return res.status(401).json({
       message: USER_ONLY,
@@ -101,8 +49,88 @@ const viewDeals = async (req, res) => {
   res.send(deals);
 };
 
+// Function to get all deals that are flagged for deletion
+const GetFlagged = async (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+
+  const dealsFound = await Deal.find({ delStatus: true }).populate('customer');
+  if (dealsFound === null) {
+    res.status(400).json({ success: false, msg: 'Bad request' });
+  } else {
+    res.send(dealsFound);
+  }
+};
+
+// view all Deals
+const GetAll = async (req, res) => {
+  if (req.user.isAdmin) {
+    GetFlagged(req, res);
+  } else {
+    Get(req, res);
+  }
+};
+
+// Function to update deals
+const Update = async (req, res, next) => {
+  try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
+    const dealFound = await Deal.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
+      { dealName: req.body.dealName, value: req.body.value },
+      { new: true },
+    );
+
+    if (dealFound === null) {
+      res.status(400).json({ success: false, msg: 'Deal not found!' });
+    } else {
+      const customer = await customerController.addCustomer(req.body.customer, req.user._id);
+      dealFound.customer = customer._id;
+      await dealFound.save();
+      res.status(200).json({
+        success: true, msg: 'Deal updated!', deal: dealFound, customer,
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Function to Update the status
+const UpdateStatus = (req, res, next) => {
+  try {
+    if (req.user.isAdmin) {
+      return res.status(401).json({
+        message: USER_ONLY,
+      });
+    }
+    const dealId = req.params.id;
+    const newStatus = req.body.status;
+    Deal.findOneAndUpdate({ _id: dealId, user: req.user._id },
+      { status: newStatus }, (err, dealFound) => {
+        if (err) {
+          console.log(err);
+          res.status(400).json({ success: false, msg: 'Bad request' });
+        } else if (dealFound != null) {
+          res.status(200).json({ success: true, msg: 'Deal status updated!' });
+        } else {
+          res.status(404).json({ success: false, msg: 'Deal not found!' });
+        }
+      });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Function to toggle deal deletion status
-const flagDealDeletion = (req, res, next) => {
+const FlagDelete = (req, res) => {
   try {
     if (req.user.isAdmin) {
       return res.status(401).json({
@@ -111,18 +139,18 @@ const flagDealDeletion = (req, res, next) => {
     }
     const dealId = req.params.id;
 
-    Deal.findOne({ _id: dealId }, (err, deal) => {
+    Deal.findOne({ _id: dealId, user: req.user._id }, (err, dealFound) => {
       if (err) {
         console.log(err);
         res.status(404);
       } else {
-        const newDelStatus = !deal.delStatus;
-        Deal.findOneAndUpdate({ _id: dealId }, { delStatus: newDelStatus },
-          { new: true }, (error, dealFound) => {
+        const newDelStatus = !dealFound.delStatus;
+        Deal.findOneAndUpdate({ _id: dealId, user: req.user._id }, { delStatus: newDelStatus },
+          { new: true }, (error, dealFound2) => {
             if (error) {
               console.log(error);
               res.status(404);
-            } else if (dealFound == null) {
+            } else if (dealFound2 == null) {
               console.log(error);
               res.status(404);
             } else {
@@ -132,13 +160,40 @@ const flagDealDeletion = (req, res, next) => {
       }
     });
   } catch (err) {
-    next(err);
+    console.log(err);
   }
 };
 
-module.exports.userCreateDeal = userCreateDeal;
-module.exports.userUpdateDeal = userUpdateDeal;
-// module.exports.userDeleteDeal = userDeleteDeal;
-module.exports.updateDealStatus = updateDealStatus;
-module.exports.viewDeals = viewDeals;
-module.exports.flagDealDeletion = flagDealDeletion;
+const Remove = (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).json({
+      message: NOT_ADMIN,
+    });
+  }
+
+  const dealId = req.params.id;
+  Deal.findOneAndDelete({ _id: dealId, delStatus: true }, (err, dealFound) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ success: false, msg: 'Bad request' });
+    } else if (dealFound != null) {
+      res.status(200).json({ success: true, msg: 'Deal deleted!' });
+    } else {
+      res.status(404).json({ success: false, msg: 'Deal not found!' });
+    }
+  });
+};
+
+const Delete = async (req, res) => {
+  if (req.user.isAdmin) {
+    Remove(req, res);
+  } else {
+    FlagDelete(req, res);
+  }
+};
+
+module.exports.Create = Create;
+module.exports.Update = Update;
+module.exports.UpdateStatus = UpdateStatus;
+module.exports.GetAll = GetAll;
+module.exports.Delete = Delete;

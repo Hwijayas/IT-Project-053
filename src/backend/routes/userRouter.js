@@ -1,30 +1,36 @@
 const router = require('express').Router();
 const passport = require('passport');
-const dealController = require('../controllers/dealController');
-const customerController = require('../controllers/customerController');
+const userController = require('../controllers/userController');
 
-// Create a new deal
-router.post('/deal', passport.authenticate('jwt', { session: false }), dealController.userCreateDeal);
+// Create new user
+router.post('/', userController.Create);
 
-// Update an existing deal
-router.put('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.userUpdateDeal);
+// Get list of users
+router.get('/', passport.authenticate('jwt', { session: false }), userController.GetAll);
 
-// // Delete an existing deal
-router.delete('/deal/:id', passport.authenticate('jwt', { session: false }), dealController.flagDealDeletion);
+// Validate an existing user and issue a JWT
+router.post('/login', userController.Login);
 
-// View All deals
-router.get('/deal', passport.authenticate('jwt', { session: false }), dealController.viewDeals);
+// Update password
+router.put('/password', passport.authenticate('jwt', { session: false }), userController.UpdatePassword);
 
-// Update status of deal
-router.put('/deal/:id/status', passport.authenticate('jwt', { session: false }), dealController.updateDealStatus);
+// Protected Routes:
+router.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: {
+      email: req.user.userEmail,
+      firstName: req.user.userFirstName,
+      lastName: req.user.userLastName,
+      isAdmin: req.user.isAdmin,
+    },
+  });
+});
 
-// Register the customer
-router.post('/customer', passport.authenticate('jwt', { session: false }), customerController.userAddsCustomer);
+// Update existing user account details
+router.put('/:id', passport.authenticate('jwt', { session: false }), userController.Update);
 
-// Update an existing customer
-router.put('/customer/:id', passport.authenticate('jwt', { session: false }), customerController.userUpdateCustomer);
-
-// Delete an existing deal
-router.delete('/customer/:id', passport.authenticate('jwt', { session: false }), customerController.userDeleteCustomer);
+// Delete user
+router.delete('/:id', passport.authenticate('jwt', { session: false }), userController.Delete);
 
 module.exports = router;

@@ -12,6 +12,7 @@ import {Link} from 'react-router-dom'
 import {Logout, Password} from '@mui/icons-material/';
 import {useDispatch, useSelector} from 'react-redux'
 import { logout, setMsg} from '../actions/userActions';
+import { logOut as adminLogout } from '../actions/adminActions';
 
 const AccountMenu = () => {
   const userReducer = useSelector(state => state.userReducer);
@@ -21,9 +22,9 @@ const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleLogout = () => {
-    console.log('logout pressed')
     dispatch(setMsg("logged out"));
     dispatch(logout());
+    dispatch(adminLogout());
     return (
       <Redirect to="/login"/>
     )
@@ -77,7 +78,8 @@ const AccountMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {userReducer.loggedIn ?<>
+        {userReducer.loggedIn ?
+        <>
         <MenuItem>
           <Avatar/>
           {`${userReducer.user.firstName} ${userReducer.user.lastName}`}
@@ -95,11 +97,14 @@ const AccountMenu = () => {
           </ListItemIcon>
           Logout
         </MenuItem>
-        </>:<>
+        </>
+        :
+        <>
         <MenuItem component={Link} to="/login">
           <Avatar /> Log In Here
         </MenuItem>
-        </>}
+        </>
+        }
       </Menu>
       </>
   );

@@ -3,7 +3,8 @@ const defaultState = {
     user: {
       email:'',
       fistName:'',
-      lastName:''
+      lastName:'',
+      isAdmin: null
     },
     message:'',
     loginErrors: '',
@@ -42,7 +43,9 @@ const userReducer = (state = defaultState, action) => {
       return {
           ...state,
           loggedIn: false,
-          user: {},
+          user: {
+            isAdmin: null,
+          },
           updateErrors: [],
           loginErrors:'',
           loading:false,
