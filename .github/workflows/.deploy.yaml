@@ -27,8 +27,8 @@ jobs:
       uses: akhileshns/heroku-deploy@v3.0.4
       with:
         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-        heroku_app_name: "bits-please-web-client"
+        heroku_app_name: "bitsrm"
         heroku_email: ${{secrets.HEROKU_API_KEY}}
       env:
         HD_APP_BASE: "src/client"
-        HD_REACT_APP_API_URL: "https://bits-please-api.herokuapp.com"
+        HD_REACT_APP_API_URL: "https://bitsrm.herokuapp.com"
