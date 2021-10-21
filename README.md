@@ -11,17 +11,17 @@ client/
 Source code for our frontend of our webapp
 
 docs/
-Contains all the documentation related to the app, can also be found on Confluence.
-    1.	Overview
-    2.	Requirements
-    3.	Ceremonies
-    4.	Inception
-    5.	Sprint 1
-    6.	Sprint 2
-    7.	Sprint 3
-    8.	System Design
-    9.	Coding Standards
-    10. Handover
+Contains all the documentation related to the app, can also be found on Confluence.  
+    1.	Overview  
+    2.	Requirements  
+    3.	Ceremonies  
+    4.	Inception  
+    5.	Sprint 1  
+    6.	Sprint 2  
+    7.	Sprint 3  
+    8.	System Design  
+    9.	Coding Standards  
+    10. Handover  
 
 ## Links to tools
 Confluence page - https://saumya-makkar.atlassian.net/wiki/spaces/BP/overview
