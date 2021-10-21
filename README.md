@@ -30,7 +30,7 @@ Trello board - https://trello.com/b/TfasDRie/it-project-team-53
 
 Discord channel - https://discord.gg/qXadasCz
 
-Demo of the app - https://saumya-makkar.atlassian.net/wiki/spaces/BP/overview
+Demo of the app - https://bitsrm.herokuapp.com/  
 
 
 ## Deployment
@@ -48,6 +48,6 @@ this will start the development server on your local machine on port 3000.
 The application will be launched automatically in your default browser at http://localhost:3000
 
 ## Demo
-We currently have an accessible link to the application via: https://algorithms-in-action-staging.herokuapp.com/
+We currently have an accessible link to the application via: https://bitsrm.herokuapp.com/  
 
 ## Customizable Customer Relationship Management (CRM) Tool
