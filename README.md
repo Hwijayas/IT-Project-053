@@ -10,7 +10,7 @@ Source code for the backend of our webapp
 client/
 Source code for our frontend of our webapp
 
-docs/
+docs/  
 Contains all the documentation related to the app, can also be found on Confluence.  
     1.	Overview  
     2.	Requirements  
