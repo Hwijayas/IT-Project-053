@@ -109,11 +109,19 @@ const Navbar = (props) => {
                 </figure> */}
                 <nav className="navbar navbar-expand d-flex flex-column align-item-start float-start" id="sidebar">
                 <li className="mt-5"><AccountMenu /></li>
+                {!user.user.isAdmin ?
                     <ul className="navbar-nav d-flex flex-column mt-5 w-100">
                         <NavLink className="nav-link text-light pb-4" to="/"><i className="zmdi zmdi-home fs-1"></i></NavLink>
                         <NavLink className="nav-link text-light pb-4" to="/graph"><i className="zmdi zmdi-chart fs-1"></i></NavLink>
                         <NavLink className="nav-link text-light pb-4" to="/customers"><i className="zmdi zmdi-phone fs-1"></i></NavLink>
                     </ul>
+                :
+                    <ul className="navbar-nav d-flex flex-column mt-5 w-100">
+                        <NavLink className="nav-link text-light pb-4" to="/"><i className="zmdi zmdi-home fs-1"></i></NavLink>
+                        <NavLink className="nav-link text-light pb-4" to="/users"><i className="zmdi zmdi-phone fs-1"></i></NavLink>
+                    </ul>
+                }
+                    
                 </nav>
             </div>
         

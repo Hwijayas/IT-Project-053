@@ -148,17 +148,27 @@ export const DealCards = ({ deal, index }) => {
                                         Delete
                                 </Button>  */}
                                 <div className="btn-group" role="group" aria-label="Basic example">
+                                    {!userReducer.user.isAdmin ?
+                                    <>
                                     <button
-                                    style={{height: '35px', width : '60px'}}
-                                    onClick={onView}
-                                    variant="contained"
-                                    type="button" class="btn btn-primary">View</button>
+                                        style={{height: '35px', width : '60px'}}
+                                        onClick={onView}
+                                        variant="contained"
+                                        type="button" class="btn btn-primary">
+                                        View
+                                    </button>
+
                                     <button
-                                    style={{height: '35px', width : '60px', backgroundColor : 'mediumseagreen'}}
-                                    onClick={onEdit}
-                                    variant="contained"
-                                    orientation="horizontal"
-                                    type="button" class="btn btn-primary">Edit</button>
+                                        style={{height: '35px', width : '60px', backgroundColor : 'mediumseagreen'}}
+                                        onClick={onEdit}
+                                        variant="contained"
+                                        orientation="horizontal"
+                                        type="button" class="btn btn-primary">
+                                        Edit
+                                    </button>
+                                    </>
+                                    :null}
+                                    
                                     <button
                                     style={{height: '35px', width : '80px',  backgroundColor : 'crimson'}}
                                     onClick={onDelete}
