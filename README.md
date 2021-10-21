@@ -1,4 +1,3 @@
-[Screenshot 2021-08-16 211148](https://user-images.githubusercontent.com/55272244/130385729-2f5c0d34-4268-49c0-9602-3b1123f07cc6.png)
 # BitsRM
 This is most recent version added by the students from Semester 2 2021 COMP30022 IT Project
 
@@ -15,13 +14,14 @@ Contains all the documentation related to the app, can also be found on Confluen
     1.	Overview  
     2.	Requirements  
     3.	Ceremonies  
-    4.	Inception  
-    5.	Sprint 1  
-    6.	Sprint 2  
-    7.	Sprint 3  
-    8.	System Design  
-    9.	Coding Standards  
-    10. Handover  
+    4.	Inception 
+    5.  Design Documents  
+    6.	Sprint 1  
+    7.	Sprint 2  
+    8.	Sprint 3  
+    9.	System Design  
+    10.	Coding Standards  
+    11. Handover  
 
 ## Links to tools
 Confluence page - https://saumya-makkar.atlassian.net/wiki/spaces/BP/overview
