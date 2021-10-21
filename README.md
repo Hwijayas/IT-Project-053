@@ -3,14 +3,14 @@
 This is most recent version added by the students from Semester 2 2021 COMP30022 IT Project
 
 ## Organisation of folders
-src/
-backend/
-Source code for the backend of our webapp
+src/  
+backend/  
+Source code for the backend of our webapp  
 
-client/
-Source code for our frontend of our webapp
+client/  
+Source code for our frontend of our webapp  
 
-docs/  
+docs/    
 Contains all the documentation related to the app, can also be found on Confluence.  
     1.	Overview  
     2.	Requirements  
