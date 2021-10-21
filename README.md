@@ -14,7 +14,7 @@ Contains all the documentation related to the app, can also be found on Confluen
     1.	Overview  
     2.	Requirements  
     3.	Ceremonies  
-    4.	Inception 
+    4.	Inception  
     5.  Design Documents  
     6.	Sprint 1  
     7.	Sprint 2  
