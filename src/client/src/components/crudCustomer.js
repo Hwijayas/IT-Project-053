@@ -12,6 +12,7 @@ import CRUDTable,
 import { useDispatch, useSelector } from 'react-redux';
 import { viewCustomers, updateCustomer, deleteCustomer, addCustomer} from '../actions/customerActions';
 import { setLoading } from '../actions/userActions';
+import logo from '../images/Union.svg'
 
 // Component's Base CSS
 import '../css/table.css';
@@ -83,7 +84,10 @@ const Customers = () => {
 
 
   return (
-    <div style={styles.container}>
+    <div className="" style={styles.container}>
+      <figure className="mb-2">
+                    <img className="dashboard-logo-cust" src={logo} alt="" srcset="" />
+                </figure>
       <CRUDTable
         caption="Customers"
         fetchItems={payload => FetchItems(payload)}

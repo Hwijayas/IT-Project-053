@@ -7,6 +7,9 @@ import {useSelector} from 'react-redux';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Chip from '@mui/material/Chip';
+import { NavLink } from 'react-router-dom'
+import '../css/App.css'
+import 'bootstrap/dist/css/bootstrap.css'
 
 const useStyles = makeStyles({
     root: {
@@ -31,11 +34,11 @@ const Navbar = (props) => {
 
     return (
         <> 
-        <Backdrop
+        {/* <Backdrop
 		sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
 		open={(user.loading)}
-  	>
-		<CircularProgress color="inherit" />
+  	> */}
+		{/* <CircularProgress color="inherit" />
     </Backdrop>
            <nav className={classes.root}>
            <AppBar position="static" color="primary">
@@ -99,7 +102,21 @@ const Navbar = (props) => {
                     </Box>
                 </Toolbar>
             </AppBar>
-        </nav>
+        </nav> */}
+        <div className="">
+            {/* <figure className="p-0 m-0 mb-2">
+                    <img className="dashboard-logo" src={logo} alt="" srcset="" />
+                </figure> */}
+                <nav className="navbar navbar-expand d-flex flex-column align-item-start float-start" id="sidebar">
+                <li className="mt-5"><AccountMenu /></li>
+                    <ul className="navbar-nav d-flex flex-column mt-5 w-100">
+                        <NavLink className="nav-link text-light pb-4" to="/"><i className="zmdi zmdi-home fs-1"></i></NavLink>
+                        <NavLink className="nav-link text-light pb-4" to="/graph"><i className="zmdi zmdi-chart fs-1"></i></NavLink>
+                        <NavLink className="nav-link text-light pb-4" to="/customers"><i className="zmdi zmdi-phone fs-1"></i></NavLink>
+                    </ul>
+                </nav>
+            </div>
+        
         </>
     );
 };

@@ -67,12 +67,16 @@ export const DealCards = ({ deal, index }) => {
                     
                     <Card
                         style={{
+                            padding : '5%',
+                            borderRadius : '20px',
+                            backgroundColor : '#9dd2eb' ,
                             opacity: snapshot.isDragging ? 0.9 : 1,
                             transform: snapshot.isDragging
                                 ? 'rotate(-2deg)'
                                 : '',
                         }}
                         elevation={snapshot.isDragging ? 3 : 1}
+                        
                     >   
                         <div className={classes.cardContent}>
                             <Typography variant="body2" gutterBottom>
@@ -113,7 +117,7 @@ export const DealCards = ({ deal, index }) => {
                             justifyContent="flex-end"
                             >
                                 
-                                <Button 
+                                {/* <Button 
                                     className={classes.button}
                                     style={{height: '30px', width : '50px'}}
                                     onClick={onView}
@@ -125,7 +129,7 @@ export const DealCards = ({ deal, index }) => {
                                 !userReducer.user.isAdmin ?
                                 <Button 
                                     className={classes.button}
-                                    style={{height: '30px', width : '50px'}}
+                                    style={{height: '30px', width : '50px', backgroundColor : 'mediumseagreen'}}
                                     onClick={onEdit}
                                     variant="contained"
                                     orientation="horizontal"
@@ -135,13 +139,33 @@ export const DealCards = ({ deal, index }) => {
                                 : null}
                                 <Button 
                                     className={classes.button}
-                                    style={{height: '30px', width : '50px'}}
+                                    style={{height: '30px', width : '50px',  backgroundColor : 'crimson'}}
                                     onClick={onDelete}
                                     variant="contained"
                                     orientation="horizontal"
+                                    className=""
                                     >
                                         Delete
-                                </Button> 
+                                </Button>  */}
+                                <div className="btn-group" role="group" aria-label="Basic example">
+                                    <button
+                                    style={{height: '35px', width : '60px'}}
+                                    onClick={onView}
+                                    variant="contained"
+                                    type="button" class="btn btn-primary">View</button>
+                                    <button
+                                    style={{height: '35px', width : '60px', backgroundColor : 'mediumseagreen'}}
+                                    onClick={onEdit}
+                                    variant="contained"
+                                    orientation="horizontal"
+                                    type="button" class="btn btn-primary">Edit</button>
+                                    <button
+                                    style={{height: '35px', width : '80px',  backgroundColor : 'crimson'}}
+                                    onClick={onDelete}
+                                    variant="contained"
+                                    orientation="horizontal"
+                                    type="button" class="btn btn-primary">Delete</button>
+                                </div>
                                 
 
                             </Grid>
