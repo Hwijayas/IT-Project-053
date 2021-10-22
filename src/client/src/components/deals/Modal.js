@@ -251,7 +251,12 @@ const Modal = ({handleClose, open, currentId}) => {
 			        		Submit
 			       		</Button>
                 	</DialogActions>
-				: null
+				: 
+				<DialogActions>
+					<Button variant="contained" onClick={handleClose}>
+						Close
+					</Button>
+				</DialogActions>
 				}
                 
             </Dialog>      
