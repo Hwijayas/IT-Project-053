@@ -1,6 +1,10 @@
 # BitsRM
 This is most recent version added by the students from Semester 2 2021 COMP30022 IT Project
 
+## Branches
+main - our main source code  
+styled-UI - main source code with a differently styled UI  
+
 ## Organisation of folders
 src/  
 backend/  
