@@ -1,11 +1,16 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { DealsChart as Chart } from './GraphDeals';
+import logo from '../../images/Union.svg'
 
 const Dashboard = () => {
     return (
         <>
-            <Box display="flex" mt="2em">
+            <div className="container">
+            <figure className="mb-2">
+                    <img className="dashboard-logo" src={logo} alt="" srcset="" />
+                </figure>
+            <Box display="flex">
                 <Box flex="3" mr="1em">
                     <Chart />
                 </Box>
@@ -13,7 +18,7 @@ const Dashboard = () => {
                     
                 </Box>
             </Box>
-            <Box display="flex" mt="2em">
+            <Box display="flex">
                 <Box flex="1" mr="1em">
                     
                 </Box>
@@ -26,6 +31,7 @@ const Dashboard = () => {
                     </Box>
                 </Box>
             </Box>
+            </div>
         </>
     );
 };
