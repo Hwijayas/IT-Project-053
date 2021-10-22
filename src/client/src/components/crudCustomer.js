@@ -86,8 +86,8 @@ const Customers = () => {
   return (
     <div className="" style={styles.container}>
       <figure className="mb-2">
-                    <img className="dashboard-logo-cust" src={logo} alt="" srcset="" />
-                </figure>
+          <img className="dashboard-logo-cust" src={logo} alt="" srcset="" />
+      </figure>
       <CRUDTable
         caption="Customers"
         fetchItems={payload => FetchItems(payload)}

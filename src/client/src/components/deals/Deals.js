@@ -134,6 +134,7 @@ const Deals = () => {
                 <figure className="mb-2">
                     <img className="dashboard-logo" src={logo} alt="" srcset="" />
                 </figure>
+                {!user.user.isAdmin?
                 <Button 
                     className="float-start"
                     onClick={showModalWindow} 
@@ -141,6 +142,7 @@ const Deals = () => {
                     > 
                     Add Deals 
                 </Button>
+                :null}
             
             {/* <div className="float-start">
                 <button 

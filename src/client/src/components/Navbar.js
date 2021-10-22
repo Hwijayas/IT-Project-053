@@ -37,8 +37,8 @@ const Navbar = (props) => {
         {/* <Backdrop
 		sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
 		open={(user.loading)}
-  	> */}
-		{/* <CircularProgress color="inherit" />
+  	>
+		<CircularProgress color="inherit" />
     </Backdrop>
            <nav className={classes.root}>
            <AppBar position="static" color="primary">
@@ -103,12 +103,19 @@ const Navbar = (props) => {
                 </Toolbar>
             </AppBar>
         </nav> */}
+
+        
         <div className="">
-            {/* <figure className="p-0 m-0 mb-2">
-                    <img className="dashboard-logo" src={logo} alt="" srcset="" />
-                </figure> */}
+                <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={(user.loading)}
+  	            />
                 <nav className="navbar navbar-expand d-flex flex-column align-item-start float-start" id="sidebar">
                 <li className="mt-5"><AccountMenu /></li>
+                <h4 className="text-white mt-4">
+                {user.user.isAdmin ? "Admin" : null}
+                </h4>
+                    
                 {!user.user.isAdmin ?
                     <ul className="navbar-nav d-flex flex-column mt-5 w-100">
                         <NavLink className="nav-link text-light pb-4" to="/"><i className="zmdi zmdi-home fs-1"></i></NavLink>
