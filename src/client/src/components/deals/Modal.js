@@ -242,14 +242,18 @@ const Modal = ({handleClose, open, currentId}) => {
                     </DialogContent>
 
 				}
-                <DialogActions>
-			        <Button variant="contained" onClick={handleClose}>
-			        	Cancel
-			        </Button>
-			        <Button type='submit' variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
-			        	Submit
-			        </Button>
-                </DialogActions>
+				{deals.view === false ? 
+					<DialogActions>
+			        	<Button variant="contained" onClick={handleClose}>
+			        		Cancel
+			        	</Button>
+			        	<Button type='submit' variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+			        		Submit
+			       		</Button>
+                	</DialogActions>
+				: null
+				}
+                
             </Dialog>      
                  
         </form>
