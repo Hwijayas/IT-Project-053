@@ -31,7 +31,8 @@ export const viewCustomers = () => async (dispatch) => {
   const res = await fetch(`${url}`, args);
   const data = await res.json();
   if(!!data){dispatch(setLoading(false));}
-  if(data.success === "false"){
+
+  if(data.success === false){
     dispatch(setErrors(data.msg))
   }else{
     dispatch(setCustomer(data.customers));
@@ -62,19 +63,17 @@ export const updateCustomer = (data) => async dispatch =>{
 }
 
 export const deleteCustomer = (userID) => async (dispatch) =>{
-  const token = await localStorage.getItem("token");
-  const response = Axios.delete(`${url}/${userID}`, {
-    headers: {...headers, "Authorization": `${token}`}
+  const token =  localStorage.getItem("token");
 
-  }).catch(err => {
-    console.log(err);
-    alert(err);
-
+  const response = await fetch(`${url}/${userID}`, {
+    method: "DELETE",
+    headers:{...headers,
+      "Authorization": `${token}`},
   });
-
   const res = await response.json();
 
   if(res.success === false){
+    alert(res.msg)
     return dispatch(setErrors(res.msg))
   }else {
     alert("Deleted successfully");

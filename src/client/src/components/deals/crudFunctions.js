@@ -1,5 +1,6 @@
 import Axios from "axios"
 import { Redirect } from "react-router";
+import { viewCustomers } from '../../actions/customerActions'
 const url = (process.env.NODE_ENV === 'development') ? 'http://localhost:5000/deals' : 'https://bits-please-api.herokuapp.com/deals';
 //const url = "https://bits-please-api.herokuapp.com/user";
 //const url = 'http://localhost:5000/user';
@@ -55,6 +56,7 @@ export const addDeal = (data) => async dispatch =>{
 
     if(responseOK){
         dispatch(add_Deal(response.data.deal))
+        dispatch(viewCustomers())
     }
 }
 

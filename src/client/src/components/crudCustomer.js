@@ -60,6 +60,7 @@ const Customers = () => {
 
   const update = async (data) => {
     await dispatch(updateCustomer(data));
+    await dispatch(viewCustomers());
     tasks =  [...customerReducer.customerList];
     let result = Array.from(tasks);
     return Promise.resolve(result);
@@ -67,13 +68,15 @@ const Customers = () => {
 
   const create = async (task) => {
     await dispatch(addCustomer(task))
+    await dispatch(viewCustomers());
     tasks =  [...customerReducer.customerList];
     let result = Array.from(tasks);
     return Promise.resolve(result);
   };
 
   const  Delete =  async (data) => {
-    dispatch(deleteCustomer(data._id));
+    await dispatch(deleteCustomer(data._id));
+    await dispatch(viewCustomers());
     tasks =  [...customerReducer.customerList];
     let result = Array.from(tasks);
     return Promise.resolve(result);
@@ -171,8 +174,8 @@ const Customers = () => {
         />
 
         <DeleteForm
-          title="User Delete Process"
-          message="Are you sure you want to delete the User?"
+          title="Customer Delete Process"
+          message="Are you sure you want to delete the Customer?"
           trigger="Delete"
           onSubmit={task => Delete(task)}
           submitText="Delete"
