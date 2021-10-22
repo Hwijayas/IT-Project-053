@@ -43,30 +43,27 @@ export const updateCustomer = (data) => async dispatch =>{
   console.log("updating")
   console.log(data)
   const token = localStorage.getItem("token");
-  const response = await Axios.put(`${url}/${data._id}`, {
-    name: data.name,
-    company: data.company,
-    email: data.email,
-    phone: data.phone
-  }, {headers: {...headers, "Authorization": `${token}`,
-      'Access-Control-Allow-Origin':'*' }}).catch(err => {
-    console.log(err);
-    alert(err);
-    return dispatch(setErrors(data.msg))
+  const res = await fetch(`${url}/${data._id}`, {
+    method: "PUT",
+    headers:{...headers,
+      "Authorization": `${token}`,
+      'Access-Control-Allow-Origin':'*'},
+    body: JSON.stringify(data),
+    mode: 'cors',
   });
+  const response = await res.json();
 
-
-  if(response.success === "false"){
+  if(response.success === false){
     dispatch(setErrors(response.msg))
+  }else {
+    alert("Updated successfully");
+    dispatch(update_Customer(data))
   }
-  alert("Updated successfully");
-  dispatch(update_Customer(data))
-
 }
 
 export const deleteCustomer = (userID) => async (dispatch) =>{
   const token = await localStorage.getItem("token");
-  const res = Axios.delete(`${url}/${userID}`, {
+  const response = Axios.delete(`${url}/${userID}`, {
     headers: {...headers, "Authorization": `${token}`}
 
   }).catch(err => {
@@ -75,13 +72,14 @@ export const deleteCustomer = (userID) => async (dispatch) =>{
 
   });
 
+  const res = await response.json();
 
   if(res.success === false){
     return dispatch(setErrors(res.msg))
+  }else {
+    alert("Deleted successfully");
+    dispatch(setDeleteCustomer(userID));
   }
-
-  alert("Deleted successfully");
-  dispatch(setDeleteCustomer(userID));
 }
 
 export const addCustomer = (data) => async dispatch =>{

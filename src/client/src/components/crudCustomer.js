@@ -59,26 +59,24 @@ const Customers = () => {
   };
 
   const update = async (data) => {
-    const task = tasks.find(t => t._id === data._id);
-    task.name = data.name;
-    task.company = data.company;
-    task.email = data.email;
-    task.phone = data.phone;
     await dispatch(updateCustomer(data));
-    return Promise.resolve(task);
+    tasks =  [...customerReducer.customerList];
+    let result = Array.from(tasks);
+    return Promise.resolve(result);
   };
 
   const create = async (task) => {
     await dispatch(addCustomer(task))
-    tasks.push(task);
-    return Promise.resolve(tasks);
+    tasks =  [...customerReducer.customerList];
+    let result = Array.from(tasks);
+    return Promise.resolve(result);
   };
 
   const  Delete =  async (data) => {
     dispatch(deleteCustomer(data._id));
-    const task = tasks.find(t => t._id === data._id);
-    tasks = tasks.filter(t => t._id !== task._id);
-    return Promise.resolve(tasks);
+    tasks =  [...customerReducer.customerList];
+    let result = Array.from(tasks);
+    return Promise.resolve(result);
   };
 
 

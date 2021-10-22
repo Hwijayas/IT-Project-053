@@ -29,8 +29,8 @@ const customerReducer = (state = defaultState, action) => {
       return{
         ...state,
         customerList : state.customerList.map((customer, index) =>
-          customer._id === action.payload.id ?
-            {...customer, status: action.payload.status} : customer
+          customer._id === action.payload._id ?
+            {...action.payload} : customer
         )
       }
 
