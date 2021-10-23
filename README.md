@@ -12,15 +12,15 @@ Source code for our frontend of our webapp
 docs/    
 Contains all the documentation related to the app, can also be found on Confluence.  
     1.	Overview  
-    2.	Requirements  
+    2.	Inception   
     3.	Ceremonies  
-    4.	Inception  
+    4.	Requirements  
     5.  Design Documents  
-    6.	Sprint 1  
-    7.	Sprint 2  
-    8.	Sprint 3  
-    9.	System Design  
-    10.	Coding Standards  
+    6.	Coding Standards   
+    7.	Sprint 1   
+    8.	Sprint 2  
+    9.	Sprint 3  
+    10.	System Design  
     11. Handover  
 
 ## Links to tools
