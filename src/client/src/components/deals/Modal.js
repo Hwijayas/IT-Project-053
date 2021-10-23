@@ -242,7 +242,7 @@ const Modal = ({handleClose, open, currentId}) => {
                     </DialogContent>
 
 				}
-				{deals.view === false ? 
+                {deals.view === false ? 
 					<DialogActions>
 			        	<Button variant="contained" onClick={handleClose}>
 			        		Cancel
@@ -258,7 +258,6 @@ const Modal = ({handleClose, open, currentId}) => {
 					</Button>
 				</DialogActions>
 				}
-                
             </Dialog>      
                  
         </form>

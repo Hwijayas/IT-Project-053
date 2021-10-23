@@ -10,7 +10,7 @@ const useStyles = makeStyles({
         flex: 1,
         paddingTop: 8,
         paddingBottom: 16,
-        backgroundColor: '#eaeaee',
+        backgroundColor: 'lavender',
         '&:first-child': {
             paddingLeft: 5,
             borderTopLeftRadius: 5,
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     droppable: {
         display: 'flex',
         flexDirection: 'column',
-        borderRadius: 5,
+        borderRadius: 10,
         padding: 5,
         '&.isDraggingOver': {
             backgroundColor: '#dadadf',
@@ -38,7 +38,9 @@ export const DealColumn = ({stage , dealIds, data}) => {
         <div className={classes.root}>
             <Typography align="center" variant="subtitle1">
                 {/* @ts-ignore */}
+                <h4 className="fw-bold">
                 {stageNames[stage]}
+                </h4>
             </Typography>
             <Droppable droppableId={stage}>
                 {(droppableProvided, snapshot) => (

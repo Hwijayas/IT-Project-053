@@ -50,9 +50,10 @@ export const DealsChart = () => {
             <>
                 <Box display="flex" alignItems="center">
                     <Box ml={2} mr={2} display="flex">
-                        <AttachMoneyIcon color="disabled" fontSize="large" />
+                        <AttachMoneyIcon color="disabled" fontSize="large" className="" />
                     </Box>
                     <Link
+                        className=""
                         underline="none"
                         variant="h5"
                         color="textSecondary"
